@@ -5,4 +5,5 @@ WORKDIR /app
 RUN mvn -f /app/pom.xml clean
 RUN mvn -f /app/pom.xml install
 EXPOSE 8080
+# RUN  docker run -it -e NGROK_AUTHTOKEN=<token> ngrok/ngrok http 80
 ENTRYPOINT ["java", "-jar", "/app/target/backend-0.0.1-SNAPSHOT.war"]
