@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "fontends",
-    "slug": "fontends",
+    "name": "CamerDrive",
+    "slug": "CamerDrive",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
