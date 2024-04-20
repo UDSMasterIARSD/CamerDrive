@@ -1,12 +1,12 @@
-import React from "react";
-import { View, Image, Text, useColorScheme } from "react-native";
+import { useNavigation } from "@react-navigation/native";
 import PropTypes from "prop-types";
+import React from "react";
+import { Image, Text, View, useColorScheme } from "react-native";
 import AppIntroSlider from "react-native-app-intro-slider";
 import dynamicStyles from "./styles";
-import { useNavigation } from "@react-navigation/native";
 
 const Onboarding = (props) => {
-  // const navigation = useNavigation();
+  const navigation = useNavigation();
   const appConfig = props.appConfig;
   const appStyles = props.appStyles;
   const colorScheme = useColorScheme();
@@ -33,9 +33,9 @@ const Onboarding = (props) => {
     </View>
   );
 
-  // const handleDone = () => {
-  //   navigation.navigate("signin");
-  // };
+  const handleDone = () => {
+    navigation.navigate("Home");
+  };
 
   return (
     <AppIntroSlider
@@ -43,7 +43,7 @@ const Onboarding = (props) => {
       slides={slides}
       renderItem={_renderItem}
       //Handler for the done On last slide
-      // onDone={handleDone}
+      onDone={handleDone}
       showSkipButton={true}
       showDoneButton={true}
       showNextButton={true}
