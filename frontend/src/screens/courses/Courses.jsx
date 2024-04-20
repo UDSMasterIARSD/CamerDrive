@@ -1,13 +1,32 @@
+import { useNavigation } from "@react-navigation/native";
 import React from "react";
-import { Text, View } from "react-native";
+import { FlatList, Image, Text, TouchableOpacity, View } from "react-native";
+import CoursesDetails from "../coursesDetails/CoursesDetails";
+import courseData from "./ courseData";
+import CoursesStyle from "./CoursesStyle";
 
 const Courses = () => {
+  const navigation = useNavigation();
+
+  const handleCoursePress = (item) => {
+    navigation.navigate(CoursesDetails);
+  };
+
   return (
-    <>
-      <View>
-        <Text style={{ marginTop: 50 }}>Hello courses</Text>
-      </View>
-    </>
+    <FlatList
+      data={courseData}
+      style={{ backgroundColor: "#f0f8ff", borderTopRightRadius: 10 }}
+      renderItem={({ item }) => (
+        <View style={CoursesStyle.container}>
+          <TouchableOpacity onPress={() => handleCoursePress(item)}>
+            <View style={CoursesStyle.itemContainer}>
+              <Image source={item.image} style={CoursesStyle.courseImage} />
+              <Text style={CoursesStyle.title}>{item.title}</Text>
+            </View>
+          </TouchableOpacity>
+        </View>
+      )}
+    />
   );
 };
 

@@ -1,84 +1,4 @@
-/*import { Ionicons } from "@expo/vector-icons";
-import { useNavigation } from "@react-navigation/native";
-import React from "react";
-import { Pressable, StyleSheet, Text, View } from "react-native";
-
-const BottomNavigation = ({
-  categories,
-  activeCategory,
-  setActiveCategory,
-}) => {
-  const navigation = useNavigation();
-  return (
-    <View style={bottomNavigationStyle.container}>
-      {categories.map((category, index) => (
-        <Pressable
-          key={category.name}
-          style={({ pressed }) => [
-            {
-              backgroundColor: pressed ? "rgba(0, 0, 0, 0.1)" : "transparent",
-            },
-            bottomNavigationStyle.categoryIcon,
-            activeCategory === category.name &&
-              bottomNavigationStyle.activeIcon,
-          ]}
-          onPress={() => {
-            setActiveCategory(category.name, index);
-            // Naviguez vers la page correspondante lorsque l'icône est pressée
-            navigation.navigate(category.name); // Assurez-vous d'avoir défini une propriété 'route' dans chaque objet de catégorie
-          }}
-        >
-          <Ionicons
-            name={category.icon}
-            size={20}
-            color={activeCategory === category.name ? "red" : "black"}
-          />
-          <Text
-            style={[
-              bottomNavigationStyle.categoryName,
-              activeCategory === category.name &&
-                bottomNavigationStyle.activeText,
-            ]}
-          >
-            {category.name}
-          </Text>
-        </Pressable>
-      ))}
-    </View>
-  );
-};
-
-const bottomNavigationStyle = StyleSheet.create({
-  container: {
-    flexDirection: "row",
-    backgroundColor: "#fff",
-    width: "100%",
-    padding: 10,
-    alignItems: "center",
-    borderTopWidth: 1,
-    borderColor: "lightgray",
-  },
-  categoryIcon: {
-    flex: 1,
-    alignItems: "center",
-  },
-  activeIcon: {
-    color: "red",
-  },
-  categoryName: {
-    fontSize: 12,
-    color: "black",
-    marginTop: 5,
-  },
-  activeText: {
-    color: "red",
-  },
-});
-
-export default BottomNavigation;
-*/
-
-import { Ionicons } from "@expo/vector-icons";
+import { AntDesign, Ionicons } from "@expo/vector-icons";
 import React from "react";
 import { Pressable, StyleSheet, Text, View } from "react-native";
 
@@ -150,7 +70,7 @@ const BottomNavigation = ({
         onPress={() => setActiveCategory("Quiz")}
       >
         <Ionicons
-          name="help-buoy-outline"
+          name="extension-puzzle-outline"
           size={20}
           color={activeCategory === "Quiz" ? "red" : "black"}
         />
@@ -174,11 +94,7 @@ const BottomNavigation = ({
         ]}
         onPress={() => setActiveCategory("Last exam")}
       >
-        <Ionicons
-          name="medkit-outline"
-          size={20}
-          color={activeCategory === "Last exam" ? "red" : "black"}
-        />
+        <AntDesign name="copy1" size={20} color="black" />
         <Text
           style={[
             styles.categoryName,

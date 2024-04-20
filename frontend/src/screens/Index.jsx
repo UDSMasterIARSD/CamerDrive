@@ -2,6 +2,7 @@ import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import React from "react";
 import Courses from "./courses/Courses.jsx";
+import CoursesDetails from "./coursesDetails/CoursesDetails.jsx";
 import Dashbord from "./dashbord/Dashbord.jsx";
 import LastExam from "./lastExam/LastExam.jsx";
 import Quiz from "./quiz/Quiz.jsx";
@@ -36,6 +37,11 @@ const Index = () => {
         <Stack.Screen
           name="Last exam"
           component={LastExam}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="CoursesDetails"
+          component={CoursesDetails}
           options={{ headerShown: false }}
         />
       </Stack.Navigator>
