@@ -14,6 +14,7 @@ import Courses from "../courses/Courses";
 import Home from "../home/Home";
 import LastExam from "../lastExam/LastExam";
 import Quiz from "../quiz/Quiz";
+import categories from "./Category";
 import DashbordStyle from "./DashbordStyle";
 
 const Dashbord = () => {
@@ -154,6 +155,7 @@ const Dashbord = () => {
         <BottomNavigation
           activeCategory={selectedCategory}
           setActiveCategory={setSelectedCategory}
+          categories={categories}
         />
       </View>
     </DrawerLayoutAndroid>

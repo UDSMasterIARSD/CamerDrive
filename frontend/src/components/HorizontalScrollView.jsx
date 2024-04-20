@@ -32,7 +32,19 @@ const data = [
 
 const HorizontalScrollView = () => {
   return (
-    <ScrollView horizontal pagingEnabled showsHorizontalScrollIndicator={false}>
+    <ScrollView
+      horizontal
+      pagingEnabled
+      showsHorizontalScrollIndicator={false}
+      style={{
+        backgroundColor: "#fb5b5a",
+        borderTopLeftRadius: 50,
+        borderBottomLeftRadius: 50,
+        marginBottom: 100,
+        //padding: 5,
+        //height: 10,
+      }}
+    >
       {data.map((item) => (
         <View key={item.id} style={ScrollViewStyle.container}>
           <AntDesign name={item.icon} size={24} color="black" />
@@ -45,18 +57,19 @@ const HorizontalScrollView = () => {
 
 const ScrollViewStyle = StyleSheet.create({
   container: {
-    width: 80,
-    height: 80,
-    margin: 10,
+    width: 50,
+    height: 50,
+    margin: 15,
     backgroundColor: "#fff",
     alignItems: "center",
     justifyContent: "center",
     borderRadius: 50,
     position: "relative",
+    marginLeft: 50,
   },
   text: {
     position: "absolute",
-    bottom: -20,
+    bottom: -40,
     textAlign: "center",
   },
 });
