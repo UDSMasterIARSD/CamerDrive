@@ -1,7 +1,6 @@
 import { useNavigation } from "@react-navigation/native";
 import React from "react";
 import { FlatList, Image, Text, TouchableOpacity, View } from "react-native";
-import CoursesDetails from "../coursesDetails/CoursesDetails";
 import courseData from "./ courseData";
 import CoursesStyle from "./CoursesStyle";
 
@@ -9,7 +8,7 @@ const Courses = () => {
   const navigation = useNavigation();
 
   const handleCoursePress = (item) => {
-    navigation.navigate(CoursesDetails);
+    navigation.navigate("CoursesDetails", { item });
   };
 
   return (
@@ -21,7 +20,10 @@ const Courses = () => {
           <TouchableOpacity onPress={() => handleCoursePress(item)}>
             <View style={CoursesStyle.itemContainer}>
               <Image source={item.image} style={CoursesStyle.courseImage} />
-              <Text style={CoursesStyle.title}>{item.title}</Text>
+              <View>
+                <Text style={CoursesStyle.title}>{item.title}</Text>
+                <Text>Driving Lesson - #{item.numero}</Text>
+              </View>
             </View>
           </TouchableOpacity>
         </View>

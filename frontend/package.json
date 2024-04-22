@@ -25,7 +25,8 @@
     "react-native-snap-carousel": "^3.9.1",
     "react-native-web": "~0.19.6",
     "typescript": "^5.3.0",
-    "@types/react": "~18.2.45"
+    "@types/react": "~18.2.45",
+    "react-native-sideswipe": "^1.5.0"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0"

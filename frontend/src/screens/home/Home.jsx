@@ -1,9 +1,18 @@
 import React from "react";
-import { Image, SafeAreaView, Text, View } from "react-native";
+import { Image, SafeAreaView, StyleSheet, Text, View } from "react-native";
+import Carousel from "../../components/Carousel";
 import HorizontalScrollView from "../../components/HorizontalScrollView";
 import Homestyles from "./HomeStyle";
 
 const Home = () => {
+  const styles = StyleSheet.create({
+    title: {
+      marginTop: 10,
+      fontSize: 16,
+      fontWeight: "bold",
+    },
+  });
+
   return (
     <>
       <SafeAreaView>
@@ -19,18 +28,13 @@ const Home = () => {
             </View>
           </View>
           <View>
-            {/* image*/}
-            <View style={{ alignItems: "center" }}>
-              <Image
-                source={require("../../../assets/dashbordImages/image4.jpg")}
-                style={Homestyles.image}
-              />
-            </View>
+            <Carousel />
             <View style={Homestyles.serviceContainer}>
               <Text style={{ fontSize: 20, fontWeight: "bold" }}>
                 Our Services
               </Text>
             </View>
+
             <HorizontalScrollView />
           </View>
         </View>

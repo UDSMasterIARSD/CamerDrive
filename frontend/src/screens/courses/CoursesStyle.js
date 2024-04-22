@@ -33,6 +33,7 @@ const CoursesStyle = StyleSheet.create({
   },
   title: {
     width: Dimensions.get("window").width * 0.5,
+    fontWeight: "bold",
   },
 });
 export default CoursesStyle;

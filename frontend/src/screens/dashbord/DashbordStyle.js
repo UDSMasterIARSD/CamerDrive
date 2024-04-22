@@ -24,7 +24,6 @@ const DashbordStyle = StyleSheet.create({
   },
   userInfoContainer: {
     flexDirection: "row",
-    //alignItems: "center", // Alignement vertical du texte par rapport à l'image
   },
   userPhoto: {
     width: 80,
@@ -82,7 +81,7 @@ const DashbordStyle = StyleSheet.create({
   textLeft: {
     position: "absolute",
     left: 0,
-    top: 60, // Ajustez la position verticale selon vos besoins
+    top: 60,
     color: "white",
     fontWeight: "bold",
     fontSize: 20,
@@ -90,14 +89,23 @@ const DashbordStyle = StyleSheet.create({
   textRight: {
     position: "absolute",
     right: 0,
-    top: 100, // Ajustez la position verticale selon vos besoins
+    top: 100,
     color: "white",
   },
   bottomNavigation: {
     position: "absolute",
-    bottom: 0, // Place la bottom navigation au bas du conteneur parent
+    bottom: 0,
     left: 0,
     right: 0,
+  },
+  alertTitle: {
+    fontSize: 18, // Adjust title font size
+    fontWeight: "bold", // Bold text
+    marginBottom: 10, // Margin below title
+  },
+  alertMessage: {
+    fontSize: 16, // Adjust message font size
+    marginBottom: 20, // Margin below message
   },
 });
 
