@@ -39,23 +39,23 @@ const HorizontalView = () => {
     </View>
   );
 };
-
 const styles = StyleSheet.create({
   container: {
     flexDirection: "row",
-    justifyContent: "space-around",
-    backgroundColor: "#FFD700", // Yellow background color
-    paddingVertical: 5,
+    backgroundColor: "#FFD700",
+    paddingVertical: 15,
     paddingHorizontal: 20,
     marginLeft: 30,
-    borderBottomLeftRadius: 870,
+    borderBottomLeftRadius: 280,
     borderTopLeftRadius: 100,
+    borderTopRightRadius: 270, // Fix: Use borderTopRightRadius instead of borderTopLeftRadius
   },
   itemContainer: {
+    flex: 1, // Fix: Use flex: 1 to make items occupy equal space
     alignItems: "center",
-    justifyContent: "start",
-    flex: 1,
+    justifyContent: "center",
     marginHorizontal: 5,
+    marginTop: 15,
   },
   iconCircle: {
     width: 50,

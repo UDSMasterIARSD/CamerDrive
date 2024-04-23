@@ -107,6 +107,10 @@ const DashbordStyle = StyleSheet.create({
     fontSize: 16, // Adjust message font size
     marginBottom: 20, // Margin below message
   },
+  alertContainer: {
+    backgroundColor: "lightgrey",
+    borderRadius: 10,
+  },
 });
 
 export default DashbordStyle;

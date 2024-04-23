@@ -55,15 +55,22 @@ const Dashbord = () => {
   };
 
   const createTwoButtonAlert = () =>
-    Alert.alert("Confirm Logout", "Are you sure you want to log out?", [
-      {
-        text: "Cancel",
+    Alert.alert(
+      "Confirm Logout",
+      "Are you sure you want to log out?",
+      [
+        {
+          text: "Cancel",
 
-        //onPress: () => console.log("Cancel Pressed"),
-        style: "cancel",
-      },
-      { text: "YES" /*{ onPress: () => console.log("OK Pressed")}*/ },
-    ]);
+          //onPress: () => console.log("Cancel Pressed"),
+          style: "cancel",
+        },
+        { text: "YES" /*{ onPress: () => console.log("OK Pressed")}*/ },
+      ],
+      {
+        alertContainerStyle: DashbordStyle.alertContainer,
+      }
+    );
 
   const menuItems = [
     { title: "Profile", iconName: "person" },
@@ -84,10 +91,10 @@ const Dashbord = () => {
     setSelectedMenuItem(menuItem);
     switch (menuItem.title) {
       case "Logout":
+        drawer.current?.closeDrawer();
         {
           createTwoButtonAlert();
         }
-        drawer.current?.closeDrawer();
 
         break;
       case "Profile":
@@ -150,7 +157,7 @@ const Dashbord = () => {
             <Text style={DashbordStyle.menuItemText}>{menuItem.title}</Text>
           </TouchableOpacity>
         ))}
-        {/* Fermeture du drawer */}
+        {/* Fermeture du drawer 
         <View style={{ alignItems: "center" }}>
           <TouchableOpacity
             style={DashbordStyle.closeBtn}
@@ -161,6 +168,7 @@ const Dashbord = () => {
             </Text>
           </TouchableOpacity>
         </View>
+        */}
       </ScrollView>
     </View>
   );
