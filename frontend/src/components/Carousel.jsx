@@ -1,3 +1,4 @@
+import { Entypo } from "@expo/vector-icons";
 import React, { useEffect, useRef, useState } from "react";
 import { Dimensions, Image, StyleSheet, Text, View } from "react-native";
 import SideSwipe from "react-native-sideswipe";
@@ -32,26 +33,38 @@ const Carousel = () => {
         prevIndex === carouselItems.length - 1 ? 0 : prevIndex + 1
       );
       carouselRef.current?.snapToNext();
-    }, 5000); // Switch every 30 seconds
+    }, 5000); // Switch every 5 seconds
 
     return () => clearInterval(timer);
   }, [carouselItems.length]);
 
   return (
-    <SideSwipe
-      index={activeIndex}
-      itemWidth={400}
-      style={{ width: viewportWidth }}
-      data={carouselItems}
-      contentOffset={contentOffset}
-      onIndexChange={(index) => setActiveIndex(index)}
-      renderItem={({ itemIndex, currentIndex, item, animatedValue }) => (
-        <View style={styles.imageContainer}>
-          <Image source={item.imageUrl} style={styles.image} />
-          {item.title && <Text style={styles.title}>{item.title}</Text>}
-        </View>
-      )}
-    />
+    <View>
+      <SideSwipe
+        index={activeIndex}
+        itemWidth={400}
+        style={{ width: viewportWidth }}
+        data={carouselItems}
+        contentOffset={contentOffset}
+        onIndexChange={(index) => setActiveIndex(index)}
+        renderItem={({ itemIndex, currentIndex, item, animatedValue }) => (
+          <View style={styles.imageContainer}>
+            <Image source={item.imageUrl} style={styles.image} />
+            {item.title && <Text style={styles.title}>{item.title}</Text>}
+          </View>
+        )}
+      />
+      <View style={styles.dotsContainer}>
+        {carouselItems.map((_, index) => (
+          <Entypo
+            key={index}
+            name="dot-single"
+            size={35}
+            color={index === activeIndex ? "black" : "lightgray"}
+          />
+        ))}
+      </View>
+    </View>
   );
 };
 
@@ -66,14 +79,17 @@ const styles = StyleSheet.create({
     marginTop: 10,
     fontSize: 16,
     fontWeight: "bold",
-    alignItems: "rig",
   },
   image: {
     height: 220,
     width: "100%",
     borderRadius: 20,
-    //borderTopLeftRadius: 30,
-    //borderTopRightRadius: 30,
+  },
+  dotsContainer: {
+    flexDirection: "row",
+    justifyContent: "center",
+    alignItems: "center",
+    //marginTop: 5,
   },
 });
 

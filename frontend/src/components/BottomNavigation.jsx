@@ -94,7 +94,11 @@ const BottomNavigation = ({
         ]}
         onPress={() => setActiveCategory("Last exam")}
       >
-        <AntDesign name="copy1" size={20} color="black" />
+        <AntDesign
+          name="copy1"
+          size={20}
+          color={activeCategory === "Last exam" ? "red" : "black"}
+        />
         <Text
           style={[
             styles.categoryName,
