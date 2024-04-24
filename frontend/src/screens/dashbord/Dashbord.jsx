@@ -1,4 +1,5 @@
 import { Ionicons } from "@expo/vector-icons";
+import { withExpoSnack } from "nativewind";
 import { useNavigation } from "@react-navigation/native";
 import React, { useRef, useState } from "react";
 import {
@@ -18,13 +19,18 @@ import LastExam from "../lastExam/LastExam";
 import Quiz from "../quiz/Quiz";
 import categories from "./Category";
 import DashbordStyle from "./DashbordStyle";
+import { styled, useColorScheme } from "nativewind";
 
 const Dashbord = () => {
+  const { colorScheme, toggleColorScheme } = useColorScheme();
   const navigation = useNavigation();
 
   const drawer = useRef(null); // Utilisez useRef() pour créer une référence
   const windowWidth = Dimensions.get("window").width;
   const marginLeft = windowWidth * 0.2;
+
+  const StyledIonicons = styled(Ionicons);
+  const StyledText = styled(Text);
 
   const [selectedCategory, setSelectedCategory] = useState("Home");
 
@@ -80,12 +86,20 @@ const Dashbord = () => {
       iconName: "information-circle",
     },
     { title: "Logout", iconName: "log-out" },
+    {
+      title: "Theme",
+      iconName: colorScheme === "dark" ? "moon" : "sunny-outline",
+    },
   ];
 
   const [selectedMenuItem, setSelectedMenuItem] = useState({
     title: "Home",
     iconName: "home",
   });
+
+  const handleDarkMode = () => {
+    toggleColorScheme();
+  };
 
   const handleMenuItemClick = (menuItem) => {
     setSelectedMenuItem(menuItem);
@@ -111,6 +125,8 @@ const Dashbord = () => {
         navigation.navigate("AboutUs");
         // Handle "About us" case
         break;
+      case "Theme":
+        handleDarkMode();
       default:
         break;
     }
@@ -139,9 +155,10 @@ const Dashbord = () => {
         </View>
       </View>
       {/* Menu des services */}
-      <ScrollView>
+      <ScrollView className="dark:bg-slate-600 pt-5">
         {menuItems.map((menuItem) => (
           <TouchableOpacity
+            className="dark:text-white"
             key={menuItem.title}
             style={[
               DashbordStyle.menuItem,
@@ -152,9 +169,20 @@ const Dashbord = () => {
             onPress={() => handleMenuItemClick(menuItem)}
           >
             <View style={DashbordStyle.menuItemIconContainer}>
-              <Ionicons name={menuItem.iconName} size={24} color="#003f5c" />
+              <StyledIonicons
+                name={menuItem.iconName}
+                size={24}
+                className="text-cyan-950 dark:text-cyan-50"
+                // color="#ffffff"
+              />
+              {/* <Ionicons name={menuItem.iconName} size={24} color="#003f5c" /> */}
             </View>
-            <Text style={DashbordStyle.menuItemText}>{menuItem.title}</Text>
+            <StyledText
+              className="text-cyan-950 dark:text-cyan-50 font-semibold"
+              style={DashbordStyle.menuItemText}
+            >
+              {menuItem.title}
+            </StyledText>
           </TouchableOpacity>
         ))}
         {/* Fermeture du drawer 
@@ -204,4 +232,4 @@ const Dashbord = () => {
   );
 };
 
-export default Dashbord;
+export default withExpoSnack(Dashbord);

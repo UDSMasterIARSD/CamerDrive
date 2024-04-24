@@ -19,7 +19,6 @@ const DashbordStyle = StyleSheet.create({
     backgroundColor: "#003f5c",
     //alignItems: "center",
     paddingVertical: 60,
-    marginBottom: 20,
     width: "auto",
   },
   userInfoContainer: {
@@ -57,7 +56,7 @@ const DashbordStyle = StyleSheet.create({
     marginLeft: 20,
   },
   menuItemText: {
-    color: "#003f5c",
+    // color: "#003f5c",
     fontSize: 15,
     marginLeft: 10,
   },

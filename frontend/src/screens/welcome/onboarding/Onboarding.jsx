@@ -1,7 +1,14 @@
 import { useNavigation } from "@react-navigation/native";
 import PropTypes from "prop-types";
-import React from "react";
-import { Image, Text, View, useColorScheme } from "react-native";
+import React, { useEffect } from "react";
+import {
+  StatusBar,
+  Image,
+  Text,
+  View,
+  useColorScheme,
+  ImageBackground,
+} from "react-native";
 import AppIntroSlider from "react-native-app-intro-slider";
 import dynamicStyles from "./styles";
 
@@ -11,6 +18,12 @@ const Onboarding = (props) => {
   const appStyles = props.appStyles;
   const colorScheme = useColorScheme();
   const styles = dynamicStyles(appStyles, colorScheme);
+
+  useEffect(() => {
+    StatusBar.setBarStyle("light-content");
+    StatusBar.setBackgroundColor("rgba(0, 0, 0, 0.5)");
+    StatusBar.setTranslucent(true);
+  }, []);
 
   const slides = appConfig.onboardingConfig.onboardingScreens.map(
     (screenSpec, index) => {
@@ -25,8 +38,8 @@ const Onboarding = (props) => {
 
   const _renderItem = ({ item, dimensions }) => (
     <View style={[styles.container, dimensions]}>
-      <Image style={styles.image} source={item.image} size={100} />
-      <View>
+      <Image style={styles.image} source={item.image} />
+      <View style={styles.secondContainer}>
         <Text style={styles.title}>{item.title}</Text>
         <Text style={styles.text}>{item.text}</Text>
       </View>
@@ -42,8 +55,8 @@ const Onboarding = (props) => {
       data={slides}
       slides={slides}
       renderItem={_renderItem}
-      //Handler for the done On last slide
       onDone={handleDone}
+      onSkip={handleDone}
       showSkipButton={true}
       showDoneButton={true}
       showNextButton={true}
