@@ -1,4 +1,9 @@
-import { StyleSheet } from "react-native";
+import {
+  Dimensions,
+  ImageBackground,
+  StatusBar,
+  StyleSheet,
+} from "react-native";
 
 const dynamicStyles = (appStyles, colorScheme) => {
   return StyleSheet.create({
@@ -18,22 +23,33 @@ const dynamicStyles = (appStyles, colorScheme) => {
     },
     image: {
       width: "100%",
-      height: 280,
+      height: Dimensions.get("window").height * 0.5,
       marginTop: 0,
       marginBottom: 60,
       objectFit: "cover",
+      borderBottomLeftRadius: 50,
+      borderBottomRightRadius: 50,
     },
     container: {
+      paddingTop: StatusBar.currentHeight,
+      overflow: "hidden",
       flex: 1,
-      justifyContent: "center",
-      alignItems: "center",
+      justifyContent: "space-between",
       backgroundColor: appStyles.colorSet[colorScheme].mainThemeForegroundColor,
+    },
+    secondContainer: {
+      backgroundColor: "#112233",
+      paddingTop: 50,
+      paddingBottom: 350,
     },
     button: {
       fontSize: 18,
       color: "black",
       marginTop: 10,
       marginBottom: 100,
+
+      borderWidth: 2,
+      borderColor: "green",
     },
   });
 };
