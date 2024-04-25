@@ -10,6 +10,8 @@ import Dashbord from "./dashbord/Dashbord.jsx";
 import LastExam from "./lastExam/LastExam.jsx";
 import Quiz from "./quiz/Quiz.jsx";
 import OnboardingCompo from "./welcome/onboarding/OnboardingCompo.jsx";
+import SignIn from "./auth/SignIn.jsx";
+import SignUp from "./auth/SignUp.jsx";
 
 const Stack = createNativeStackNavigator();
 
@@ -60,6 +62,16 @@ const Index = () => {
         <Stack.Screen
           name="Statistiques"
           component={Statistiques}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="SignIn"
+          component={SignIn}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="SignUp"
+          component={SignUp}
           options={{ headerShown: false }}
         />
       </Stack.Navigator>

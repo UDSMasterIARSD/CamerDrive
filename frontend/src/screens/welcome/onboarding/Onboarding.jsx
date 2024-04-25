@@ -12,6 +12,7 @@ import {
 import AppIntroSlider from "react-native-app-intro-slider";
 import dynamicStyles from "./styles";
 
+
 const Onboarding = (props) => {
   const navigation = useNavigation();
   const appConfig = props.appConfig;
@@ -47,7 +48,7 @@ const Onboarding = (props) => {
   );
 
   const handleDone = () => {
-    navigation.navigate("Home");
+    navigation.navigate("SignIn", { screen: "SignIn" });
   };
 
   return (
