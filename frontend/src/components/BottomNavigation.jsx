@@ -69,11 +69,11 @@ const BottomNavigation = ({
         ]}
         onPress={() => setActiveCategory("Quiz")}
       >
-        <Ionicons
+        {/* <Ionicons
           name="extension-puzzle-outline"
           size={20}
           color={activeCategory === "Quiz" ? "red" : "black"}
-        />
+        /> */}
         <Text
           style={[
             styles.categoryName,
