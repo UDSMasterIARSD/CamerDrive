@@ -1,4 +1,5 @@
 import { useNavigation } from "@react-navigation/native";
+import { withExpoSnack } from "nativewind";
 import {
   Image,
   Text,
@@ -6,19 +7,19 @@ import {
   TextInput,
   ScrollView,
   Pressable,
-  TouchableOpacity
+  TouchableOpacity,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 const SignIn = () => {
   const navigation = useNavigation();
   return (
-    <SafeAreaView
+    <View
       style={{
         flex: 1,
         justifyContent: "start",
         alignItems: "start",
-        backgroundColor: "#1C202F"
+        backgroundColor: "#1C202F",
       }}
     >
       <ScrollView>
@@ -40,7 +41,7 @@ const SignIn = () => {
             height: 330,
             borderRadius: 20,
             justifyContent: "start",
-            padding: 8
+            padding: 8,
           }}
         >
           <View>
@@ -49,7 +50,7 @@ const SignIn = () => {
                 color: "#fff",
                 fontWeight: "bold",
                 fontSize: 15,
-                marginLeft: 10
+                marginLeft: 10,
               }}
             >
               Username:
@@ -64,7 +65,7 @@ const SignIn = () => {
                 padding: 10,
                 borderRadius: 20,
                 backgroundColor: "#1C202F",
-                fontSize: 16
+                fontSize: 16,
               }}
               placeholder="Enter your email address here ..."
               placeholderTextColor="#fff"
@@ -78,7 +79,7 @@ const SignIn = () => {
                 color: "#fff",
                 fontWeight: "bold",
                 fontSize: 15,
-                marginLeft: 10
+                marginLeft: 10,
               }}
             >
               Password:
@@ -93,7 +94,7 @@ const SignIn = () => {
                 borderRadius: 20,
                 backgroundColor: "#1C202F",
                 color: "#fff",
-                fontSize: 16
+                fontSize: 16,
               }}
               placeholder="Enter your password here ..."
               placeholderTextColor="#fff"
@@ -109,10 +110,10 @@ const SignIn = () => {
               alignItems: "center",
               height: 80,
               position: "relative",
-              padding: 30
+              padding: 30,
             }}
           >
-            <PressableOpacity
+            <Pressable
               style={{
                 alignItems: "center",
                 justifyContent: "center",
@@ -122,31 +123,29 @@ const SignIn = () => {
                 width: 320,
                 borderRadius: 40,
                 elevation: 3,
-                backgroundColor: "#3AAF9F"
+                backgroundColor: "#3AAF9F",
               }}
-              onPress={() => {
-                navigation.navigate("Dashbord");
-              }}
-              >
+              onPress={() => navigation.navigate("Home")}
+            >
               <Text
                 style={{
                   fontSize: 16,
                   lineHeight: 21,
                   fontWeight: "bold",
                   letterSpacing: 0.25,
-                  color: "white"
+                  color: "white",
                 }}
               >
                 Login
               </Text>
-            </PressableOpacity>
+            </Pressable>
           </View>
           <View
             style={{
               height: 20,
               justifyContent: "center",
               alignItems: "center",
-              marginBottom: 10
+              marginBottom: 10,
             }}
           >
             <TouchableOpacity
@@ -160,7 +159,7 @@ const SignIn = () => {
                   color: "#fff",
                   fontWeight: "bold",
                   marginLeft: "20",
-                  fontSize: 15
+                  fontSize: 15,
                 }}
               >
                 Don't have an account ? SignUp
@@ -172,7 +171,7 @@ const SignIn = () => {
               textAlign: "center",
               marginBottom: 30,
               color: "#fff",
-              fontSize: 16
+              fontSize: 16,
             }}
           >
             Or, login with ...
@@ -188,7 +187,7 @@ const SignIn = () => {
             width: "auto",
             marginHorizontal: 25,
             paddingTop: 40,
-            marginBottom: 80
+            marginBottom: 80,
           }}
         >
           <TouchableOpacity
@@ -215,8 +214,8 @@ const SignIn = () => {
           </TouchableOpacity>
         </View>
       </ScrollView>
-    </SafeAreaView>
+    </View>
   );
 };
 
-export default SignIn;
+export default withExpoSnack(SignIn);

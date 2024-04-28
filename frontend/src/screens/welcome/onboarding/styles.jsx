@@ -34,13 +34,15 @@ const dynamicStyles = (appStyles, colorScheme) => {
       paddingTop: StatusBar.currentHeight,
       overflow: "hidden",
       flex: 1,
-      justifyContent: "space-between",
+      justifyContent: "flex-end",
       backgroundColor: appStyles.colorSet[colorScheme].mainThemeForegroundColor,
     },
     secondContainer: {
-      backgroundColor: "#112233",
+      backgroundColor: "rgba(17, 34, 51, 0.5)",
       paddingTop: 50,
-      paddingBottom: 350,
+      paddingBottom: 150,
+      borderTopLeftRadius: 20,
+      borderTopRightRadius: 20,
     },
     button: {
       fontSize: 18,

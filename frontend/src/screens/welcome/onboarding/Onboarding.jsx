@@ -38,13 +38,19 @@ const Onboarding = (props) => {
   );
 
   const _renderItem = ({ item, dimensions }) => (
-    <View style={[styles.container, dimensions]}>
-      <Image style={styles.image} source={item.image} />
-      <View style={styles.secondContainer}>
+    <ImageBackground style={[styles.container, dimensions]} source={item.image}>
+      <View style={styles.secondContainer} className="shadow-2xl">
         <Text style={styles.title}>{item.title}</Text>
         <Text style={styles.text}>{item.text}</Text>
       </View>
-    </View>
+    </ImageBackground>
+    // <View style={[styles.container, dimensions]}>
+    //   <Image style={styles.image} source={item.image} />
+    //   <View style={styles.secondContainer}>
+    //     <Text style={styles.title}>{item.title}</Text>
+    //     <Text style={styles.text}>{item.text}</Text>
+    //   </View>
+    // </View>
   );
 
   const handleDone = () => {

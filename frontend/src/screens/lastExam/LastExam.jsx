@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { withExpoSnack } from "nativewind";
 import {
   Dimensions,
+  SafeAreaView,
   ScrollView,
   Text,
   TouchableOpacity,
@@ -16,13 +17,13 @@ import CorrigeLastExam from "./CorrigeLastExam";
 
 const LastExam = () => {
   const [option, setOption] = useState(optionValues.sujet);
-  const StyledScrollView = styled(ScrollView);
+  const StyledSafeAreaView = styled(SafeAreaView);
   const StyledView = styled(View);
   return (
     // <ColorScheme />
-    <StyledScrollView
+    <StyledSafeAreaView
       style={{ height: Dimensions.get("window").height * 0.8 }}
-      className="flex-1 dark:bg-slate-700 overflow-hidden px-4"
+      className="flex-1 dark:bg-slate-700 overflow-hidden"
     >
       <StyledView
         selectable={false}
@@ -56,10 +57,10 @@ const LastExam = () => {
           <Text className="text-base dark:text-cyan-50">Corriges</Text>
         </View>
       </View>
-      <View className="grid grid-cols-2 box-border space-x-4 space-y-4">
-        {option === optionValues.sujet ? <LastSubject /> : <CorrigeLastExam />}
-      </View>
-    </StyledScrollView>
+      {/* <View style={{ flexDirection: "row", flexWrap: "wrap", margin: -2 }}> */}
+      {option === optionValues.sujet ? <LastSubject /> : <CorrigeLastExam />}
+      {/* </View> */}
+    </StyledSafeAreaView>
   );
 };
 
