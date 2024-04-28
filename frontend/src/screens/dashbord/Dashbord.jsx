@@ -31,6 +31,7 @@ const Dashbord = () => {
 
   const StyledIonicons = styled(Ionicons);
   const StyledText = styled(Text);
+  const StyledDrawerLayoutAndroid = styled(DrawerLayoutAndroid);
 
   const [selectedCategory, setSelectedCategory] = useState("Home");
 
@@ -158,7 +159,6 @@ const Dashbord = () => {
       <ScrollView className="dark:bg-slate-600 pt-5">
         {menuItems.map((menuItem) => (
           <TouchableOpacity
-            className="dark:text-white"
             key={menuItem.title}
             style={[
               DashbordStyle.menuItem,
@@ -202,25 +202,34 @@ const Dashbord = () => {
   );
 
   return (
-    <DrawerLayoutAndroid
+    <StyledDrawerLayoutAndroid
       ref={drawer}
       drawerWidth={300}
       drawerPosition={"left"}
       renderNavigationView={navigationView}
       // Appliquer le style d'overlay
+      // className="dark:bg-white"
     >
       <View style={DashbordStyle.header}>
         <TouchableOpacity
           onPress={() => drawer.current?.openDrawer()}
-          style={DashbordStyle.iconContainer}
+          // style={DashbordStyle.iconContainer}
+          className="dark:text-slate-50"
         >
-          <Ionicons name="menu" size={24} color="#000000" />
+          <StyledIonicons
+            name="menu"
+            size={24}
+            className="dark:text-slate-50"
+          />
         </TouchableOpacity>
 
         <Text style={{ marginLeft: marginLeft }}>{renderSelectedOption()}</Text>
       </View>
       <View style={DashbordStyle.contentContainer}>{renderSelectedPage()}</View>
-      <View style={DashbordStyle.bottomNavigation}>
+      <View
+        className="dark:bg-slate-700"
+        style={DashbordStyle.bottomNavigation}
+      >
         {/* Barre de navigation inférieure */}
         <BottomNavigation
           activeCategory={selectedCategory}
@@ -228,7 +237,7 @@ const Dashbord = () => {
           categories={categories}
         />
       </View>
-    </DrawerLayoutAndroid>
+    </StyledDrawerLayoutAndroid>
   );
 };
 
