@@ -1,4 +1,5 @@
-import { StatusBar, StyleSheet } from "react-native";
+import { Dimensions, StatusBar, StyleSheet } from "react-native";
+const { width, height } = Dimensions.get("window");
 
 const DashbordStyle = StyleSheet.create({
   container: {
@@ -30,6 +31,20 @@ const DashbordStyle = StyleSheet.create({
     borderRadius: 50,
     marginLeft: 30,
     marginRight: 20, // Marge à droite de l'image pour séparer l'image du nom
+  },
+  fullImageContainer: {
+    position: "absolute",
+    top: 0,
+    left: 0,
+    width: width,
+    height: height / 2,
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "black",
+  },
+  fullImage: {
+    width: width,
+    height: height / 2,
   },
   userName: {
     fontSize: 20,
