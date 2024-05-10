@@ -7,4 +7,5 @@ import com.example.backend.models.Role;
 
 @Repository
 public interface RoleRepository extends JpaRepository<Role, Long>{
+    Role findByNom(String nom);
 }

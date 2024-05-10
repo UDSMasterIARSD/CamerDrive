@@ -17,7 +17,7 @@ import java.util.List;
 @Table(name = "roles")
 @RequiredArgsConstructor
 public class Role implements Serializable {
-    @jakarta.persistence.Id
+    @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long Id;
 
