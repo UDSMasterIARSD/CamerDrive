@@ -4,6 +4,7 @@ import com.example.backend.dto.SignInRequest;
 import com.example.backend.dto.SignInResponse;
 import com.example.backend.dto.UserRequest;
 import com.example.backend.dto.UserResponse;
+import com.example.backend.exceptions.NotFoundException;
 import com.example.backend.models.User;
 import com.example.backend.repositories.UserRepository;
 import com.example.backend.security.JWTUtil;
@@ -52,8 +53,7 @@ public class AuthController {
 
         String token = jwtUtil.generateToken(request.getUsername());
 
-//        User user = userRepository.findByEmailOrUsername(request.getUsername(), request.getUsername()).orElseThrow(() -> new ResourceNotFoundException("L'User", "de Username", request.getUsername()));
-        User user = userRepository.findByEmailOrUsername(request.getUsername(), request.getUsername()).orElseThrow(() -> new RuntimeException("Username invalide"));
+        User user = userRepository.findByEmailOrUsername(request.getUsername(), request.getUsername()).orElseThrow(() -> new NotFoundException("L'User", "de Username", request.getUsername()));
         UserResponse userResponse = modelMapper.map(user, UserResponse.class);
 
         return new SignInResponse(userResponse, token);

@@ -1,10 +1,11 @@
 import React from "react";
 import { Text, View } from "react-native";
+import { quizList } from "./quizList";
 
 const Quiz = () => {
   return (
     <View>
-      <Text style={{ marginTop: 50 }}>Hello quiz</Text>
+      <Text>hello</Text>
     </View>
   );
 };

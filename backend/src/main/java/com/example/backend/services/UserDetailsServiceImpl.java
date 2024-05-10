@@ -1,5 +1,6 @@
 package com.example.backend.services;
 
+import com.example.backend.exceptions.NotFoundException;
 import com.example.backend.models.User;
 import com.example.backend.repositories.UserRepository;
 import com.example.backend.security.UserDetailsImpl;
@@ -23,8 +24,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         Optional<User> user = userRepo.findByEmailOrUsername(username, username);
 
-//        return user.map(UserDetailsImpl::new).orElseThrow(() -> new ResourceNotFoundException("User", "email", username));
-        return user.map(UserDetailsImpl::new).orElseThrow(() -> new RuntimeException("Cet utilisateur n'a pas ete trouve !!!"));
+        return user.map(UserDetailsImpl::new).orElseThrow(() -> new NotFoundException("L'Utilisateur", "de username", username));
     }
 
 }

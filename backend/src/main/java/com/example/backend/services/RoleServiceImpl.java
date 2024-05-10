@@ -2,6 +2,7 @@ package com.example.backend.services;
 
 import com.example.backend.dto.RoleRequest;
 import com.example.backend.dto.RoleResponse;
+import com.example.backend.exceptions.NotFoundException;
 import com.example.backend.models.Role;
 import com.example.backend.repositories.RoleRepository;
 import lombok.AllArgsConstructor;
@@ -31,9 +32,8 @@ public class RoleServiceImpl implements RoleService {
 
     @Override
     public RoleResponse show(Long id) {
-//        Role role = roleRepo.findById(id)
-//                .orElseThrow(() -> new ResourceNotFoundException("Le Role", "d'Id", id));
-        Role role = roleRepo.findById(id).orElseThrow(() -> new RuntimeException("Le role n'a pas ete trouve !!!"));
+        Role role = roleRepo.findById(id)
+                .orElseThrow(() -> new NotFoundException("Le Role", "d'Id", id));
         return modelMapper.map(role, RoleResponse.class);
     }
 
@@ -45,9 +45,8 @@ public class RoleServiceImpl implements RoleService {
 
     @Override
     public RoleResponse update(RoleRequest role, Long id) {
-//        roleRepo.findById(id)
-//                .orElseThrow(() -> new ResourceNotFoundException("Le Role que vous voulez modifier", "d'Id", id));
-        roleRepo.findById(id).orElseThrow(() -> new RuntimeException("Le role n'a pas ete trouve !!!"));
+        roleRepo.findById(id)
+                .orElseThrow(() -> new NotFoundException("Le Role que vous voulez modifier", "d'Id", id));
                 Role oldRole = modelMapper.map(role, Role.class);
         oldRole.setId(id);
         return modelMapper.map(roleRepo.save(oldRole), RoleResponse.class);
@@ -55,9 +54,8 @@ public class RoleServiceImpl implements RoleService {
 
     @Override
     public void delete(Long id) {
-//        Role role = roleRepo.findById(id)
-//                .orElseThrow(() -> new ResourceNotFoundException("Le Role que voulez supprimer ", "d'Id", id));
-        Role role = roleRepo.findById(id).orElseThrow(() -> new RuntimeException("Le role n'a pas ete trouve !!!"));
+        Role role = roleRepo.findById(id)
+                .orElseThrow(() -> new NotFoundException("Le Role que voulez supprimer ", "d'Id", id));
         roleRepo.delete(role);
     }
 
