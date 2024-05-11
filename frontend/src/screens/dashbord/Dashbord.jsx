@@ -1,31 +1,31 @@
 import { Ionicons } from "@expo/vector-icons";
-import { withExpoSnack } from "nativewind";
 import { useNavigation } from "@react-navigation/native";
+import { styled, useColorScheme, withExpoSnack } from "nativewind";
 import React, { useRef, useState } from "react";
 import {
   Alert,
   Dimensions,
   DrawerLayoutAndroid,
   Image,
+  Pressable,
   ScrollView,
   Text,
   TouchableOpacity,
   View,
 } from "react-native";
-import BottomNavigation from "../../components/BottomNavigation"; // Assurez-vous que le chemin d'importation est correct
+import BottomNavigation from "../../components/BottomNavigation";
 import Courses from "../courses/Courses";
 import Home from "../home/Home";
 import LastExam from "../lastExam/LastExam";
 import Quiz from "../quiz/Quiz";
 import categories from "./Category";
 import DashbordStyle from "./DashbordStyle";
-import { styled, useColorScheme } from "nativewind";
 
 const Dashbord = () => {
   const { colorScheme, toggleColorScheme } = useColorScheme();
   const navigation = useNavigation();
 
-  const drawer = useRef(null); // Utilisez useRef() pour créer une référence
+  const drawer = useRef(null);
   const windowWidth = Dimensions.get("window").width;
   const marginLeft = windowWidth * 0.2;
 
@@ -133,15 +133,22 @@ const Dashbord = () => {
     }
   };
 
+  const goToProfilePage = () => {
+    navigation.navigate("Profile");
+  };
+
   const navigationView = () => (
     <View style={[DashbordStyle.container, DashbordStyle.navigationContainer]}>
       <View style={DashbordStyle.navigationHeader}>
         {/* Photo de l'utilisateur */}
         <View style={DashbordStyle.userInfoContainer}>
-          <Image
-            source={require("../../../assets/V2.jpg")}
-            style={DashbordStyle.userPhoto}
-          />
+          <Pressable onPress={goToProfilePage}>
+            <Image
+              source={require("../../../assets/V2.jpg")}
+              style={DashbordStyle.userPhoto}
+            />
+          </Pressable>
+
           {/* Nom de l'utilisateur et rôle */}
           <View>
             <Text style={DashbordStyle.userName}>Lidelle</Text>

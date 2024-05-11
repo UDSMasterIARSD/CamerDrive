@@ -47,10 +47,12 @@ const Profile = () => {
       <ScrollView>
         <View style={{ backgroundColor: "white" }}>
           <View style={ProfileStyle.imageContainer}>
-            <Image
-              source={require("../../../assets/V2.jpg")}
-              style={ProfileStyle.image}
-            />
+            <TouchableOpacity>
+              <Image
+                source={require("../../../assets/V2.jpg")}
+                style={ProfileStyle.image}
+              />
+            </TouchableOpacity>
             {/* Icône de crayon pour éditer le profil 
           <TouchableOpacity
             style={ProfileStyle.editIconContainer}
