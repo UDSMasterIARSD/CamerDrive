@@ -3,6 +3,7 @@ import { StyleSheet } from "react-native";
 // import DynamicAppStyles from "./src/screens/welcome/onboarding/DynamicAppStyles";
 // import Onboarding from "./src/screens/welcome/onboarding/Onboarding";
 // import OnboardingConfig from "./src/screens/welcome/onboarding/OnboardingConfig";
+import { NavigationContainer } from "@react-navigation/native";
 import { AuthProvider } from "./src/context/AuthContext";
 import Index from "./src/screens/Index";
 
@@ -13,9 +14,11 @@ export default function App() {
       
     </View>
     */
-    <AuthProvider>
-      <Index />
-    </AuthProvider>
+    <NavigationContainer>
+      <AuthProvider>
+        <Index />
+      </AuthProvider>
+    </NavigationContainer>
   );
 }
 

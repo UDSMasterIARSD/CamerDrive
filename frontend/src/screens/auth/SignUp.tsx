@@ -1,8 +1,10 @@
 import { useState } from "react";
 
+import DateTimePicker from "@react-native-community/datetimepicker";
 import { useNavigation } from "@react-navigation/native";
 import {
   ActivityIndicator,
+  Dimensions,
   Image,
   Pressable,
   ScrollView,
@@ -19,30 +21,82 @@ const SignIn = () => {
   const [name, setName] = useState<string>("");
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
-  //const [showPassword, setShowPassword] = useState(false);
-  //const [image, setImage] = useState<string>("");
+  const [confirmPassword, setConfirmPassword] = useState<string>("");
   const [isLoading, setIsLoading] = useState(false); // State for showing the loading indicator
+  const [dateOfBirth, setDateOfBirth] = useState<Date | null>(null); // Etat local pour la date de naissance
+  const [showDatePicker, setShowDatePicker] = useState<boolean>(false); //
   const { onRegister } = useAuth();
+
+  const [errors, setErrors] = useState<{
+    name: string | null;
+    email: string | null;
+    password: string | null;
+    confirmPassword: string | null;
+  }>({
+    name: null,
+    email: null,
+    password: null,
+    confirmPassword: null,
+  });
 
   const navigation = useNavigation();
 
   const handleRegister = async () => {
     try {
-      setIsLoading(true); // Start loading
+      setIsLoading(true);
 
-      const result = await onRegister!(name, email, password);
+      // Validation des champs
+      const validationErrors: any = {};
+
+      if (!name) {
+        validationErrors.name = "Please enter your username.";
+      }
+
+      if (!email) {
+        validationErrors.email = "Please enter your email address.";
+      } else if (!email.endsWith("@gmail.com")) {
+        validationErrors.email = "Please use a valid Gmail address.";
+      }
+
+      if (!password) {
+        validationErrors.password = "Please enter your password.";
+      } else if (password.length < 8 || !/\d/.test(password)) {
+        validationErrors.password =
+          "Password must be at least 8 characters long and contain at least one digit.";
+      }
+
+      if (!confirmPassword) {
+        validationErrors.confirmPassword = "Please confirm your password.";
+      } else if (password !== confirmPassword) {
+        validationErrors.confirmPassword = "Passwords do not match.";
+      }
+
+      setErrors(validationErrors);
+
+      // Vérification des erreurs
+      if (Object.keys(validationErrors).length > 0) {
+        return; // Arrête le traitement si des erreurs existent
+      }
+
+      const result = await onRegister!(name, email, password, confirmPassword);
 
       if (result && result.error) {
         alert(result.message + result.error);
       }
     } finally {
-      setIsLoading(false); // Stop loading
+      setIsLoading(false);
     }
+  };
+
+  const handleDateChange = (event: any, selectedDate: Date | undefined) => {
+    const currentDate = selectedDate || dateOfBirth;
+    setShowDatePicker(false);
+    setDateOfBirth(currentDate);
   };
 
   return (
     <SafeAreaView style={styles.SafeAreaView}>
-      <ScrollView style={{ marginTop: 30 }}>
+      <ScrollView>
         <View style={{ justifyContent: "center", alignItems: "center" }}>
           <Image
             source={require("./../../../assets/auth/createAccount.png")}
@@ -56,12 +110,11 @@ const SignIn = () => {
             <TextInput
               style={styles.TextInput}
               value={name}
-              placeholder="Enter your username address here ..."
+              placeholder="Enter your username here ..."
               placeholderTextColor="#fff"
-              //keyboardType="email-address"
-              //textContentType="emailAddress"
               onChangeText={(text) => setName(text)}
             />
+            {errors.name && <Text style={styles.errorText}>{errors.name}</Text>}
           </View>
           <View>
             <Text style={styles.Text}>Email:</Text>
@@ -70,21 +123,29 @@ const SignIn = () => {
               value={email}
               placeholder="Enter your email address here ..."
               placeholderTextColor="#fff"
-              //keyboardType="email-address"
-              //textContentType="emailAddress"
               onChangeText={(text) => setEmail(text)}
             />
+            {errors.email && (
+              <Text style={styles.errorText}>{errors.email}</Text>
+            )}
           </View>
           <View>
-            <Text style={styles.Text}>Date de Naissance :</Text>
-            <TextInput
-              style={styles.TextInput}
-              placeholder="Enter your email address here ..."
-              placeholderTextColor="#fff"
-              //keyboardType="email-address"
-              //textContentType="emailAddress"
-            />
+            <Text style={styles.Text}>Date of Birth:</Text>
+            <Pressable onPress={() => setShowDatePicker(true)}>
+              <Text style={styles.dateText}>
+                {dateOfBirth ? dateOfBirth.toDateString() : "Select Date"}
+              </Text>
+            </Pressable>
+            {showDatePicker && (
+              <DateTimePicker
+                value={dateOfBirth || new Date()}
+                mode="date"
+                display="default"
+                onChange={handleDateChange}
+              />
+            )}
           </View>
+
           <View>
             <Text style={styles.Text}>Password:</Text>
             <TextInput
@@ -98,6 +159,9 @@ const SignIn = () => {
               onChangeText={(text) => setPassword(text)}
               maxLength={20}
             />
+            {errors.password && (
+              <Text style={styles.errorText}>{errors.password}</Text>
+            )}
           </View>
           <View>
             <Text style={styles.Text}>Confirm Password :</Text>
@@ -108,8 +172,13 @@ const SignIn = () => {
               keyboardType="default"
               textContentType="password"
               secureTextEntry={true}
+              value={confirmPassword}
+              onChangeText={(text) => setConfirmPassword(text)}
               maxLength={20}
             />
+            {errors.confirmPassword && (
+              <Text style={styles.errorText}>{errors.confirmPassword}</Text>
+            )}
           </View>
         </View>
         <View style={styles.ViewPressable}>
@@ -126,32 +195,23 @@ const SignIn = () => {
   );
 };
 
-export default SignIn;
-
 const styles = StyleSheet.create({
   SafeAreaView: {
     flex: 1,
-    //justifyContent: "start",
-    //alignItems: "start",
     backgroundColor: "#1C202F",
   },
   Pressable: {
     alignItems: "center",
     justifyContent: "center",
-    paddingVertical: 12,
-    paddingHorizontal: 32,
     height: 50,
-    width: 320,
-    borderRadius: 40,
+    width: Dimensions.get("window").width * 0.6,
+    borderRadius: 20,
     elevation: 3,
     backgroundColor: "#3AAF9F",
+    marginBottom: 10,
   },
   ViewPressable: {
-    justifyContent: "center",
     alignItems: "center",
-    height: 80,
-    position: "relative",
-    padding: 30,
   },
   TextRegister: {
     fontSize: 16,
@@ -161,40 +221,53 @@ const styles = StyleSheet.create({
     color: "white",
   },
   Informationview: {
-    // backgroundColor: "#FFF1FE",
-    opacity: 0.9,
-    flexDirection: "column",
-    margin: 20,
-    height: 330,
-    borderRadius: 20,
-    //justifyContent: "start",
-    padding: 1,
-    marginBottom: 220,
+    width: Dimensions.get("window").width * 0.8,
+    marginBottom: 20,
+    marginLeft: Dimensions.get("window").width * 0.1,
   },
   Text: {
     color: "#fff",
     fontWeight: "bold",
     fontSize: 15,
     marginLeft: 10,
+    marginBottom: 10,
   },
   TextInput: {
-    height: 65,
-    margin: 12,
-    borderWidth: 3,
+    borderWidth: 2,
     borderColor: "#3AAF9F",
-    padding: 10,
-    borderRadius: 20,
-    backgroundColor: "#1C202F",
-    color: "#fff",
-    fontSize: 16,
+    borderRadius: 15,
+    height: 55,
+    alignItems: "center",
+    paddingLeft: 15,
+    marginBottom: 20,
+    color: "white",
   },
   Image: {
     width: 300,
     height: 200,
   },
   createAccountText: {
-    fontSize: 40,
+    fontSize: 30,
     fontWeight: "bold",
     color: "#fff",
+    marginBottom: 30,
+    marginTop: 20,
+  },
+  dateText: {
+    borderWidth: 2,
+    borderColor: "#3AAF9F",
+    borderRadius: 15,
+    height: 55,
+    paddingLeft: 15,
+    marginBottom: 20,
+    color: "#fff",
+    textAlignVertical: "center",
+  },
+  errorText: {
+    color: "red",
+    fontSize: 12,
+    marginLeft: 10,
   },
 });
+
+export default SignIn;
