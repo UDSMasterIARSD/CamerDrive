@@ -22,19 +22,24 @@ const SignIn = () => {
   const [password, setPassword] = useState("");
   //const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [loginError, setLoginError] = useState<string | null>(null);
 
   const { onLogin } = useAuth();
+
   const handleLogin = async () => {
     try {
-      setIsLoading(true); // Start loading
+      setIsLoading(true);
 
       const result = await onLogin!(name, password);
+      console.log("Login result:", result);
 
       if (result && result.error) {
-        alert(result.message + result.error);
+        setLoginError("Invalid username or password.");
+      } else {
+        setLoginError(null);
       }
     } finally {
-      setIsLoading(false); // Stop loading
+      setIsLoading(false);
     }
   };
 
@@ -56,10 +61,8 @@ const SignIn = () => {
             <TextInput
               style={styles.textInput}
               value={name}
-              placeholder="Enter your name here ..."
+              placeholder="Enter your username here ..."
               placeholderTextColor="#fff"
-              //keyboardType="email-address"
-              //textContentType="emailAddress"
               onChangeText={(text) => setName(text)}
             />
           </View>
@@ -76,6 +79,7 @@ const SignIn = () => {
               secureTextEntry={true}
               maxLength={20}
             />
+            {loginError && <Text style={styles.errorText}>{loginError}</Text>}
           </View>
           <View
             style={{
@@ -227,5 +231,12 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     //marginLeft: "20",
     fontSize: 15,
+  },
+  errorText: {
+    color: "red",
+    textAlign: "center",
+    marginTop: 10,
+    marginBottom: 5,
+    fontSize: 14,
   },
 });

@@ -6,7 +6,7 @@ const environment: ConfigurationParameters  = {
     username: '',
     password: '',
     accessToken: '',
-    basePath: Platform.OS === "android"? ' https://66f0-129-0-103-7.ngrok-free.app': 'http://localhost:8080/api',
+    basePath: Platform.OS === "android"? ' https://145a-129-0-103-13.ngrok-free.app': 'http://localhost:8080/api',
 };
 
 export default environment;

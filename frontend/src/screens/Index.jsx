@@ -1,4 +1,3 @@
-import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import React from "react";
 import { useAuth } from "../context/AuthContext.tsx";
@@ -20,73 +19,71 @@ const Index = () => {
   const { authState, onLogout } = useAuth();
 
   return (
-    <NavigationContainer>
-      <Stack.Navigator initialRouteName="Onboading">
-        {authState?.authenticated ? (
-          <>
-            <Stack.Screen
-              name="Home"
-              component={Dashbord}
-              options={{ headerShown: false }}
-            />
-            <Stack.Screen
-              name="Courses"
-              component={Courses}
-              options={{ headerShown: false }}
-            />
-            <Stack.Screen
-              name="Quiz"
-              component={Quiz}
-              options={{ headerShown: false }}
-            />
-            <Stack.Screen
-              name="Last exam"
-              component={LastExam}
-              options={{ headerShown: false }}
-            />
-            <Stack.Screen
-              name="CoursesDetails"
-              component={CoursesDetails}
-              options={{ headerShown: false }}
-            />
-            <Stack.Screen
-              name="Profile"
-              component={Profile}
-              options={{ headerShown: false }}
-            />
-            <Stack.Screen
-              name="AboutUs"
-              component={AboutUs}
-              options={{ headerShown: false }}
-            />
-            <Stack.Screen
-              name="Statistiques"
-              component={Statistiques}
-              options={{ headerShown: false }}
-            />
-          </>
-        ) : (
-          <>
-            <Stack.Screen
-              name="Onboarding"
-              component={OnboardingCompo}
-              options={{ headerShown: false }}
-            />
+    <Stack.Navigator initialRouteName="Onboading">
+      {authState?.authenticated ? (
+        <>
+          <Stack.Screen
+            name="Home"
+            component={Dashbord}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name="Courses"
+            component={Courses}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name="Quiz"
+            component={Quiz}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name="Last exam"
+            component={LastExam}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name="CoursesDetails"
+            component={CoursesDetails}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name="Profile"
+            component={Profile}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name="AboutUs"
+            component={AboutUs}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name="Statistiques"
+            component={Statistiques}
+            options={{ headerShown: false }}
+          />
+        </>
+      ) : (
+        <>
+          <Stack.Screen
+            name="Onboarding"
+            component={OnboardingCompo}
+            options={{ headerShown: false }}
+          />
 
-            <Stack.Screen
-              name="SignIn"
-              component={SignIn}
-              options={{ headerShown: false }}
-            />
-            <Stack.Screen
-              name="SignUp"
-              component={SignUp}
-              options={{ headerShown: false }}
-            />
-          </>
-        )}
-      </Stack.Navigator>
-    </NavigationContainer>
+          <Stack.Screen
+            name="SignIn"
+            component={SignIn}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name="SignUp"
+            component={SignUp}
+            options={{ headerShown: false }}
+          />
+        </>
+      )}
+    </Stack.Navigator>
   );
 };
 

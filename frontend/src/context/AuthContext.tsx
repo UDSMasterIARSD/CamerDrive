@@ -1,6 +1,6 @@
+import { useNavigation } from "@react-navigation/native";
 import * as SecureStore from "expo-secure-store";
 import React, { createContext, useContext, useState } from "react";
-//import { AuthApi } from "../../generated/index";
 import { AuthControllerApi } from "../../generated/index";
 import { SignInRequest, UserRequest } from "../../generated/models";
 import environment from "../environments/environment";
@@ -10,7 +10,8 @@ interface AuthProps {
   onRegister?: (
     username: string,
     email: string,
-    password: string
+    password: string,
+    confirmPassword: string
   ) => Promise<any>;
   onLogin?: (username: string, password: string) => Promise<any>;
 }
@@ -26,6 +27,7 @@ export const useAuth = () => {
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
   children,
 }) => {
+  const navigation = useNavigation();
   const [authState, setAuthState] = useState<{
     token: string | null;
     authenticated: boolean | null;
@@ -34,7 +36,6 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
     authenticated: null,
   });
 
-  //register the user
   const register = async (
     username: string,
     email: string,
@@ -47,18 +48,17 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
       password: password,
       email: email,
     };
-    console.log(apiParams);
 
-    authApi
-      .register(apiParams)
-      .then((response) => {
-        console.log(response.data.email);
-        alert(response.data.email);
-      })
-      .catch((error) => {
-        console.log(error);
-        alert(error.message);
-      });
+    try {
+      const response = await authApi.register(apiParams);
+      console.log(response.data.email);
+      //alert(response.data.email);
+
+      navigation.navigate("SignIn"); // Redirection vers la page de connexion
+    } catch (error) {
+      console.log(error);
+      alert(error.message);
+    }
   };
 
   const login = async (username: string, password: string) => {
@@ -77,7 +77,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
           token: response?.data?.token,
           authenticated: true,
         });
-        const currentTime = new Date().toISOString(); // Get the current time in milliseconds
+        const currentTime = new Date().toISOString();
         console.log(currentTime);
         await SecureStore.setItemAsync("TIME", currentTime);
         await SecureStore.setItemAsync(TOKEN, response?.data?.token);
@@ -87,6 +87,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
       })
       .catch((error) => {
         console.log(error);
+        //return error;
         alert(error);
       });
   };
