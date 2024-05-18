@@ -2,9 +2,12 @@ import React from "react";
 import { Image, ScrollView, Text, View } from "react-native";
 import Carousel from "../../components/Carousel";
 import HorizontalView from "../../components/HorizontalView";
+import { useAuth } from "../../context/AuthContext";
 import Homestyles from "./HomeStyle";
 
 const Home = () => {
+  const { authState } = useAuth();
+
   return (
     <ScrollView>
       <View style={Homestyles.fstContainer}>
@@ -15,7 +18,7 @@ const Home = () => {
           />
           <View style={{ flex: 1 }}>
             <Text style={Homestyles.welcomeText}>Welcome to CarmerDrive</Text>
-            <Text>Lidelle</Text>
+            <Text>{authState?.userName}</Text>
           </View>
         </View>
         <View>

@@ -14,6 +14,7 @@ import {
   View,
 } from "react-native";
 import BottomNavigation from "../../components/BottomNavigation";
+import { useAuth } from "../../context/AuthContext";
 import Courses from "../courses/Courses";
 import Home from "../home/Home";
 import LastExam from "../lastExam/LastExam";
@@ -24,6 +25,7 @@ import DashbordStyle from "./DashbordStyle";
 const Dashbord = () => {
   const { colorScheme, toggleColorScheme } = useColorScheme();
   const navigation = useNavigation();
+  const { authState } = useAuth();
 
   const drawer = useRef(null);
   const windowWidth = Dimensions.get("window").width;
@@ -61,6 +63,8 @@ const Dashbord = () => {
     }
   };
 
+  const { onLogout } = useAuth();
+
   const createTwoButtonAlert = () =>
     Alert.alert(
       "Confirm Logout",
@@ -72,7 +76,7 @@ const Dashbord = () => {
           //onPress: () => console.log("Cancel Pressed"),
           style: "cancel",
         },
-        { text: "YES" /*{ onPress: () => console.log("OK Pressed")}*/ },
+        { text: "YES", onPress: () => onLogout() },
       ],
       {
         alertContainerStyle: DashbordStyle.alertContainer,
@@ -151,8 +155,8 @@ const Dashbord = () => {
 
           {/* Nom de l'utilisateur et rôle */}
           <View>
-            <Text style={DashbordStyle.userName}>Lidelle</Text>
-            <Text style={DashbordStyle.userRole}>Candidat</Text>
+            <Text style={DashbordStyle.userName}>{authState?.userName}</Text>
+            <Text style={DashbordStyle.userRole}>{authState?.role}</Text>
             {/* Ligne foncée */}
             <View style={DashbordStyle.line}></View>
             {/* Texte "Camer" à gauche de la ligne */}

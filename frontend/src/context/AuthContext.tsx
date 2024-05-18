@@ -1,6 +1,6 @@
 import { useNavigation } from "@react-navigation/native";
 import * as SecureStore from "expo-secure-store";
-import React, { createContext, useContext, useState } from "react";
+import React, { createContext, useContext, useEffect, useState } from "react";
 import { AuthControllerApi } from "../../generated/index";
 import { SignInRequest, UserRequest } from "../../generated/models";
 import environment from "../environments/environment";
@@ -10,6 +10,7 @@ interface AuthProps {
     token: string | null;
     authenticated: boolean | null;
     role: string | null;
+    userName: string | null;
   };
   onRegister?: (
     username: string,
@@ -18,6 +19,7 @@ interface AuthProps {
     confirmPassword: string
   ) => Promise<any>;
   onLogin?: (username: string, password: string) => Promise<any>;
+  onLogout?: () => Promise<any>;
 }
 
 const TOKEN = "TOKEN";
@@ -36,11 +38,37 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
     token: string | null;
     authenticated: boolean | null;
     role: string | null;
+    userName: string | null;
   }>({
     token: null,
     authenticated: null,
     role: null,
+    userName: null,
   });
+
+  useEffect(() => {
+    const loadToken = async () => {
+      const token = await SecureStore.getItemAsync(TOKEN);
+
+      if (token) {
+        setAuthState({
+          token: token,
+          authenticated: true,
+          role: authState?.role,
+          userName: authState?.userName,
+        });
+      } else {
+        setAuthState({
+          token: null,
+          authenticated: false,
+          role: null,
+          userName: null,
+        });
+      }
+    };
+
+    loadToken();
+  }, []);
 
   const register = async (
     username: string,
@@ -82,7 +110,8 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
         setAuthState({
           token: response?.data?.token,
           authenticated: true,
-          role: response?.data?.user.role.nom,
+          role: response?.data?.user?.role?.nom,
+          userName: response?.data?.user?.username,
         });
         const currentTime = new Date().toISOString();
         console.log(currentTime);
@@ -99,9 +128,21 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
       });
   };
 
+  const logout = async () => {
+    await SecureStore.deleteItemAsync(TOKEN);
+    setAuthState({
+      token: null,
+      authenticated: false,
+      role: null,
+      userName: null,
+    });
+    alert("You have been logged out.");
+  };
+
   const value: AuthProps = {
     onRegister: register,
     onLogin: login,
+    onLogout: logout,
     authState: authState,
   };
 

@@ -45,7 +45,7 @@ const AboutUs = () => {
           <Text style={styles.appName}>CarmerDrive</Text>
         </View>
 
-        <View style={styles.content}>
+        <View>
           <Text style={styles.aboutTitle}>About Us</Text>
 
           <Text style={styles.aboutText}>
@@ -128,7 +128,7 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 24,
     fontWeight: "bold",
-    textIndent: 20, // Indent the first line by 20 pixels
+    //textIndent: 20, // Indent the first line by 20 pixels
   },
 });
 

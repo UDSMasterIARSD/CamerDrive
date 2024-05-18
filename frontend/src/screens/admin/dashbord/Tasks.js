@@ -1,10 +1,10 @@
 const tasks = [
-  { icon: "help-circle-outline", text: "Gestion des Questions" }, // Gestion des questions
-  { icon: "clipboard-outline", text: "Gestion des Quiz" }, // Gestion des quiz
-  { icon: "archive-outline", text: "Gestion des Anciens Sujets" }, // Gestion des anciens sujets
-  { icon: "people-outline", text: "Gestion des Utilisateurs" },
-  { icon: "bar-chart-outline", text: "Gestion des Statistiques" }, // Gestion des statistiques
-  { icon: "checkmark-circle-outline", text: "Gestion des Tests" },
+  { icon: "help-circle-outline", text: "Question Management" }, // Gestion des questions
+  { icon: "clipboard-outline", text: "Quiz Management" }, // Gestion des quiz
+  { icon: "archive-outline", text: "Past Papers Management" }, // Gestion des anciens sujets
+  { icon: "people-outline", text: "User Management" }, // Gestion des utilisateurs
+  { icon: "bar-chart-outline", text: "Couses Management" }, // Gestion des statistiques
+  { icon: "checkmark-circle-outline", text: "Test Management" }, // Gestion des tests
 ];
 
 export default tasks;
