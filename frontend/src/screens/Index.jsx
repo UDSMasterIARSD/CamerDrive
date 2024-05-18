@@ -1,10 +1,11 @@
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import React from "react";
 import { useAuth } from "../context/AuthContext.tsx";
-import AboutUs from "./AboutUs.jsx";
+import AboutUs from "./AboutUs.tsx";
 import Profile from "./Profile/Profile.jsx";
 import Statistiques from "./Statistiques/Statistiques.jsx";
 import AdminDashbord from "./admin/dashbord/AdminDashbord.jsx";
+import QuestionDetails from "./admin/manageQuestions/QuestionDetails.jsx";
 import SignIn from "./auth/SignIn.tsx";
 import SignUp from "./auth/SignUp.tsx";
 import Courses from "./courses/Courses.jsx";
@@ -27,6 +28,11 @@ const Index = () => {
             <Stack.Screen
               name="AdminDashboard"
               component={AdminDashbord}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="QuestionDetails"
+              component={QuestionDetails}
               options={{ headerShown: false }}
             />
             {/* Ajoutez d'autres écrans d'administration ici */}

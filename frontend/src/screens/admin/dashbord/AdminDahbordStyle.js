@@ -4,10 +4,10 @@ const { width, height } = Dimensions.get("window");
 const AdminDashbordStyle = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
+    //justifyContent: "center",
+    //alignItems: "center",
     backgroundColor: "#f5f5f5",
-    marginTop: StatusBar.currentHeight + 50,
+    marginTop: StatusBar.currentHeight + 20,
   },
   textBelowLine: {
     fontSize: 24,
@@ -16,6 +16,7 @@ const AdminDashbordStyle = StyleSheet.create({
     marginBottom: 20,
     textAlign: "center",
     alignSelf: "center",
+    marginTop: 20,
   },
   tasksContainer: {
     marginTop: 16,
@@ -43,6 +44,10 @@ const AdminDashbordStyle = StyleSheet.create({
     color: "white",
     fontSize: 12,
     marginTop: 15,
+  },
+  alertContainer: {
+    backgroundColor: "lightgrey",
+    borderRadius: 10,
   },
 });
 

@@ -1,14 +1,54 @@
 import { Ionicons } from "@expo/vector-icons";
+import { useNavigation } from "@react-navigation/native";
 import React from "react";
-import { ScrollView, Text, TouchableOpacity, View } from "react-native";
+import { Alert, Pressable, ScrollView, Text, View } from "react-native";
+import { useAuth } from "../../../context/AuthContext";
 import AdminDashbordStyle from "./AdminDahbordStyle";
 import tasks from "./Tasks";
 
 const AdminDashbord = () => {
+  const navigation = useNavigation();
+
+  const { onLogout } = useAuth();
+
+  const handleTaskPress = (task) => {
+    switch (task.text) {
+      case "Question Management":
+        navigation.navigate("QuestionDetails");
+        break;
+      case "Gestion des Quiz":
+        //navigation.navigate("Task2");
+        break;
+      default:
+        break;
+    }
+  };
+
+  const createTwoButtonAlert = () =>
+    Alert.alert(
+      "Confirm Logout",
+      "Are you sure you want to log out?",
+      [
+        {
+          text: "Cancel",
+
+          //onPress: () => console.log("Cancel Pressed"),
+          style: "cancel",
+        },
+        { text: "YES", onPress: () => onLogout() },
+      ],
+      {
+        alertContainerStyle: AdminDashbordStyle.alertContainer,
+      }
+    );
+
   return (
     <>
       <ScrollView>
         <View style={AdminDashbordStyle.container}>
+          <Pressable style={{ marginLeft: 10 }} onPress={createTwoButtonAlert}>
+            <Ionicons name="log-out" size={30} color="#003f5c" />
+          </Pressable>
           {/* Texte "My tasks" */}
           <Text style={AdminDashbordStyle.textBelowLine}>
             You can perform the following tasks
@@ -21,9 +61,10 @@ const AdminDashbord = () => {
                   {tasks
                     .slice(rowIndex * 2, (rowIndex + 1) * 2)
                     .map((item, index) => (
-                      <TouchableOpacity
+                      <Pressable
                         key={index}
                         style={AdminDashbordStyle.tasksIconContainer}
+                        onPress={() => handleTaskPress(item)}
                       >
                         <View style={AdminDashbordStyle.tasksIcon}>
                           <Ionicons name={item.icon} size={24} color="white" />
@@ -31,7 +72,7 @@ const AdminDashbord = () => {
                             {item.text}
                           </Text>
                         </View>
-                      </TouchableOpacity>
+                      </Pressable>
                     ))}
                 </View>
               )

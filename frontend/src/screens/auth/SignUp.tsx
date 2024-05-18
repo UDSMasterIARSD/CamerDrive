@@ -17,7 +17,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 
 import { useAuth } from "../../context/AuthContext";
 
-const SignIn = () => {
+const SignUp = () => {
   const [name, setName] = useState<string>("");
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
@@ -189,6 +189,15 @@ const SignIn = () => {
               <Text style={styles.TextRegister}>Register</Text>
             )}
           </Pressable>
+          <Pressable
+            onPress={() => {
+              navigation.navigate("SignIn");
+            }}
+          >
+            <Text style={styles.textSignUp}>
+              Already have an account ? SignIn
+            </Text>
+          </Pressable>
         </View>
       </ScrollView>
     </SafeAreaView>
@@ -268,6 +277,14 @@ const styles = StyleSheet.create({
     fontSize: 12,
     marginLeft: 10,
   },
+  textSignUp: {
+    textAlign: "right",
+    color: "#fff",
+    //fontWeight: "bold",
+    //marginLeft: "20",
+    fontSize: 15,
+    marginBottom: 20,
+  },
 });
 
-export default SignIn;
+export default SignUp;
