@@ -4,6 +4,7 @@ import { useAuth } from "../context/AuthContext.tsx";
 import AboutUs from "./AboutUs.jsx";
 import Profile from "./Profile/Profile.jsx";
 import Statistiques from "./Statistiques/Statistiques.jsx";
+import AdminDashbord from "./admin/dashbord/AdminDashbord.jsx";
 import SignIn from "./auth/SignIn.tsx";
 import SignUp from "./auth/SignUp.tsx";
 import Courses from "./courses/Courses.jsx";
@@ -21,48 +22,59 @@ const Index = () => {
   return (
     <Stack.Navigator initialRouteName="Onboading">
       {authState?.authenticated ? (
-        <>
-          <Stack.Screen
-            name="Home"
-            component={Dashbord}
-            options={{ headerShown: false }}
-          />
-          <Stack.Screen
-            name="Courses"
-            component={Courses}
-            options={{ headerShown: false }}
-          />
-          <Stack.Screen
-            name="Quiz"
-            component={Quiz}
-            options={{ headerShown: false }}
-          />
-          <Stack.Screen
-            name="Last exam"
-            component={LastExam}
-            options={{ headerShown: false }}
-          />
-          <Stack.Screen
-            name="CoursesDetails"
-            component={CoursesDetails}
-            options={{ headerShown: false }}
-          />
-          <Stack.Screen
-            name="Profile"
-            component={Profile}
-            options={{ headerShown: false }}
-          />
-          <Stack.Screen
-            name="AboutUs"
-            component={AboutUs}
-            options={{ headerShown: false }}
-          />
-          <Stack.Screen
-            name="Statistiques"
-            component={Statistiques}
-            options={{ headerShown: false }}
-          />
-        </>
+        authState.role === "ADMIN" ? (
+          <>
+            <Stack.Screen
+              name="AdminDashboard"
+              component={AdminDashbord}
+              options={{ headerShown: false }}
+            />
+            {/* Ajoutez d'autres écrans d'administration ici */}
+          </>
+        ) : (
+          <>
+            <Stack.Screen
+              name="Home"
+              component={Dashbord}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="Courses"
+              component={Courses}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="Quiz"
+              component={Quiz}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="LastExam"
+              component={LastExam}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="CoursesDetails"
+              component={CoursesDetails}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="Profile"
+              component={Profile}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="AboutUs"
+              component={AboutUs}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="Statistiques"
+              component={Statistiques}
+              options={{ headerShown: false }}
+            />
+          </>
+        )
       ) : (
         <>
           <Stack.Screen
@@ -70,7 +82,6 @@ const Index = () => {
             component={OnboardingCompo}
             options={{ headerShown: false }}
           />
-
           <Stack.Screen
             name="SignIn"
             component={SignIn}
