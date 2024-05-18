@@ -58,6 +58,8 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
           userName: authState?.userName,
         });
       } else {
+        console.log("Token expired. Deleting token and time.");
+        await SecureStore.deleteItemAsync(TOKEN);
         setAuthState({
           token: null,
           authenticated: false,

@@ -6,7 +6,6 @@ import {
   Alert,
   Dimensions,
   DrawerLayoutAndroid,
-  Image,
   Pressable,
   ScrollView,
   Text,
@@ -146,12 +145,27 @@ const Dashbord = () => {
       <View style={DashbordStyle.navigationHeader}>
         {/* Photo de l'utilisateur */}
         <View style={DashbordStyle.userInfoContainer}>
-          <Pressable onPress={goToProfilePage}>
-            <Image
-              source={require("../../../assets/V2.jpg")}
-              style={DashbordStyle.userPhoto}
-            />
-          </Pressable>
+          <View style={DashbordStyle.initialLetterContainer}>
+            <Pressable onPress={goToProfilePage}>
+              <Text style={DashbordStyle.initialLetter}>
+                {authState?.userName?.charAt(0)}
+              </Text>
+            </Pressable>
+          </View>
+          {/*{userPhoto ? (
+            <Pressable onPress={goToProfilePage}>
+              <Image
+                source={{ uri: userPhoto }}
+                style={DashbordStyle.userPhoto}
+              />
+            </Pressable>
+          ) : (
+            <View style={DashbordStyle.initialLetterContainer}>
+              <Text style={DashbordStyle.initialLetter}>
+                {username.charAt(0)}
+              </Text>
+            </View>
+          )}*/}
 
           {/* Nom de l'utilisateur et rôle */}
           <View>
