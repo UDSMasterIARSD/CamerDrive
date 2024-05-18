@@ -6,7 +6,11 @@ import { SignInRequest, UserRequest } from "../../generated/models";
 import environment from "../environments/environment";
 
 interface AuthProps {
-  authState?: { token: string | null; authenticated: boolean | null };
+  authState?: {
+    token: string | null;
+    authenticated: boolean | null;
+    role: string | null;
+  };
   onRegister?: (
     username: string,
     email: string,
@@ -31,9 +35,11 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
   const [authState, setAuthState] = useState<{
     token: string | null;
     authenticated: boolean | null;
+    role: string | null;
   }>({
     token: null,
     authenticated: null,
+    role: null,
   });
 
   const register = async (
@@ -76,6 +82,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
         setAuthState({
           token: response?.data?.token,
           authenticated: true,
+          role: response?.data?.user.role.nom,
         });
         const currentTime = new Date().toISOString();
         console.log(currentTime);
