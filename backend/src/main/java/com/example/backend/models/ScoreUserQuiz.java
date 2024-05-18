@@ -5,12 +5,14 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.io.Serializable;
+
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table(name = "user_answers")
-public class UserAnswer {
+@Table(name = "score_user_quiz")
+public class ScoreUserQuiz implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -20,9 +22,8 @@ public class UserAnswer {
     private User user;
 
     @ManyToOne
-    @JoinColumn(name = "question_id")
-    private Questions question;
+    @JoinColumn(name = "quiz_id")
+    private Quiz quiz;
 
-    @Column(nullable = false)
-    private int selectedOption;
+    private double note;
 }

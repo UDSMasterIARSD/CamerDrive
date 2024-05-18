@@ -11,6 +11,7 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import java.io.Serializable;
+import java.util.Date;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
@@ -45,6 +46,10 @@ public class User implements Serializable {
     @NotBlank(message = "password : Ce champ ne doit pas etre vide")
     private String password;
 
+    @Column(name = "date_naiss")
+    @NotNull(message = "Date de naissance: Ce champ est obligatoire")
+    private Date dateNaiss;
+
     @ManyToOne
     private Role role;
 
@@ -54,7 +59,7 @@ public class User implements Serializable {
     private Timestamp createdAt;
 
     @UpdateTimestamp
-    @Column(name = "updated_at", nullable = false, updatable = true)
+    @Column(name = "updated_at", nullable = false)
     private Timestamp updatedAt;
 
     @ManyToMany(cascade = CascadeType.ALL)
@@ -62,5 +67,11 @@ public class User implements Serializable {
             name = "user_cours",
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "cours_id"))
-    private List<Cours> courses = new ArrayList<>();
+    private List<Cours> cours = new ArrayList<>();
+
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private List<ScoreUserTest> scoreUserTests;
+
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private List<ScoreUserQuiz> scoreUserQuizzes;
 }

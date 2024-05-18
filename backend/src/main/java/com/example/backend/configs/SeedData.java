@@ -9,7 +9,7 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
-import java.util.Arrays;
+import java.text.SimpleDateFormat;
 
 @Configuration
 public class SeedData implements CommandLineRunner {
@@ -25,20 +25,25 @@ public class SeedData implements CommandLineRunner {
     @Override
     public void run(String... args) throws Exception {
         if (roleRepo.count() == 0) {
-            Role role1 = new Role();
-            role1.setNom("ADMIN");
-            role1.setDescription("Administrateur");
-            roleRepo.save(role1);
-            Role role2 = new Role();
-            role2.setNom("USER");
-            role2.setDescription("Utilisateur");
-            roleRepo.save(role2);
+            Role adminRole = new Role();
+            adminRole.setNom("ADMIN");
+            adminRole.setDescription("Administrateur");
+            roleRepo.save(adminRole);
+            Role instRole = new Role();
+            instRole.setNom("INSTITUTER");
+            instRole.setDescription("Instituteur(rice)");
+            roleRepo.save(instRole);
+            Role stdRole = new Role();
+            stdRole.setNom("STUDENT");
+            stdRole.setDescription("Simple utilisateur");
+            roleRepo.save(stdRole);
         }
         if (userRepo.count() == 0) {
             User user = new User();
             user.setUsername("admin");
             user.setEmail("admin@admin.com");
             user.setPassword(encoder.encode("P@ssword1"));
+            user.setDateNaiss(new SimpleDateFormat("yyyy-MM-dd").parse("2000-01-01"));
             Role role = new Role();
             role.setNom("ADMIN");
             user.setRole(roleRepo.findByNom("ADMIN"));

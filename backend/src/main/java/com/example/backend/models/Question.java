@@ -8,19 +8,21 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import java.sql.Timestamp;
+import java.util.ArrayList;
+import java.util.List;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
 @Table(name = "questions")
-public class Questions {
+public class Question {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(nullable = false)
-    private String questionText;
+    private String libelle;
 
     @Column(nullable = false)
     private String option1;
@@ -28,22 +30,25 @@ public class Questions {
     @Column(nullable = false)
     private String option2;
 
-    @Column(nullable = false)
     private String option3;
 
-    @Column(nullable = false)
     private String option4;
 
     @Column(nullable = false)
     private String correctOption;
 
-    {/*
-        @CreationTimestamp
-        @Column(name = "created_at", nullable = false, updatable = false)
-        private Timestamp createdAt;
+    @CreationTimestamp
+    @Column(name = "created_at", nullable = false, updatable = false)
+    private Timestamp createdAt;
 
-        @UpdateTimestamp
-        @Column(name = "updated_at", nullable = false, updatable = true)
-        private Timestamp updatedAt;
-   */ }
+    @UpdateTimestamp
+    @Column(name = "updated_at", nullable = false)
+    private Timestamp updatedAt;
+
+    @ManyToMany(mappedBy = "questions")
+    private List<Quiz> quizzes = new ArrayList<>();
+
+
+    @ManyToMany(mappedBy = "questions")
+    private List<Test> tests;
 }

@@ -5,18 +5,14 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.sql.Timestamp;
-import java.util.Date;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class UserResponse {
+public class ConceptResponse {
     private Long id;
-    private String username;
-    private String email;
-    private String password;
-    private Date dateNaiss;
-    private RoleResponse role;
+    private String titre;
+    private String contenu;
     private Timestamp createdAt;
     private Timestamp updatedAt;
 }
