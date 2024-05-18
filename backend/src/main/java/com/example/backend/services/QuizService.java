@@ -1,6 +1,8 @@
 package com.example.backend.services;
 
-import com.example.backend.models.Questions;
+import com.example.backend.dto.QuizRequest;
+import com.example.backend.dto.QuizResponse;
+import com.example.backend.models.Question;
 import com.example.backend.models.Quiz;
 import org.springframework.stereotype.Service;
 
@@ -8,15 +10,15 @@ import java.util.List;
 @Service
 public interface QuizService {
 
-    public Quiz createQuiz(Quiz quiz);
+    public List<QuizResponse> index();
 
-    public Quiz getQuizById(Long id);
+    public QuizResponse show(Long id);
 
-    public Quiz updateQuiz(Long id, Quiz updatedQuiz);
+    public QuizResponse create(QuizRequest quiz);
 
-    public void deleteQuiz(Long id);
+    public QuizResponse update(Long id, QuizRequest updatedQuiz);
 
-    public List<Quiz> getAllQuizzes();
+    public void delete(Long id);
 
-    public List<Questions> getQuizQuestById(Long id);
+//    public List<Question> getQuizQuestById(Long id);
 }

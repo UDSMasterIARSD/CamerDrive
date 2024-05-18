@@ -10,8 +10,14 @@ public class AppConstants {
 
     public static  final String ADMIN_AUTHORITY = "hasAuthority('ADMIN')";
 
-    public static  final String USER_AUTHORITY = "hasAuthority('USER')";
+    public static  final String STUDENT_AUTHORITY = "hasAuthority('STUDENT')";
 
-    public static  final String ADMIN_USER_AUTHORITY = "hasAnyAuthority('ADMIN', 'USER')";
+    public static  final String INSTITUTER_AUTHORITY = "hasAuthority('INSTITUTER')";
+
+    public static  final String ADMIN_STUDENT_AUTHORITIES = "hasAnyAuthority('ADMIN', 'STUDENT')";
+
+    public static  final String ADMIN_INSTITUTER_AUTHORITIES = "hasAnyAuthority('ADMIN', 'INSTITUTER')";
+
+    public static  final String ALL_AUTHORITIES = "hasAnyAuthority('ADMIN', 'STUDENT', 'INSTITUTER')";
 
 }

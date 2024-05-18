@@ -9,6 +9,8 @@ import com.example.backend.models.User;
 import com.example.backend.repositories.UserRepository;
 import com.example.backend.security.JWTUtil;
 import com.example.backend.services.UserService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,8 +38,8 @@ public class AuthController {
     @Autowired
     private UserRepository userRepository;
 
-    @ResponseStatus(HttpStatus.CREATED)
     @PostMapping("/register")
+    @ResponseStatus(HttpStatus.CREATED)
     public UserResponse register(@Valid @RequestBody UserRequest user) {
         return userService.create(user);
     }

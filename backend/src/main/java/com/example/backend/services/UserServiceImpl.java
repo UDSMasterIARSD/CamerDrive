@@ -9,7 +9,7 @@ import com.example.backend.exceptions.NotFoundException;
 import com.example.backend.models.User;
 import com.example.backend.repositories.UserRepository;
 import com.example.backend.repositories.RoleRepository;
-import lombok.RequiredArgsConstructor;
+import lombok.AllArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -18,7 +18,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
-@RequiredArgsConstructor
+@AllArgsConstructor
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepo;
@@ -34,12 +34,17 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public List<UserResponse> index() {
-        return userRepo.findAll().stream().map(el -> mapper.map(el, UserResponse.class)).toList();
+        return userRepo.findAll()
+                .stream().map(el -> mapper.map(el, UserResponse.class)).toList();
     }
 
     @Override
     public UserResponse show(Long id) {
-        User user = userRepo.findById(id).orElseThrow(() -> new NotFoundException("L'Utilisateur", "d'id", id));
+        System.out.println("\ndebut toilette");
+        User user = userRepo.findById(id)
+                .orElseThrow(() -> new NotFoundException("L'Utilisateur", "d'id", id));
+        System.out.println("\n" + user);
+        System.out.println(user);
         return mapper.map(user, UserResponse.class);
     }
 
@@ -54,10 +59,12 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserResponse update(UserRequest user, Long id) {
-        userRepo.findById(id).orElseThrow(() -> new NotFoundException("L'Utilisateur", "d'id", id));
-        User oldUser = mapper.map(user, User.class);
-        oldUser.setId(id);
-        return mapper.map(userRepo.save(oldUser), UserResponse.class);
+        User oldUser = userRepo.findById(id).orElseThrow(() -> new NotFoundException("L'Utilisateur", "d'id", id));
+        User newUser = mapper.map(user, User.class);
+        newUser.setId(id);
+        newUser.setPassword(oldUser.getPassword());
+        newUser.setRole(oldUser.getRole());
+        return mapper.map(userRepo.save(newUser), UserResponse.class);
     }
 
     @Override

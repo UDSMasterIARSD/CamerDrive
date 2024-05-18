@@ -2,7 +2,6 @@ package com.example.backend.services;
 
 import com.example.backend.dto.RoleRequest;
 import com.example.backend.dto.RoleResponse;
-import com.example.backend.models.Role;
 
 import java.util.List;
 

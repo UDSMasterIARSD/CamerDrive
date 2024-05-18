@@ -30,7 +30,7 @@ import io.swagger.v3.oas.models.info.Info;
 public class SwaggerConfig {
 
     @Bean
-    public OpenAPI springShopOpenAPI() {
+    public OpenAPI springOpenAPI() {
         return new OpenAPI().info(new Info().title("CamerDrive APIs Documentation")
                         .description("Backend APIs pour une application de e-learning pour les personnes qui veulent avoir le permis B"));
 

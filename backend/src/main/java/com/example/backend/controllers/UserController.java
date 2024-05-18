@@ -32,8 +32,9 @@ public class UserController {
 
     @GetMapping("/{id}")
     @Transactional(readOnly = true)
-    @ResponseStatus(HttpStatus.FOUND)
-    public UserResponse showUser(@RequestBody Long id) {
+    @ResponseStatus(HttpStatus.OK)
+    public UserResponse showUser(@PathVariable Long id) {
+        System.out.println("Controller");
         return userService.show(id);
     }
 

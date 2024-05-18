@@ -35,6 +35,6 @@ public class Role implements Serializable {
     private Timestamp createdAt;
 
     @UpdateTimestamp
-    @Column(name = "updated_at", nullable = false, updatable = true)
+    @Column(name = "updated_at", nullable = false)
     private Timestamp updatedAt;
 }

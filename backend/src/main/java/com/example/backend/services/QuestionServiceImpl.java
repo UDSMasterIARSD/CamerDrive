@@ -1,9 +1,14 @@
 package com.example.backend.services;
 
-import com.example.backend.models.Questions;
+import com.example.backend.dto.QuestionRequest;
+import com.example.backend.dto.QuestionResponse;
+import com.example.backend.exceptions.NotFoundException;
+import com.example.backend.models.Question;
 import com.example.backend.repositories.QuestionRepository;
-import jakarta.persistence.EntityNotFoundException;
 import lombok.AllArgsConstructor;
+import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -12,34 +17,44 @@ import java.util.List;
 @AllArgsConstructor
 public class QuestionServiceImpl implements QuestionService{
     
-    private final QuestionRepository questionRepository;
+    private final QuestionRepository questionRepo;
+
+    @Autowired
+    private ModelMapper mapper;
+
+    @Override
+    public List<QuestionResponse> index(){
+        Pageable pageable = Pageable.ofSize(15);
+        return questionRepo.findAll(pageable).stream().map(el ->
+                mapper.map(el, QuestionResponse.class)).toList();
+    }
+
+    @Override
+    public QuestionResponse show(Long id){
+        Question question = questionRepo.findById(id).orElseThrow(() ->
+                new NotFoundException("La Question ", "d'id: ", id));
+        return mapper.map(question, QuestionResponse.class);
+    }
     
     @Override
-    public Questions createQuestion(Questions question){
-        return questionRepository.save(question);
-    }
-    
-    public Questions getQuestionById(Long id){
-        return questionRepository.findById(id).orElseThrow(()-> new EntityNotFoundException("Question not found"));
+    public QuestionResponse create(QuestionRequest question){
+        Question req = mapper.map(question, Question.class);
+        return mapper.map(questionRepo.save(req), QuestionResponse.class);
     }
 
-    public Questions updateQuestion(Long id, Questions updatedQuestion){
-        Questions question = getQuestionById(id);
-        question.setQuestionText(updatedQuestion.getQuestionText());
-        question.setOption1(updatedQuestion.getOption1());
-        question.setOption2(updatedQuestion.getOption2());
-        question.setOption3(updatedQuestion.getOption3());
-        question.setOption4(updatedQuestion.getOption4());
-        question.setCorrectOption(updatedQuestion.getCorrectOption());
-        return questionRepository.save(question);
+    @Override
+    public QuestionResponse update(Long id, QuestionRequest updated){
+        Question old = questionRepo.findById(id).orElseThrow(() ->
+                new NotFoundException("La question que vous voulez modifier ", "d'id: ", id));
+        Question newQuestion = mapper.map(updated, Question.class);
+        newQuestion.setId(id);
+        return mapper.map(questionRepo.save(newQuestion), QuestionResponse.class);
     }
 
-    public void deleteQuestion(Long id){
-        Questions question = getQuestionById(id);
-        questionRepository.delete(question);
-    }
-
-    public List<Questions> getAllQuestions(){
-        return questionRepository.findAll();
+    @Override
+    public void delete(Long id){
+        Question question = questionRepo.findById(id).orElseThrow(() ->
+                new NotFoundException("La Question que vous voulez supprimer ", "d'id: ", id));
+        questionRepo.delete(question);
     }
 }

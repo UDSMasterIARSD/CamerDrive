@@ -22,7 +22,6 @@ public class RoleServiceImpl implements RoleService {
     @Autowired
     private final ModelMapper modelMapper;
 
-
     @Override
     public List<RoleResponse> index() {
         return roleRepo.findAll()

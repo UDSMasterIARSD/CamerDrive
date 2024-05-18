@@ -1,18 +1,20 @@
 package com.example.backend.services;
 
-import com.example.backend.models.Questions;
+import com.example.backend.dto.QuestionRequest;
+import com.example.backend.dto.QuestionResponse;
+import com.example.backend.models.Question;
 
 import java.util.List;
 
 public interface QuestionService {
 
-    public Questions createQuestion(Questions question);
+    public List<QuestionResponse> index();
 
-    public Questions getQuestionById(Long id);
+    public QuestionResponse show(Long id);
 
-    public Questions updateQuestion(Long id, Questions updatedQuestion);
+    public QuestionResponse create(QuestionRequest question);
 
-    public void deleteQuestion(Long id);
+    public QuestionResponse update(Long id, QuestionRequest updatedQuestion);
 
-    public List<Questions> getAllQuestions();
+    public void delete(Long id);
 }
