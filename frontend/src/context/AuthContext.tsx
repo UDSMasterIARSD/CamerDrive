@@ -1,6 +1,6 @@
 import { useNavigation } from "@react-navigation/native";
 import * as SecureStore from "expo-secure-store";
-import React, { createContext, useContext, useEffect, useState } from "react";
+import React, { createContext, useContext, useState } from "react";
 import { AuthControllerApi } from "../../generated/index";
 import { SignInRequest, UserRequest } from "../../generated/models";
 import environment from "../environments/environment";
@@ -15,8 +15,9 @@ interface AuthProps {
   onRegister?: (
     username: string,
     email: string,
-    password: string,
-    confirmPassword: string
+    dateNaiss: Date,
+    password: string
+    //confirmPassword: string
   ) => Promise<any>;
   onLogin?: (username: string, password: string) => Promise<any>;
   onLogout?: () => Promise<any>;
@@ -46,9 +47,10 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
     userName: null,
   });
 
-  useEffect(() => {
+  /*useEffect(() => {
     const loadToken = async () => {
       const token = await SecureStore.getItemAsync(TOKEN);
+      console.log(token);
 
       if (token) {
         setAuthState({
@@ -58,6 +60,8 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
           userName: authState?.userName,
         });
       } else {
+        console.log("Token expired. Deleting token and time.");
+        await SecureStore.deleteItemAsync(TOKEN);
         setAuthState({
           token: null,
           authenticated: false,
@@ -69,10 +73,11 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
 
     loadToken();
   }, []);
-
+*/
   const register = async (
     username: string,
     email: string,
+    dateNaiss: Date,
     password: string
   ) => {
     const authApi = new AuthControllerApi(environment);
@@ -81,6 +86,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
       username: username,
       password: password,
       email: email,
+      dateNaiss: dateNaiss,
     };
 
     try {

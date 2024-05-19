@@ -1,47 +1,48 @@
-import React from "react";
-import { StyleSheet } from "react-native";
-import { DataTable } from "react-native-paper";
+import { Dimensions, StatusBar, StyleSheet } from "react-native";
+const { width, height } = Dimensions.get("window");
 
-const TableExample = () => {
-  return (
-    <DataTable style={styles.container}>
-      <DataTable.Header style={styles.tableHeader}>
-        <DataTable.Title>Name</DataTable.Title>
-        <DataTable.Title>Favourite Food</DataTable.Title>
-        <DataTable.Title>Age</DataTable.Title>
-      </DataTable.Header>
-      <DataTable.Row>
-        <DataTable.Cell>Radhika</DataTable.Cell>
-        <DataTable.Cell>Dosa</DataTable.Cell>
-        <DataTable.Cell>23</DataTable.Cell>
-      </DataTable.Row>
-
-      <DataTable.Row>
-        <DataTable.Cell>Krishna</DataTable.Cell>
-        <DataTable.Cell>Uttapam</DataTable.Cell>
-        <DataTable.Cell>26</DataTable.Cell>
-      </DataTable.Row>
-      <DataTable.Row>
-        <DataTable.Cell>Vanshika</DataTable.Cell>
-        <DataTable.Cell>Brownie</DataTable.Cell>
-        <DataTable.Cell>20</DataTable.Cell>
-      </DataTable.Row>
-      <DataTable.Row>
-        <DataTable.Cell>Teena</DataTable.Cell>
-        <DataTable.Cell>Pizza</DataTable.Cell>
-        <DataTable.Cell>24</DataTable.Cell>
-      </DataTable.Row>
-    </DataTable>
-  );
-};
-
-export default TableExample;
-
-const styles = StyleSheet.create({
+const QuestionDetailsStyle = StyleSheet.create({
   container: {
-    padding: 15,
+    flex: 1,
+    marginTop: StatusBar.currentHeight + 20,
+    backgroundColor: "#fff",
+    padding: 10,
   },
-  tableHeader: {
-    backgroundColor: "#DCDCDC",
+  titleHeader: {
+    marginBottom: 20,
+    flexDirection: "row",
+    justifyContent: "space-around",
+    alignItems: "center",
+  },
+  header: {
+    height: 50,
+    backgroundColor: "#537791",
+  },
+  text: {
+    textAlign: "center",
+    fontWeight: "400",
+    fontSize: 15,
+  },
+  titleText: {
+    fontSize: 34,
+    fontWeight: "bold",
+  },
+
+  dataWrapper: { marginTop: -1 },
+  row: {
+    height: 70, // Hauteur des cases
+    backgroundColor: "#E7E6E1",
+  },
+  actionButtons: {
+    flexDirection: "row",
+    justifyContent: "space-around",
+  },
+  rowView: {
+    flex: 1,
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-around",
   },
 });
+
+export default QuestionDetailsStyle;

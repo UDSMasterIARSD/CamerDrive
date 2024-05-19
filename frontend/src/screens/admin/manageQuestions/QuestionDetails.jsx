@@ -1,73 +1,91 @@
 import { Ionicons } from "@expo/vector-icons";
-import React, { useState } from "react";
-import {
-  ScrollView,
-  StatusBar,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-} from "react-native";
+import { useRoute } from "@react-navigation/native";
+import React, { useEffect, useState } from "react";
+import { ScrollView, Text, TouchableOpacity, View } from "react-native";
 import { Row, Table } from "react-native-table-component";
+import CourseList from "./CourseList";
+import QuestionDetailsStyle from "./QuestionDetailsStyles";
 import QuestionList from "./QuestionList";
+import UserList from "./UserList";
 
 const QuestionDetails = () => {
-  const [tableHead] = useState(["ID", "Question Text", "Actions"]);
-  const [widthArr] = useState([40, 240, 100]);
+  const route = useRoute();
+  const { type } = route.params;
+
+  const [tableHead, setTableHead] = useState([
+    "ID",
+    "Question Text",
+    "Actions",
+  ]);
+  const [dataList, setDataList] = useState(QuestionList);
+  const [widthArr, setWidthArr] = useState([40, 240, 100]);
+
+  useEffect(() => {
+    if (type === "users") {
+      setTableHead(["ID", "User Name", "Actions"]);
+      setDataList(UserList);
+    } else if (type === "courses") {
+      setTableHead(["ID", "Course Name", "Actions"]);
+      setDataList(CourseList);
+    } else {
+      setTableHead(["ID", "Question Text", "Actions"]);
+      setDataList(QuestionList);
+    }
+  }, [type]);
 
   const renderRows = () => {
-    return QuestionList.map((rowData, index) => (
+    return dataList.map((rowData, index) => (
       <Row
         key={index}
         data={[
           rowData.id,
-          rowData.questionText,
-          <View
-            style={{
-              flex: 1,
-              flexDirection: "row",
-              alignItems: "center",
-              justifyContent: "space-around",
-            }}
-          >
-            <TouchableOpacity onPress={() => handleEditQuestion(rowData.id)}>
+          type === "users"
+            ? rowData.userName
+            : type === "courses"
+            ? rowData.courseName
+            : rowData.questionText,
+          <View style={QuestionDetailsStyle.rowView}>
+            <TouchableOpacity onPress={() => handleEdit(rowData.id)}>
               <Ionicons name="create-outline" size={24} color="blue" />
             </TouchableOpacity>
-            <TouchableOpacity onPress={() => handleDeleteQuestion(rowData.id)}>
+            <TouchableOpacity onPress={() => handleDelete(rowData.id)}>
               <Ionicons name="trash-outline" size={24} color="red" />
             </TouchableOpacity>
           </View>,
         ]}
         widthArr={widthArr}
-        style={[styles.row, index % 2 && { backgroundColor: "#F7F6E7" }]}
-        textStyle={styles.text}
+        style={[
+          QuestionDetailsStyle.row,
+          index % 2 && { backgroundColor: "#F7F6E7" },
+        ]}
+        textStyle={QuestionDetailsStyle.text}
       />
     ));
   };
 
-  const handleEditQuestion = (questionId) => {
-    // Logique pour éditer la question
+  const handleEdit = (id) => {
+    // Logique pour éditer la question ou l'utilisateur
   };
 
-  const handleDeleteQuestion = (questionId) => {
-    // Logique pour supprimer la question
+  const handleDelete = (id) => {
+    // Logique pour supprimer la question ou l'utilisateur
   };
 
-  const handleAddQuestion = () => {
-    // Logique pour ajouter une nouvelle question
+  const handleAdd = () => {
+    // Logique pour ajouter une nouvelle question ou un utilisateur
   };
 
   return (
-    <View style={styles.container}>
-      <View
-        style={{
-          marginBottom: 20,
-          flexDirection: "row",
-          justifyContent: "space-around",
-        }}
-      >
-        <Text style={{ fontSize: 34, fontWeight: "bold" }}>Questions</Text>
-        <TouchableOpacity onPress={() => handleAddQuestion()}>
+    <View style={QuestionDetailsStyle.container}>
+      <View style={QuestionDetailsStyle.titleHeader}>
+        <Text style={QuestionDetailsStyle.titleText}>
+          {type === "users"
+            ? "Users"
+            : type === "courses"
+            ? "Courses"
+            : "Questions"}
+        </Text>
+        <TouchableOpacity onPress={handleAdd}>
           <Ionicons name="add-circle-outline" size={34} color="green" />
         </TouchableOpacity>
       </View>
@@ -77,11 +95,11 @@ const QuestionDetails = () => {
             <Row
               data={tableHead}
               widthArr={widthArr}
-              style={styles.header}
-              textStyle={styles.text}
+              style={QuestionDetailsStyle.header}
+              textStyle={QuestionDetailsStyle.text}
             />
           </Table>
-          <ScrollView style={styles.dataWrapper}>
+          <ScrollView style={QuestionDetailsStyle.dataWrapper}>
             <Table borderStyle={{ borderWidth: 2, borderColor: "#000" }}>
               {renderRows()}
             </Table>
@@ -93,30 +111,3 @@ const QuestionDetails = () => {
 };
 
 export default QuestionDetails;
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    marginTop: StatusBar.currentHeight + 20,
-    backgroundColor: "#fff",
-    padding: 10,
-  },
-  header: {
-    height: 50,
-    backgroundColor: "#537791",
-  },
-  text: {
-    textAlign: "center",
-    fontWeight: "400",
-    fontSize: 15,
-  },
-  dataWrapper: { marginTop: -1 },
-  row: {
-    height: 70, // Hauteur des cases
-    backgroundColor: "#E7E6E1",
-  },
-  actionButtons: {
-    flexDirection: "row",
-    justifyContent: "space-around",
-  },
-});

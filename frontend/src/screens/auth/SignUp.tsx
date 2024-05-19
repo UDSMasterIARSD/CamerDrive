@@ -1,7 +1,6 @@
-import { useState } from "react";
-
 import DateTimePicker from "@react-native-community/datetimepicker";
 import { useNavigation } from "@react-navigation/native";
+import { useState } from "react";
 import {
   ActivityIndicator,
   Dimensions,
@@ -14,27 +13,28 @@ import {
   View,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-
 import { useAuth } from "../../context/AuthContext";
 
 const SignUp = () => {
   const [name, setName] = useState<string>("");
   const [email, setEmail] = useState<string>("");
+  const [dateOfBirth, setDateOfBirth] = useState<Date | null>(null);
   const [password, setPassword] = useState<string>("");
   const [confirmPassword, setConfirmPassword] = useState<string>("");
   const [isLoading, setIsLoading] = useState(false); // State for showing the loading indicator
-  const [dateOfBirth, setDateOfBirth] = useState<Date | null>(null); // Etat local pour la date de naissance
   const [showDatePicker, setShowDatePicker] = useState<boolean>(false); //
   const { onRegister } = useAuth();
 
   const [errors, setErrors] = useState<{
     name: string | null;
     email: string | null;
+    dateOfBirth: string | null;
     password: string | null;
     confirmPassword: string | null;
   }>({
     name: null,
     email: null,
+    dateOfBirth: null,
     password: null,
     confirmPassword: null,
   });
@@ -58,6 +58,10 @@ const SignUp = () => {
         validationErrors.email = "Please use a valid Gmail address.";
       }
 
+      if (!dateOfBirth) {
+        validationErrors.dateOfBirth = "Please select your date of birth.";
+      }
+
       if (!password) {
         validationErrors.password = "Please enter your password.";
       } else if (password.length < 8 || !/\d/.test(password)) {
@@ -78,7 +82,7 @@ const SignUp = () => {
         return; // Arrête le traitement si des erreurs existent
       }
 
-      const result = await onRegister!(name, email, password, confirmPassword);
+      const result = await onRegister!(name, email, dateOfBirth, password);
 
       if (result && result.error) {
         alert(result.message + result.error);
@@ -143,6 +147,9 @@ const SignUp = () => {
                 display="default"
                 onChange={handleDateChange}
               />
+            )}
+            {errors.dateOfBirth && (
+              <Text style={styles.errorText}>{errors.dateOfBirth}</Text>
             )}
           </View>
 

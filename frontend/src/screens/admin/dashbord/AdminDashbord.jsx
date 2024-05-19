@@ -8,16 +8,18 @@ import tasks from "./Tasks";
 
 const AdminDashbord = () => {
   const navigation = useNavigation();
-
   const { onLogout } = useAuth();
 
   const handleTaskPress = (task) => {
     switch (task.text) {
       case "Question Management":
-        navigation.navigate("QuestionDetails");
+        navigation.navigate("QuestionDetails", { type: "questions" });
         break;
-      case "Gestion des Quiz":
-        //navigation.navigate("Task2");
+      case "User Management":
+        navigation.navigate("QuestionDetails", { type: "users" });
+        break;
+      case "Courses Management":
+        navigation.navigate("QuestionDetails", { type: "courses" });
         break;
       default:
         break;
@@ -31,8 +33,6 @@ const AdminDashbord = () => {
       [
         {
           text: "Cancel",
-
-          //onPress: () => console.log("Cancel Pressed"),
           style: "cancel",
         },
         { text: "YES", onPress: () => onLogout() },
@@ -49,11 +49,9 @@ const AdminDashbord = () => {
           <Pressable style={{ marginLeft: 10 }} onPress={createTwoButtonAlert}>
             <Ionicons name="log-out" size={30} color="#003f5c" />
           </Pressable>
-          {/* Texte "My tasks" */}
           <Text style={AdminDashbordStyle.textBelowLine}>
             You can perform the following tasks
           </Text>
-
           <View style={AdminDashbordStyle.tasksContainer}>
             {Array.from({ length: Math.ceil(tasks.length / 2) }).map(
               (_, rowIndex) => (
