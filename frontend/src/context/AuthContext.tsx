@@ -1,6 +1,6 @@
 import { useNavigation } from "@react-navigation/native";
 import * as SecureStore from "expo-secure-store";
-import React, { createContext, useContext, useState } from "react";
+import React, { createContext, useContext, useEffect, useState } from "react";
 import { AuthControllerApi } from "../../generated/index";
 import { SignInRequest, UserRequest } from "../../generated/models";
 import environment from "../environments/environment";
@@ -47,33 +47,41 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
     userName: null,
   });
 
-  /*useEffect(() => {
+  useEffect(() => {
     const loadToken = async () => {
       const token = await SecureStore.getItemAsync(TOKEN);
-      console.log(token);
+      const storedTime = await SecureStore.getItemAsync("TIME");
+
+      console.log("stored token: " + token);
+      console.log("stored time: " + storedTime);
 
       if (token) {
-        setAuthState({
-          token: token,
-          authenticated: true,
-          role: authState?.role,
-          userName: authState?.userName,
-        });
-      } else {
-        console.log("Token expired. Deleting token and time.");
-        await SecureStore.deleteItemAsync(TOKEN);
-        setAuthState({
-          token: null,
-          authenticated: false,
-          role: null,
-          userName: null,
-        });
+        const currentTime = new Date().toISOString();
+        console.log("current time: " + currentTime);
+        const timeDifference =
+          Math.abs(
+            new Date(currentTime).getTime() - new Date(storedTime!).getTime()
+          ) / 1000; // Difference in seconds
+        console.log("time difference: " + timeDifference);
+        const exp: number = 600;
+        if (timeDifference > exp) {
+          // Less than 1 minute
+          console.log("Token expired. Deleting token and time.");
+          await SecureStore.deleteItemAsync(TOKEN);
+          await SecureStore.deleteItemAsync("TIME");
+        } else {
+          console.log("Token not expired");
+          setAuthState({
+            token: token,
+            authenticated: true,
+            userName: authState?.userName,
+            role: authState?.role,
+          });
+        }
       }
     };
-
     loadToken();
   }, []);
-*/
   const register = async (
     username: string,
     email: string,
@@ -135,14 +143,20 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
   };
 
   const logout = async () => {
-    await SecureStore.deleteItemAsync(TOKEN);
-    setAuthState({
-      token: null,
-      authenticated: false,
-      role: null,
-      userName: null,
-    });
-    alert("You have been logged out.");
+    let token: string | null = await SecureStore.getItemAsync(TOKEN);
+    if (token == null) {
+      token = "";
+    } else {
+      setAuthState({
+        token: "",
+        authenticated: false,
+        userName: authState?.userName,
+        role: authState?.role,
+      });
+
+      await SecureStore.deleteItemAsync(TOKEN);
+      alert("you have been log out");
+    }
   };
 
   const value: AuthProps = {
