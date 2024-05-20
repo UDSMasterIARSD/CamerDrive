@@ -20,4 +20,5 @@ public class AppConstants {
 
     public static  final String ALL_AUTHORITIES = "hasAnyAuthority('ADMIN', 'STUDENT', 'INSTITUTER')";
 
+    public static final String STUDENT_ROLE = "STUDENT";
 }

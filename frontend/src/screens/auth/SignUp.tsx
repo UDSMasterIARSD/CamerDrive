@@ -79,7 +79,7 @@ const SignUp = () => {
 
       // Vérification des erreurs
       if (Object.keys(validationErrors).length > 0) {
-        return; // Arrête le traitement si des erreurs existent
+        return;
       }
 
       const result = await onRegister!(name, email, dateOfBirth, password);

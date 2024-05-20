@@ -52,7 +52,7 @@ public class UserServiceImpl implements UserService {
     public UserResponse create(UserRequest user) {
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         User newUser = mapper.map(user, User.class);
-        newUser.setRole(roleRepo.findByNom("USER"));
+        newUser.setRole(roleRepo.findByNom(AppConstants.STUDENT_ROLE));
 
         return mapper.map(userRepo.save(newUser), UserResponse.class);
     }

@@ -1,12 +1,13 @@
 import { Platform } from "react-native";
 import { ConfigurationParameters } from "../../generated";
 
-const environment: ConfigurationParameters  = {
-    apiKey: '',
-    username: '',
-    password: '',
-    accessToken: '',
-    basePath: Platform.OS === "android"? 'https://025a-41-202-219-246.ngrok-free.app': 'http://localhost:8080/api',
+
+const devConfig: ConfigurationParameters = {
+  apiKey: '',
+  username: '',
+  password: '',
+  accessToken: '',
+  basePath: Platform.OS === "android" ? 'https://f539-129-0-103-88.ngrok-free.app' : 'http://localhost:8080/api',
 };
 
-export default environment;
+export default devConfig;
