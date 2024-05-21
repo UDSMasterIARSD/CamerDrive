@@ -12,7 +12,7 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-import { Dropdown } from "react-native-element-dropdown"; // Remplacer par "react-native-dropdown-picker"
+import { Dropdown } from "react-native-element-dropdown";
 import {
   ConceptControllerApi,
   CoursControllerApi,
@@ -26,7 +26,7 @@ const AddConceptForm = () => {
   const [selectedCourse, setSelectedCourse] = useState(null);
   const [courses, setCourses] = useState([]);
   const [message, setMessage] = useState("");
-  const [messageType, setMessageType] = useState(""); // 'success' or 'error'
+  const [messageType, setMessageType] = useState("");
   const [titleError, setTitleError] = useState("");
   const [contentError, setContentError] = useState("");
   const [loading, setLoading] = useState(true);
@@ -41,10 +41,10 @@ const AddConceptForm = () => {
           environment.basePath,
           axiosInstance
         );
-        const response = await courseApi.indesCours(); // Remplacer "indesCours" par "indexCours"
+        const response = await courseApi.indesCours();
         const courseList = response.data.map((course) => ({
           label: course.titre,
-          value: course, // Stocker tout l'objet `course`
+          value: course,
         }));
         setCourses(courseList);
       } catch (error) {
@@ -59,7 +59,7 @@ const AddConceptForm = () => {
   }, []);
 
   const handlePress = () => {
-    navigation.goBack(); // Revenir à la page précédente
+    navigation.goBack();
   };
 
   const handleSubmit = async () => {
@@ -80,10 +80,10 @@ const AddConceptForm = () => {
     }
 
     if (!selectedCourse) {
-      setCorrectOptionError("Veuillez sélectionner un cours."); // Renommer "correctOptionError" au lieu de "courseIdError"
+      setCorrectOptionError("Veuillez sélectionner un cours.");
       hasError = true;
     } else {
-      setCorrectOptionError(""); // Remise à zéro de l'erreur
+      setCorrectOptionError("");
     }
 
     if (hasError) return;
@@ -97,7 +97,7 @@ const AddConceptForm = () => {
       await conceptApi.create1({
         titre: titre,
         contenu: contenu,
-        cours: selectedCourse,
+        cours: selectedCourse.value,
       });
       setMessage("Concept ajouté avec succès.");
       setMessageType("success");
@@ -175,11 +175,13 @@ const AddConceptForm = () => {
               maxHeight={300}
               labelField="label"
               valueField="value"
-              placeholder="Select a course"
+              placeholder={
+                selectedCourse ? selectedCourse.label : "Select a course"
+              }
               searchPlaceholder="Search..."
               value={selectedCourse}
               onChange={(item) => {
-                setSelectedCourse(item.value);
+                setSelectedCourse(item);
               }}
               renderLeftIcon={() => (
                 <AntDesign
@@ -191,7 +193,7 @@ const AddConceptForm = () => {
               )}
             />
             {correctOptionError ? (
-              <Text style={styles.errorText}>{correctOptionError}</Text> // Affichage de l'erreur correcte
+              <Text style={styles.errorText}>{correctOptionError}</Text>
             ) : null}
           </View>
         </View>
@@ -263,6 +265,7 @@ const styles = StyleSheet.create({
   },
   placeholderStyle: {
     fontSize: 16,
+    //padding: 50,
   },
   selectedTextStyle: {
     fontSize: 16,
@@ -276,6 +279,7 @@ const styles = StyleSheet.create({
     marginTop: 20,
     marginBottom: 100,
   },
+
   button: {
     backgroundColor: "#00ced1",
     borderRadius: 20,

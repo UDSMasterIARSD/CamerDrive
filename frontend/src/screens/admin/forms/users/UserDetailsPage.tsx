@@ -36,6 +36,11 @@ const UserDetailsPage = ({ id }) => {
     );
   }
 
+  const formatDate = (dateString) => {
+    const date = new Date(dateString);
+    return date.toISOString().split("T")[0];
+  };
+
   return (
     <View style={UserDetailsStyle.container}>
       <View style={UserDetailsStyle.detailsContainer}>
@@ -57,13 +62,7 @@ const UserDetailsPage = ({ id }) => {
         <View style={UserDetailsStyle.sectionContainer}>
           <Text style={UserDetailsStyle.labelText}>date of birth</Text>
           <Text style={UserDetailsStyle.detailText}>
-            {userDetails.DateNaiss}
-          </Text>
-        </View>
-        <View style={UserDetailsStyle.sectionContainer}>
-          <Text style={UserDetailsStyle.labelText}>password</Text>
-          <Text style={UserDetailsStyle.detailText}>
-            {userDetails.password}
+            {formatDate(userDetails.dateNaiss)}
           </Text>
         </View>
       </View>

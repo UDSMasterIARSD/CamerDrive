@@ -10,7 +10,7 @@ interface Quiz {
   titre: string;
 }
 
-const Quizzes: React.FC = () => {
+const Quizzes = () => {
   const navigation = useNavigation();
 
   const [quizzes, setQuizzes] = useState<Quiz[]>([]);

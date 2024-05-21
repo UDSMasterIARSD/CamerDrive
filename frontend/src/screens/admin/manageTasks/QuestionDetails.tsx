@@ -115,6 +115,12 @@ const QuestionDetails = () => {
     }
   };
 
+  /*useFocusEffect(
+    useCallback(() => {
+      AllUsers();
+    }, [])
+  );*/
+
   const AllConcepts = async () => {
     try {
       const conceptApi = new ConceptControllerApi(
@@ -305,6 +311,7 @@ const QuestionDetails = () => {
 
   const handleAdd = () => {
     navigation.navigate("AddForm", { type });
+    navigation.navigate("AddForm", { type });
   };
 
   return (
@@ -321,6 +328,7 @@ const QuestionDetails = () => {
             ? "Quizzes"
             : "Questions"}
         </Text>
+
         <TouchableOpacity onPress={() => handleAdd()}>
           <Ionicons name="add-circle-outline" size={34} color="green" />
         </TouchableOpacity>

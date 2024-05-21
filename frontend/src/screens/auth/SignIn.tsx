@@ -14,27 +14,25 @@ import {
   View,
 } from "react-native";
 
-import { useAuth } from "../../context/AuthContext";
 import React from "react";
+import { useAuth } from "../../context/AuthContext";
 
 const SignIn = () => {
   const navigation = useNavigation();
 
   const [name, setName] = useState("");
   const [password, setPassword] = useState("");
-  const [showPassword, setShowPassword] = useState(false); // Nouvel état pour gérer la visibilité du mot de passe
+  const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [loginError, setLoginError] = useState<string | null>(null);
-  const [validationError, setValidationError] = useState<string | null>(null); // État pour les erreurs de validation
+  const [validationError, setValidationError] = useState<string | null>(null);
 
   const { onLogin } = useAuth();
 
   const handleLogin = async () => {
-    // Réinitialiser les erreurs
     setValidationError(null);
     setLoginError(null);
 
-    // Vérifier si les champs sont vides
     if (!name) {
       setValidationError("Username is required.");
       return;
@@ -87,14 +85,14 @@ const SignIn = () => {
             <Text style={styles.textInfo}>Password:</Text>
             <View style={styles.passwordContainer}>
               <TextInput
-                style={{ color: "#fff", fontSize: 16 }}
+                style={{ color: "#fff", fontSize: 16, marginLeft: 15 }}
                 placeholder="Enter your password here ..."
                 placeholderTextColor="#fff"
                 value={password}
                 onChangeText={(text) => setPassword(text)}
                 keyboardType="default"
                 textContentType="password"
-                secureTextEntry={!showPassword} // Utilisez l'état pour gérer la visibilité du mot de passe
+                secureTextEntry={!showPassword}
                 maxLength={20}
               />
               <TouchableOpacity
@@ -246,6 +244,7 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     backgroundColor: "#1C202F",
     fontSize: 16,
+    marginLeft: 15,
   },
   textInfo: {
     color: "#fff",

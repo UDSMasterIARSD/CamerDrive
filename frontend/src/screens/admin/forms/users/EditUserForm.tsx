@@ -48,7 +48,7 @@ const EditUserForm = ({ id }: EditCourseFormProps) => {
         );
         const response = await userApi.showUser(id);
         const user = response.data;
-        console.log(user);
+        console.log(user.dateNaiss);
         setUsername(user.username);
         setEmail(user.email);
         setDateNaiss(user.dateNaiss);
@@ -78,6 +78,11 @@ const EditUserForm = ({ id }: EditCourseFormProps) => {
       </View>
     );
   }
+
+  const formatDate = (dateString) => {
+    const date = new Date(dateString);
+    return date.toISOString().split("T")[0];
+  };
 
   const handleSubmit = async () => {
     let hasError = false;
@@ -235,9 +240,10 @@ const EditUserForm = ({ id }: EditCourseFormProps) => {
             <View>
               <Pressable onPress={() => setShowDatePicker(true)}>
                 <Text style={styles.textInput}>
-                  {dateNaiss ? dateNaiss.toDateString() : "Select Date"}
+                  {dateNaiss ? formatDate(dateNaiss) : "Select Date"}
                 </Text>
               </Pressable>
+
               {showDatePicker && (
                 <DateTimePicker
                   value={dateNaiss || new Date()}

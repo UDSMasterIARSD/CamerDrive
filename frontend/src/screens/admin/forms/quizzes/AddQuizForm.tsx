@@ -98,12 +98,13 @@ const AddQuizForm = () => {
     } else {
       setTitleError("");
     }
-    if (!selectedCourse) {
+
+    /* if (!selectedCourse) {
       setCourseError("Veuillez sélectionner un cours.");
       hasError = true;
     } else {
       setCourseError("");
-    }
+    }*/
 
     if (selectedQuestions.length === 0) {
       setQuestionError("Veuillez sélectionner au moins une question.");
