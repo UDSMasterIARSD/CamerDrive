@@ -1,19 +1,19 @@
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import React from "react";
-import { useAuth } from "../context/AuthContext.tsx";
-import AboutUs from "./AboutUs.tsx";
-import Profile from "./Profile/Profile.jsx";
-import Statistiques from "./Statistiques/Statistiques.jsx";
-import AdminDashbord from "./admin/dashbord/AdminDashbord.jsx";
-import QuestionDetails from "./admin/manageTasks/QuestionDetails.tsx";
-import SignIn from "./auth/SignIn.tsx";
-import SignUp from "./auth/SignUp.tsx";
-import Courses from "./courses/Courses.tsx";
-import CoursesDetails from "./coursesDetails/CoursesDetails.jsx";
-import Dashbord from "./dashbord/Dashbord.jsx";
-import LastExam from "./lastExam/LastExam.jsx";
-import Quiz from "./quiz/Quiz.jsx";
-import OnboardingCompo from "./welcome/onboarding/OnboardingCompo.jsx";
+import { useAuth } from "../context/AuthContext";
+import AboutUs from "./AboutUs";
+import Profile from "./Profile/Profile";
+import Statistiques from "./Statistiques/Statistiques";
+import AdminDashbord from "./admin/dashbord/AdminDashbord";
+import QuestionDetails from "./admin/manageQuestions/QuestionDetails";
+import SignIn from "./auth/SignIn";
+import SignUp from "./auth/SignUp";
+import Courses from "./courses/Courses";
+import CoursesDetails from "./coursesDetails/CoursesDetails";
+import Dashbord from "./dashbord/Dashbord";
+import LastExam from "./lastExam/LastExam";
+import Quiz from "./quiz/Quiz";
+import OnboardingCompo from "./welcome/onboarding/OnboardingCompo";
 
 const Stack = createNativeStackNavigator();
 

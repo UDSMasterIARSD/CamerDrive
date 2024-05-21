@@ -1,4 +1,11 @@
-const tasks = [
+import { Ionicons } from "@expo/vector-icons";
+
+export interface Task {
+  icon: keyof typeof Ionicons.glyphMap;
+  text: string;
+}
+
+const tasks: Task[] = [
   { icon: "help-circle-outline", text: "Question Management" }, // Gestion des questions
   { icon: "clipboard-outline", text: "Quiz Management" }, // Gestion des quiz
   { icon: "archive-outline", text: "Past Papers Management" }, // Gestion des anciens sujets

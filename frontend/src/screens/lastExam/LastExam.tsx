@@ -18,21 +18,19 @@ import CorrigeLastExam from "./CorrigeLastExam";
 const LastExam = () => {
   const [option, setOption] = useState(optionValues.sujet);
   const StyledSafeAreaView = styled(SafeAreaView);
-  const StyledView = styled(View);
   return (
     // <ColorScheme />
     <StyledSafeAreaView
       style={{ height: Dimensions.get("window").height * 0.8 }}
       className="flex-1 dark:bg-slate-700 overflow-hidden"
     >
-      <StyledView
-        selectable={false}
+      <View
         className="dark:text-white my-5 items-center"
       >
         <Text className="border-b-2 border-green-800 p-1 font-semibold text-xl dark:text-cyan-50">
           Cameroun
         </Text>
-      </StyledView>
+      </View>
       <View className="flex-row items-center justify-around shadow-md px-8">
         <View className="flex-row items-center">
           <RadioButton.Android

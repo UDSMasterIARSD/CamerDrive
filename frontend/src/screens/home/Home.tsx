@@ -10,21 +10,21 @@ const Home = () => {
 
   return (
     <ScrollView>
-      <View style={Homestyles.fstContainer}>
-        <View style={Homestyles.textContainer}>
+      <View style={Homestyles.fstContainer} className="bg-zinc-200 dark:bg-cyan-950" >
+        <View className="bg-white dark:bg-slate-700" style={Homestyles.textContainer}>
           <Image
             source={require("../../../assets/V2.jpg")}
             style={Homestyles.logo}
           />
           <View style={{ flex: 1 }}>
-            <Text style={Homestyles.welcomeText}>Welcome to CarmerDrive</Text>
-            <Text>{authState?.userName}</Text>
+            <Text className="text-gray-700 dark:text-gray-50" style={Homestyles.welcomeText}>Welcome to CarmerDrive</Text>
+            <Text className="text-gray-900 dark:text-gray-200">{authState?.userName}</Text>
           </View>
         </View>
         <View>
           <Carousel />
           <View style={Homestyles.serviceContainer}>
-            <Text style={{ fontSize: 20, fontWeight: "bold" }}>
+            <Text className="" style={{ fontSize: 20, fontWeight: "bold" }}>
               Our Services
             </Text>
           </View>

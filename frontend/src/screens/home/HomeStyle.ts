@@ -5,14 +5,12 @@ const Homestyles = StyleSheet.create({
     alignSelf: "center",
     justifyContent: "center",
     marginBottom: 150,
-
-    backgroundColor: "#f0f0f0",
+    paddingTop: 10,
   },
 
   textContainer: {
     flexDirection: "row",
     alignItems: "center",
-    backgroundColor: "#fff",
     padding: 20,
     borderRadius: 25,
     shadowColor: "#000",
@@ -27,12 +25,10 @@ const Homestyles = StyleSheet.create({
   welcomeText: {
     fontSize: 18,
     fontWeight: "bold",
-    color: "#333",
     marginBottom: 5,
   },
   username: {
     fontSize: 16,
-    color: "#666",
   },
   logo: {
     //borderWidth: 2,

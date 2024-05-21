@@ -28,7 +28,7 @@ const CoursesDetails = () => {
       <View style={DashbordStyle.header}>
         <TouchableOpacity
           onPress={handlePress}
-          style={DashbordStyle.iconContainer}
+          // style={DashbordStyle.iconContainer}
         >
           <Ionicons name="arrow-back" size={24} color="#000000" />
         </TouchableOpacity>

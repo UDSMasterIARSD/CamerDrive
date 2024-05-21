@@ -24,6 +24,7 @@ public class Cours implements Serializable {
 
     @NotNull(message = "titre : Ce champ est obligatoire")
     @NotBlank(message = "titre : Ce champ ne doit pas etre vide")
+    @Column(nullable = false, unique = true)
     private String titre;
 
     @NotNull(message = "description : Ce champ est obligatoire")

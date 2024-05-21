@@ -1,16 +1,20 @@
 import { Ionicons } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 import React from "react";
-import { Alert, Pressable, ScrollView, Text, View } from "react-native";
+import { Alert, AlertOptions, Pressable, ScrollView, Text, View, ViewStyle } from "react-native";
 import { useAuth } from "../../../context/AuthContext";
 import AdminDashbordStyle from "./AdminDahbordStyle";
-import tasks from "./Tasks";
+import tasks, { Task } from "./Tasks";
 
-const AdminDashbord = () => {
+declare interface CustomAlertOptions extends AlertOptions {
+  alertContainerStyle?: ViewStyle;
+}
+
+const AdminDashbord: React.FC = () => {
   const navigation = useNavigation();
   const { onLogout } = useAuth();
 
-  const handleTaskPress = (task) => {
+  const handleTaskPress = (task: Task) => {
     switch (task.text) {
       case "Question Management":
         navigation.navigate("QuestionDetails", { type: "questions" });
@@ -35,11 +39,20 @@ const AdminDashbord = () => {
           text: "Cancel",
           style: "cancel",
         },
-        { text: "YES", onPress: () => onLogout() },
+        {
+          text: "YES",
+          onPress: () => {
+            if (onLogout) {
+              onLogout();
+            } else {
+              console.error("onLogout function is not defined");
+            }
+          },
+        },
       ],
       {
         alertContainerStyle: AdminDashbordStyle.alertContainer,
-      }
+      } as CustomAlertOptions
     );
 
   return (

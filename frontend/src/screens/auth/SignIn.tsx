@@ -14,6 +14,7 @@ import {
 } from "react-native";
 
 import { useAuth } from "../../context/AuthContext";
+import React from "react";
 
 const SignIn = () => {
   const navigation = useNavigation();

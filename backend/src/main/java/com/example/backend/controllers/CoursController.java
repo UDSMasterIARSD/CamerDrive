@@ -17,7 +17,7 @@ import java.util.List;
 
 @RestController
 @AllArgsConstructor
-@RequestMapping(name = "/cours")
+@RequestMapping("/cours")
 public class CoursController {
 
     @Autowired

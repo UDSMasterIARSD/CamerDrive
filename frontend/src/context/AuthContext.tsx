@@ -122,15 +122,15 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
       .login(apiParams)
       .then(async (response) => {
         setAuthState({
-          token: response?.data?.token,
+          token: response?.data?.token!,
           authenticated: true,
-          role: response?.data?.user?.role?.nom,
-          userName: response?.data?.user?.username,
+          role: response?.data?.user?.role?.nom!,
+          userName: response?.data?.user?.username!,
         });
         const currentTime = new Date().toISOString();
         console.log(currentTime);
         await SecureStore.setItemAsync("TIME", currentTime);
-        await SecureStore.setItemAsync(TOKEN, response?.data?.token);
+        await SecureStore.setItemAsync(TOKEN, response?.data?.token!);
 
         console.log(response.data.user);
         alert(response.data.user);

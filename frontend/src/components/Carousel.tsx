@@ -50,7 +50,7 @@ const Carousel = () => {
         renderItem={({ itemIndex, currentIndex, item, animatedValue }) => (
           <View style={styles.imageContainer}>
             <Image source={item.imageUrl} style={styles.image} />
-            {item.title && <Text style={styles.title}>{item.title}</Text>}
+            {/* {item.title && <Text style={styles.title}>{item.title}</Text>} */}
           </View>
         )}
       />
