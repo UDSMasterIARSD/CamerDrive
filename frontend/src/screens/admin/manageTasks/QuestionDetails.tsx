@@ -1,5 +1,5 @@
 import { Ionicons } from "@expo/vector-icons";
-import { RouteProp, useRoute } from "@react-navigation/native";
+import { RouteProp, useNavigation, useRoute } from "@react-navigation/native";
 import React, { useEffect, useState } from "react";
 import {
   ActivityIndicator,
@@ -37,11 +37,10 @@ type DataItem = {
 const QuestionDetails = () => {
   const route = useRoute<RouteProp<QuestionDetailsRouteParams, "params">>();
   const { type } = route.params;
-
+  const navigation = useNavigation();
   const [tableHead, setTableHead] = useState(["", "", ""]);
   const [dataList, setDataList] = useState<DataItem[]>([]);
   const [loading, setLoading] = useState(true);
-
   const screenWidth = Dimensions.get("window").width;
   const [widthArr, setWidthArr] = useState([
     screenWidth * 0.1,
@@ -127,17 +126,90 @@ const QuestionDetails = () => {
     }
   };
 
+  const handleDelete = (id: number) => {
+    Alert.alert(
+      "Delete Entry",
+      `Are you sure you want to delete this ${type.slice(0, -1)}?`,
+      [
+        {
+          text: "No",
+          onPress: () => console.log("Deletion cancelled"),
+          style: "cancel",
+        },
+        {
+          text: "Yes",
+          onPress: async () => {
+            try {
+              if (type === "questions") {
+                const questionApi = new QuestionControllerApi(
+                  environment,
+                  environment.basePath,
+                  axiosInstance
+                );
+                await questionApi.deleteQuestion(id);
+              } else if (type === "courses") {
+                const courseApi = new CoursControllerApi(
+                  environment,
+                  environment.basePath,
+                  axiosInstance
+                );
+                await courseApi.deleteCours(id);
+              } else if (type === "users") {
+                const userApi = new UserControllerApi(
+                  environment,
+                  environment.basePath,
+                  axiosInstance
+                );
+                await userApi.deleteUser(id);
+              }
+              Alert.alert(
+                "Success",
+                `${type.slice(0, -1)} deleted successfully`
+              );
+
+              if (type === "questions") {
+                AllQuestions();
+              } else if (type === "courses") {
+                AllCourses();
+              } else if (type === "users") {
+                AllUsers();
+              }
+            } catch (error) {
+              console.log(error);
+              Alert.alert("Error", `Failed to delete ${type.slice(0, -1)}`);
+            }
+          },
+          style: "destructive",
+        },
+      ]
+    );
+  };
+
+  const handleEdit = (id: number) => {
+    navigation.navigate("EditForm", { type, id });
+  };
+
+  const handleDetails = (id: number) => {
+    navigation.navigate("DetailsPage", { type, id });
+  };
+
   const renderRows = () => {
     return dataList.map((rowData, index) => (
       <Row
         key={index}
         data={[
-          rowData.id,
-          type === "users"
-            ? rowData.username
-            : type === "courses"
-            ? rowData.courseName
-            : rowData.questionText,
+          <TouchableOpacity onPress={() => handleDetails(rowData.id)}>
+            <Text>{rowData.id}</Text>
+          </TouchableOpacity>,
+          <TouchableOpacity onPress={() => handleDetails(rowData.id)}>
+            <Text>
+              {type === "users"
+                ? rowData.username
+                : type === "courses"
+                ? rowData.courseName
+                : rowData.questionText}
+            </Text>
+          </TouchableOpacity>,
           <View style={QuestionDetailsStyle.rowView}>
             <TouchableOpacity onPress={() => handleEdit(rowData.id)}>
               <Ionicons name="create-outline" size={24} color="blue" />
@@ -157,16 +229,8 @@ const QuestionDetails = () => {
     ));
   };
 
-  const handleEdit = (id) => {
-    // Logique pour éditer la question ou l'utilisateur
-  };
-
-  const handleDelete = (id) => {
-    // Logique pour supprimer la question ou l'utilisateur
-  };
-
   const handleAdd = () => {
-    // Logique pour ajouter une nouvelle question ou un utilisateur
+    navigation.navigate("AddForm", { type });
   };
 
   return (
@@ -179,7 +243,7 @@ const QuestionDetails = () => {
             ? "Courses"
             : "Questions"}
         </Text>
-        <TouchableOpacity onPress={handleAdd}>
+        <TouchableOpacity onPress={() => handleAdd()}>
           <Ionicons name="add-circle-outline" size={34} color="green" />
         </TouchableOpacity>
       </View>
