@@ -7,7 +7,7 @@ const AdminDashbordStyle = StyleSheet.create({
     //justifyContent: "center",
     //alignItems: "center",
     backgroundColor: "#f5f5f5",
-    marginTop: StatusBar.currentHeight + 20,
+    marginTop: StatusBar.currentHeight! + 20,
   },
   textBelowLine: {
     fontSize: 24,

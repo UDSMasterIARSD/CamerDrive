@@ -1,33 +1,34 @@
-import { AntDesign, Ionicons } from "@expo/vector-icons";
 import React from "react";
+import { AntDesign, Ionicons } from "@expo/vector-icons";
 import { Pressable, StyleSheet, Text, View } from "react-native";
 
-const BottomNavigation = ({
-  categories,
-  activeCategory,
-  setActiveCategory,
-}) => {
+interface BottomNavigationProps {
+  activeCategory: String,
+  setActiveCategory: (component: String) => void,
+}
+
+const BottomNavigation = (props: BottomNavigationProps) => {
   return (
     <View style={styles.container}>
-      <Pressable
+      <Pressable  
         style={({ pressed }) => [
           {
             backgroundColor: pressed ? "rgba(0, 0, 0, 0.1)" : "transparent",
           },
           styles.categoryIcon,
-          activeCategory === "Home" && styles.activeIcon,
+          props.activeCategory === "Home" && styles.activeIcon,
         ]}
-        onPress={() => setActiveCategory("Home")}
+        onPress={() => props.setActiveCategory("Home")}
       >
         <Ionicons
           name="home-outline"
           size={20}
-          color={activeCategory === "Home" ? "red" : "black"}
+          color={props.activeCategory === "Home" ? "red" : "black"}
         />
         <Text
           style={[
             styles.categoryName,
-            activeCategory === "Home" && styles.activeText,
+            props.activeCategory === "Home" && styles.activeText,
           ]}
         >
           Home
@@ -40,19 +41,19 @@ const BottomNavigation = ({
             backgroundColor: pressed ? "rgba(0, 0, 0, 0.1)" : "transparent",
           },
           styles.categoryIcon,
-          activeCategory === "Courses" && styles.activeIcon,
+          props.activeCategory === "Courses" && styles.activeIcon,
         ]}
-        onPress={() => setActiveCategory("Courses")}
+        onPress={() => props.setActiveCategory("Courses")}
       >
         <Ionicons
           name="school-outline"
           size={20}
-          color={activeCategory === "Courses" ? "red" : "black"}
+          color={props.activeCategory === "Courses" ? "red" : "black"}
         />
         <Text
           style={[
             styles.categoryName,
-            activeCategory === "Courses" && styles.activeText,
+            props.activeCategory === "Courses" && styles.activeText,
           ]}
         >
           Courses
@@ -65,19 +66,19 @@ const BottomNavigation = ({
             backgroundColor: pressed ? "rgba(0, 0, 0, 0.1)" : "transparent",
           },
           styles.categoryIcon,
-          activeCategory === "Quiz" && styles.activeIcon,
+          props.activeCategory === "Quiz" && styles.activeIcon,
         ]}
-        onPress={() => setActiveCategory("Quiz")}
+        onPress={() => props.setActiveCategory("Quiz")}
       >
         <Ionicons
           name="extension-puzzle-outline"
           size={20}
-          color={activeCategory === "Quiz" ? "red" : "black"}
+          color={props.activeCategory === "Quiz" ? "red" : "black"}
         />
         <Text
           style={[
             styles.categoryName,
-            activeCategory === "Quiz" && styles.activeText,
+            props.activeCategory === "Quiz" && styles.activeText,
           ]}
         >
           Quiz
@@ -90,19 +91,19 @@ const BottomNavigation = ({
             backgroundColor: pressed ? "rgba(0, 0, 0, 0.1)" : "transparent",
           },
           styles.categoryIcon,
-          activeCategory === "Last exam" && styles.activeIcon,
+          props.activeCategory === "Last exam" && styles.activeIcon,
         ]}
-        onPress={() => setActiveCategory("Last exam")}
+        onPress={() => props.setActiveCategory("Last exam")}
       >
         <AntDesign
           name="copy1"
           size={20}
-          color={activeCategory === "Last exam" ? "red" : "black"}
+          color={props.activeCategory === "Last exam" ? "red" : "black"}
         />
         <Text
           style={[
             styles.categoryName,
-            activeCategory === "Last exam" && styles.activeText,
+            props.activeCategory === "Last exam" && styles.activeText,
           ]}
         >
           Last exam

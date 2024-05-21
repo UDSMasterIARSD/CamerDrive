@@ -6,7 +6,7 @@ const CoursesStyle = StyleSheet.create({
     marginBottom: 15,
     marginLeft: 20,
     marginRight: 20,
-    marginTop: StatusBar.currentHeight - 10,
+    marginTop: StatusBar.currentHeight! - 10,
     borderRadius: 20,
   },
   image: {

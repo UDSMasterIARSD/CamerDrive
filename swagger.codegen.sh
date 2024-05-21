@@ -1,6 +1,7 @@
 
 cd ressources/api/swagger/
-java -jar swagger-codegen-cli-3.0.46.jar generate -i http://localhost:8080/v3/api-docs -l typescript-axios -o ../../../frontend/generated
+java -jar swagger-codegen-cli-3.0.46.jar generate -i https://013f-129-0-103-71.ngrok-free.app/v3/api-docs -l typescript-axios -o ../../../frontend/generated
+# java -jar swagger-codegen-cli-3.0.46.jar generate -i http://localhost:8080/api/v3/api-docs -l typescript-axios -o ../../../frontend/generated
 # java -jar swagger-codegen-cli-3.0.46.jar generate -i ../../../src/backend/target/swagger-ui/api-docs.yaml -l typescript-axios -o ../../../src/frontend/generated
 
 #Remplcer la sous chaine ./dist par ./

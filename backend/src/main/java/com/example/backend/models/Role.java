@@ -22,6 +22,7 @@ public class Role implements Serializable {
     private Long Id;
 
     @NotNull(message = "nom : Ce champ est obligatoire")
+    @Column(unique = true)
     private String nom;
 
     @Nullable

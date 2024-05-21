@@ -4,13 +4,11 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.List;
-
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class CoursRequest {
-    private String titre;
-    private String description;
-//    private List<ConceptResponse> concepts;
+public class ScoreUserQuizResponse {
+    private UserResponse user;
+    private QuizResponse Quiz;
+    private double note;
 }

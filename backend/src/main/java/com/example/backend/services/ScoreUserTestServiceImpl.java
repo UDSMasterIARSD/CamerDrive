@@ -40,6 +40,7 @@ public class ScoreUserTestServiceImpl implements ScoreUserTestService {
         return mapper.map(scoreUserTestRepo.save(userTest), ScoreUserTestResponse.class);
     }
 
+    @Override
     public ScoreUserTest getUserTestById(Long id){
         return scoreUserTestRepo.findById(id).orElseThrow(()-> new EntityNotFoundException("User Answer not found"));
     }

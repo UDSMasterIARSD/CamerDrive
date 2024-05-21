@@ -4,6 +4,7 @@ import { styled, useColorScheme, withExpoSnack } from "nativewind";
 import React, { useRef, useState } from "react";
 import {
   Alert,
+  AlertOptions,
   Dimensions,
   DrawerLayoutAndroid,
   Pressable,
@@ -11,6 +12,7 @@ import {
   Text,
   TouchableOpacity,
   View,
+  ViewStyle,
 } from "react-native";
 import BottomNavigation from "../../components/BottomNavigation";
 import { useAuth } from "../../context/AuthContext";
@@ -21,12 +23,21 @@ import Quiz from "../quiz/Quiz";
 import categories from "./Category";
 import DashbordStyle from "./DashbordStyle";
 
+declare interface CustomAlertOptions extends AlertOptions {
+  alertContainerStyle?: ViewStyle;
+}
+
+interface MenuItem {
+  title: string,
+  iconName: keyof typeof Ionicons.glyphMap,
+}
+
 const Dashbord = () => {
   const { colorScheme, toggleColorScheme } = useColorScheme();
   const navigation = useNavigation();
   const { authState } = useAuth();
 
-  const drawer = useRef(null);
+  const drawer = useRef<DrawerLayoutAndroid>(null);
   const windowWidth = Dimensions.get("window").width;
   const marginLeft = windowWidth * 0.2;
 
@@ -75,14 +86,23 @@ const Dashbord = () => {
           //onPress: () => console.log("Cancel Pressed"),
           style: "cancel",
         },
-        { text: "YES", onPress: () => onLogout() },
+        {
+          text: "YES",
+          onPress: () => {
+            if (onLogout) {
+              onLogout();
+            } else {
+              console.error("onLogout function is not defined");
+            }
+          },
+        },
       ],
       {
         alertContainerStyle: DashbordStyle.alertContainer,
-      }
+      } as CustomAlertOptions
     );
 
-  const menuItems = [
+  const menuItems: MenuItem[] = [
     { title: "Profile", iconName: "person" },
     { title: "Statistiques", iconName: "stats-chart" },
     {
@@ -101,11 +121,7 @@ const Dashbord = () => {
     iconName: "home",
   });
 
-  const handleDarkMode = () => {
-    toggleColorScheme();
-  };
-
-  const handleMenuItemClick = (menuItem) => {
+  const handleMenuItemClick = (menuItem: MenuItem) => {
     setSelectedMenuItem(menuItem);
     switch (menuItem.title) {
       case "Logout":
@@ -130,7 +146,7 @@ const Dashbord = () => {
         // Handle "About us" case
         break;
       case "Theme":
-        handleDarkMode();
+        toggleColorScheme();
       default:
         break;
     }
@@ -235,7 +251,7 @@ const Dashbord = () => {
       // Appliquer le style d'overlay
       // className="dark:bg-white"
     >
-      <View style={DashbordStyle.header}>
+      <View className="bg-slate-50 dark:bg-slate-800 border-b-slate-300 dark:border-b-slate-900" style={DashbordStyle.header}>
         <TouchableOpacity
           onPress={() => drawer.current?.openDrawer()}
           // style={DashbordStyle.iconContainer}
@@ -248,7 +264,7 @@ const Dashbord = () => {
           />
         </TouchableOpacity>
 
-        <Text style={{ marginLeft: marginLeft }}>{renderSelectedOption()}</Text>
+        <Text className="dark:text-slate-200" style={{ marginLeft: marginLeft }}>{renderSelectedOption()}</Text>
       </View>
       <View style={DashbordStyle.contentContainer}>{renderSelectedPage()}</View>
       <View

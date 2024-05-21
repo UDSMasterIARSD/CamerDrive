@@ -12,9 +12,7 @@ const DashbordStyle = StyleSheet.create({
     alignItems: "center",
     paddingHorizontal: 20,
     paddingVertical: 10,
-    backgroundColor: "#ffffff",
     borderBottomWidth: 1,
-    borderBottomColor: "#dddddd",
   },
   navigationHeader: {
     backgroundColor: "#003f5c",
@@ -125,21 +123,7 @@ const DashbordStyle = StyleSheet.create({
     backgroundColor: "lightgrey",
     borderRadius: 10,
   },
-  initialLetterContainer: {
-    width: 80,
-    height: 80,
-    borderRadius: 50,
-    marginLeft: 30,
-    marginRight: 20,
-    backgroundColor: "green",
-    alignItems: "center",
-    justifyContent: "center",
-  },
-
-  initialLetter: {
-    fontSize: 40, // Taille de la lettre
-    color: "white", // Couleur de la lettre
-  },
+  contentContainer: {}
 });
 
 export default DashbordStyle;

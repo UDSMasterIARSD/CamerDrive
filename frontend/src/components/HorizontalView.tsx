@@ -2,10 +2,16 @@ import { AntDesign } from "@expo/vector-icons";
 import React from "react";
 import { StyleSheet, Text, View } from "react-native";
 
-const data = [
+interface DataType {
+  id: number,
+  icon: keyof typeof AntDesign.glyphMap,
+  title: string,
+}
+
+const data: DataType[] = [
   {
     id: 1,
-    icon: "filetext1", // Ensure this matches the icon you want
+    icon: "filetext1",
     title: "Mock Test",
   },
   {
