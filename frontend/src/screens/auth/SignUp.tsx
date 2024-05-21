@@ -96,6 +96,14 @@ const SignUp = () => {
 
   const handleDateChange = (event: any, selectedDate: Date | undefined) => {
     const currentDate = selectedDate || dateOfBirth;
+    const minDate = new Date();
+    minDate.setFullYear(minDate.getFullYear() - 18);
+
+    if (currentDate && currentDate.getTime() > minDate.getTime()) {
+      alert("You must be 18 years or older to sign up.");
+      return;
+    }
+
     setShowDatePicker(false);
     setDateOfBirth(currentDate);
   };

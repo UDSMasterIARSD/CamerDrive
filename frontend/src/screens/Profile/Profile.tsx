@@ -1,5 +1,5 @@
 import { Ionicons } from "@expo/vector-icons";
-import { useNavigation } from "@react-navigation/native";
+import { NavigationProp, useNavigation } from "@react-navigation/native";
 import React from "react";
 import {
   Alert,
@@ -13,8 +13,8 @@ import {
 } from "react-native";
 import ProfileStyle from "./ProfileStyle";
 
-const Profile = () => {
-  const navigation = useNavigation();
+const Profile: React.FC = () => {
+  const navigation = useNavigation<NavigationProp<any>>();
 
   const handlePress = () => {
     navigation.goBack(); // Revenir à la page précédente
@@ -24,10 +24,10 @@ const Profile = () => {
   const marginLeft = windowWidth * 0.2;
 
   const createOneButtonAlert = () =>
-    Alert.alert("Confirm update", "succesfully update your information", [
+    Alert.alert("Confirm update", "Successfully updated your information", [
       {
         text: "Ok",
-        style: "ok",
+        // style: "ok",
       },
     ]);
 

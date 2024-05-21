@@ -1,7 +1,7 @@
 import { Ionicons } from "@expo/vector-icons";
-import { useNavigation } from "@react-navigation/native";
+import { useNavigation, useNavigationState } from "@react-navigation/native";
 import { styled, useColorScheme, withExpoSnack } from "nativewind";
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import {
   Alert,
   AlertOptions,
@@ -36,6 +36,15 @@ const Dashbord = () => {
   const { colorScheme, toggleColorScheme } = useColorScheme();
   const navigation = useNavigation();
   const { authState } = useAuth();
+  console.log("userName", authState?.userName);
+  console.log("initialLetter", authState?.userName?.charAt(0));
+
+  const navigationState = useNavigationState((state) => state);
+  
+  useEffect(() => {
+    console.log("Route change detected:", navigationState);
+    drawer.current?.closeDrawer();
+  }, [navigationState]);
 
   const drawer = useRef<DrawerLayoutAndroid>(null);
   const windowWidth = Dimensions.get("window").width;
@@ -266,7 +275,7 @@ const Dashbord = () => {
 
         <Text className="dark:text-slate-200" style={{ marginLeft: marginLeft }}>{renderSelectedOption()}</Text>
       </View>
-      <View style={DashbordStyle.contentContainer}>{renderSelectedPage()}</View>
+      <View>{renderSelectedPage()}</View>
       <View
         className="dark:bg-slate-700"
         style={DashbordStyle.bottomNavigation}

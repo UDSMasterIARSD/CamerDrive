@@ -1,10 +1,12 @@
 import React from "react";
-import { StyleSheet } from "react-native";
-import { NavigationContainer } from "@react-navigation/native";
+import { LogBox, StyleSheet } from "react-native";
 import { AuthProvider } from "./src/context/AuthContext";
+import { NavigationContainer } from "@react-navigation/native";
+
 import Index from "./src/screens/Index";
 
 export default function App() {
+  LogBox.ignoreAllLogs();
   return (
     <NavigationContainer>
       <AuthProvider>

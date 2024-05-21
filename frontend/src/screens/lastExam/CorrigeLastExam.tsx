@@ -1,8 +1,8 @@
-import React from "react";
 import { withExpoSnack } from "nativewind";
+import React from "react";
 
-import { Dimensions, Pressable, Text } from "react-native";
 import { useColorScheme } from "nativewind";
+import { Dimensions, Pressable, Text } from "react-native";
 
 const CorrigeLastExam = () => {
   const { colorScheme, toggleColorScheme } = useColorScheme();

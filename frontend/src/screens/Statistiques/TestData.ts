@@ -1,4 +1,12 @@
-const TestData = [
+export interface Test {
+  id: number;
+  status: "PASSED" | "FAILED";
+  numberOfQuestions: number;
+  numberOfCorrectAnswers: number;
+  Time: number;
+}
+
+export const TestData: Test[] = [
   {
     id: 1,
     status: "PASSED",
@@ -6,7 +14,6 @@ const TestData = [
     numberOfCorrectAnswers: 20,
     Time: 30,
   },
-
   {
     id: 2,
     status: "FAILED",
@@ -25,7 +32,7 @@ const TestData = [
     id: 4,
     status: "PASSED",
     numberOfQuestions: 50,
-    numberOfCorrectAnswers: 480,
+    numberOfCorrectAnswers: 48,
     Time: 45,
   },
   {
@@ -43,5 +50,3 @@ const TestData = [
     Time: 30,
   },
 ];
-
-export default TestData;

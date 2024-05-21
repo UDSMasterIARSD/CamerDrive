@@ -25,6 +25,12 @@ const AdminDashbord: React.FC = () => {
       case "Courses Management":
         navigation.navigate("QuestionDetails", { type: "courses" });
         break;
+      case "Concepts Management":
+        navigation.navigate("QuestionDetails", { type: "concepts" });
+        break;
+      case "Quiz Management":
+        navigation.navigate("QuestionDetails", { type: "quizzes" });
+        break;
       default:
         break;
     }

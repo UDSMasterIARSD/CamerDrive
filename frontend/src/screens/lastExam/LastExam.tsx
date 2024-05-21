@@ -1,19 +1,11 @@
 import React, { useState } from "react";
-import { withExpoSnack } from "nativewind";
-import {
-  Dimensions,
-  SafeAreaView,
-  ScrollView,
-  Text,
-  TouchableOpacity,
-  View,
-} from "react-native";
+import { Dimensions, SafeAreaView, Text, View } from "react-native";
 
 import { styled } from "nativewind";
 import { RadioButton } from "react-native-paper";
-import { optionValues } from "./data";
-import LastSubject from "./LastSubject";
 import CorrigeLastExam from "./CorrigeLastExam";
+import LastSubject from "./LastSubject";
+import { optionValues } from "./data";
 
 const LastExam = () => {
   const [option, setOption] = useState(optionValues.sujet);
