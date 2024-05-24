@@ -13,7 +13,7 @@ public interface UserService {
 
     List<UserResponse> index();
 
-    UserResponse show(Long Id);
+    UserResponse show(Long id);
 
     UserResponse create(UserRequest user);
 

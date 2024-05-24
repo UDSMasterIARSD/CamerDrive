@@ -2,6 +2,7 @@ package com.example.backend.services;
 
 import com.example.backend.configs.AppConstants;
 import com.example.backend.dto.PasswordRequest;
+import com.example.backend.dto.RoleResponse;
 import com.example.backend.dto.UserRequest;
 import com.example.backend.dto.UserResponse;
 import com.example.backend.exceptions.BADException;
@@ -15,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.Collections;
 import java.util.List;
 
 @Service
@@ -40,11 +42,8 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserResponse show(Long id) {
-        System.out.println("\ndebut toilette");
         User user = userRepo.findById(id)
                 .orElseThrow(() -> new NotFoundException("L'Utilisateur", "d'id", id));
-        System.out.println("\n" + user);
-        System.out.println(user);
         return mapper.map(user, UserResponse.class);
     }
 
@@ -87,8 +86,13 @@ public class UserServiceImpl implements UserService {
 
     public  void savePassword(User user, String password){
         if (!(password.matches(AppConstants.PASSWORD_REGEX)))
-            throw new BADException("Le mot de passe doit avoir min 8 carateres et contenir au moins :\n " +
-                    "- Un chiffre ,\n- une lettre majuscule,\n- une lettre minuscule,\n- un caractere special,\n- pas d'espace.");
+            throw new BADException("""
+                    Le mot de passe doit avoir min 8 carateres et contenir au moins :
+                    - Un chiffre,
+                    - une lettre majuscule,
+                    - une lettre minuscule,
+                    - un caractere special,
+                    - pas d'espace.""");
         user.setPassword(passwordEncoder.encode(password));
     }
 

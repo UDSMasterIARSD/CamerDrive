@@ -16,16 +16,18 @@ import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
-@Data
+
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 @Entity
 @Table(name = "users")
-@RequiredArgsConstructor
 public class User implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "username")
     @NotNull(message = "username : Ce champ est obligatoire")
     @NotBlank(message = "username : Ce champ ne doit pas etre vide")
     private String username;
@@ -52,7 +54,6 @@ public class User implements Serializable {
 
     @ManyToOne
     private Role role;
-
 
     @CreationTimestamp
     @Column(name = "created_at", nullable = false, updatable = false)
