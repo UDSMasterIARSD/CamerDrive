@@ -3,7 +3,6 @@ import { useState } from "react";
 
 import DateTimePicker from "@react-native-community/datetimepicker";
 import { useNavigation } from "@react-navigation/native";
-import { useState } from "react";
 import {
   ActivityIndicator,
   Dimensions,
@@ -85,7 +84,7 @@ const SignUp = () => {
         return;
       }
 
-      const result = await onRegister!(name, email, dateOfBirth, password);
+      const result = await onRegister!(name, email, dateOfBirth!, password);
 
       if (result && result.error) {
         alert(result.message + result.error);

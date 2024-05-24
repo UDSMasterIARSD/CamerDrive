@@ -21,7 +21,7 @@ import java.util.List;
 public class UserController {
 
     @Autowired
-    private final UserService userService;
+    private UserService userService;
 
     @GetMapping("/")
     @Transactional(readOnly = true)
@@ -34,7 +34,6 @@ public class UserController {
     @Transactional(readOnly = true)
     @ResponseStatus(HttpStatus.OK)
     public UserResponse showUser(@PathVariable Long id) {
-        System.out.println("Controller");
         return userService.show(id);
     }
 

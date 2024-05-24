@@ -46,7 +46,7 @@ public class SeedData implements CommandLineRunner {
             user.setDateNaiss(new SimpleDateFormat("yyyy-MM-dd").parse("2000-01-01"));
             Role role = new Role();
             role.setNom("ADMIN");
-            user.setRole(roleRepo.findByNom("ADMIN"));
+            user.setRole(roleRepo.findByNom(AppConstants.ADMIN_ROLE));
             userRepo.save(user);
         }
     }

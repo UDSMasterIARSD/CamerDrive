@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.example.backend.dto.ConceptRequest;
 import com.example.backend.dto.ConceptResponse;
+import com.example.backend.dto.CoursResponse;
 import com.example.backend.services.ConceptService;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
@@ -33,6 +34,13 @@ public class ConceptController {
     @ResponseStatus(HttpStatus.OK)
     public ConceptResponse showConcept(@PathVariable Long id) {
         return conceptService.show(id);
+    }
+
+    @GetMapping("/getCours/{id}")
+    @Transactional(readOnly = true)
+    @ResponseStatus(HttpStatus.OK)
+    public CoursResponse getCours(@PathVariable Long id) {
+        return conceptService.getCours(id);
     }
 
     @PostMapping("/")

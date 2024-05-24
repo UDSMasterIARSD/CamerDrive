@@ -5,7 +5,7 @@ import AboutUs from "./AboutUs";
 import Profile from "./Profile/Profile";
 import Statistiques from "./Statistiques/Statistiques";
 import AdminDashbord from "./admin/dashbord/AdminDashbord";
-import QuestionDetails from "./admin/manageQuestions/QuestionDetails";
+import QuestionDetails from "./admin/manageTasks/QuestionDetails";
 import SignIn from "./auth/SignIn";
 import SignUp from "./auth/SignUp";
 import Courses from "./courses/Courses";
