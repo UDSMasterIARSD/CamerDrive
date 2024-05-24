@@ -118,7 +118,7 @@ const AddUserForm = () => {
         <TouchableOpacity onPress={handlePress}>
           <Ionicons name="arrow-back" size={24} color="#000000" />
         </TouchableOpacity>
-        <Text style={styles.headerText}>Add Question</Text>
+        <Text style={styles.headerText}>Add User</Text>
       </View>
       <ScrollView style={styles.scrollView}>
         <View style={styles.formContainer}>

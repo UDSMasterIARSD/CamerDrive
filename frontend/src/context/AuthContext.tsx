@@ -1,6 +1,6 @@
 import { useNavigation } from "@react-navigation/native";
 import * as SecureStore from "expo-secure-store";
-import React, { createContext, useContext, useEffect, useState } from "react";
+import React, { createContext, useContext, useState } from "react";
 import { AuthControllerApi } from "../../generated/index";
 import { SignInRequest, UserRequest } from "../../generated/models";
 import environment from "../environments/environment";
@@ -47,7 +47,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
     userName: null,
   });
 
-  useEffect(() => {
+  /*useEffect(() => {
     const loadToken = async () => {
       const token = await SecureStore.getItemAsync(TOKEN);
       const storedTime = await SecureStore.getItemAsync("TIME");
@@ -81,7 +81,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
       }
     };
     loadToken();
-  }, []);
+  }, []); */
   const register = async (
     username: string,
     email: string,

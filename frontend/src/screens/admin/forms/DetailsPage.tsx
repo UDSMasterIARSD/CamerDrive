@@ -3,10 +3,12 @@ import React from "react";
 import QuestionDetailsPage from "./questions/QuestionDetailsPage";
 //import EditUserForm from "./EditUserForm";
 //import EditCourseForm from "./EditCourseForm";
+import QuizDetailsPage from "./quizzes/QuizDetailsPage";
+import UserDetailsPage from "./users/UserDetailsPage";
 
 type DetailsPageRouteParams = {
   params: {
-    type: "users" | "courses" | "questions";
+    type: "users" | "courses" | "questions" | "quizzes";
     id: number;
   };
 };
@@ -17,10 +19,12 @@ const DetailsPage = () => {
 
   if (type === "questions") {
     return <QuestionDetailsPage id={id} />;
-  } else if (type === "courses") {
-    // return <EditCourseForm id={id} />;
   } else if (type === "users") {
+    return <UserDetailsPage id={id} />;
+  } else if (type === "courses") {
     // return <EditUserForm id={id} />;
+  } else if (type === "quizzes") {
+    return <QuizDetailsPage id={id} />;
   } else {
     return null;
   }

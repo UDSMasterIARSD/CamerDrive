@@ -1,3 +1,4 @@
+import { Ionicons } from "@expo/vector-icons"; // Assurez-vous d'avoir installé @expo/vector-icons
 import { useNavigation } from "@react-navigation/native";
 import { withExpoSnack } from "nativewind";
 import { useState } from "react";
@@ -20,13 +21,28 @@ const SignIn = () => {
 
   const [name, setName] = useState("");
   const [password, setPassword] = useState("");
-  //const [showPassword, setShowPassword] = useState(false);
+  const [showPassword, setShowPassword] = useState(false); // Nouvel état pour gérer la visibilité du mot de passe
   const [isLoading, setIsLoading] = useState(false);
   const [loginError, setLoginError] = useState<string | null>(null);
+  const [validationError, setValidationError] = useState<string | null>(null); // État pour les erreurs de validation
 
   const { onLogin } = useAuth();
 
   const handleLogin = async () => {
+    // Réinitialiser les erreurs
+    setValidationError(null);
+    setLoginError(null);
+
+    // Vérifier si les champs sont vides
+    if (!name) {
+      setValidationError("Username is required.");
+      return;
+    }
+    if (!password) {
+      setValidationError("Password is required.");
+      return;
+    }
+
     try {
       setIsLoading(true);
 
@@ -50,7 +66,7 @@ const SignIn = () => {
           <Image
             source={require("./../../../assets/auth/loginImg.png")}
             style={{ width: 300, height: 200 }}
-          ></Image>
+          />
           <Text style={{ fontSize: 40, fontWeight: "bold", color: "#fff" }}>
             Login Screen
           </Text>
@@ -68,18 +84,33 @@ const SignIn = () => {
           </View>
           <View>
             <Text style={styles.textInfo}>Password:</Text>
-            <TextInput
-              style={styles.textInput}
-              placeholder="Enter your password here ..."
-              placeholderTextColor="#fff"
-              value={password}
-              onChangeText={(text) => setPassword(text)}
-              keyboardType="default"
-              textContentType="password"
-              secureTextEntry={true}
-              maxLength={20}
-            />
+            <View style={styles.passwordContainer}>
+              <TextInput
+                style={{ color: "#fff", fontSize: 16 }}
+                placeholder="Enter your password here ..."
+                placeholderTextColor="#fff"
+                value={password}
+                onChangeText={(text) => setPassword(text)}
+                keyboardType="default"
+                textContentType="password"
+                secureTextEntry={!showPassword} // Utilisez l'état pour gérer la visibilité du mot de passe
+                maxLength={20}
+              />
+              <TouchableOpacity
+                style={styles.eyeIcon}
+                onPress={() => setShowPassword(!showPassword)}
+              >
+                <Ionicons
+                  name={showPassword ? "eye-off" : "eye"}
+                  size={24}
+                  color="#fff"
+                />
+              </TouchableOpacity>
+            </View>
             {loginError && <Text style={styles.errorText}>{loginError}</Text>}
+            {validationError && (
+              <Text style={styles.errorText}>{validationError}</Text>
+            )}
           </View>
           <View
             style={{
@@ -122,7 +153,7 @@ const SignIn = () => {
               }}
             >
               <Text style={styles.textSignUp}>
-                Don't have an account ? SignUp
+                Don't have an account? SignUp
               </Text>
             </TouchableOpacity>
           </View>
@@ -143,19 +174,19 @@ const SignIn = () => {
             <Image
               source={require("./../../../assets/auth/icons8-google-logo-96.png")}
               style={styles.image}
-            ></Image>
+            />
           </TouchableOpacity>
           <TouchableOpacity onPress={() => {}}>
             <Image
               source={require("./../../../assets/auth/icons8-facebook-logo-96.png")}
               style={styles.image}
-            ></Image>
+            />
           </TouchableOpacity>
           <TouchableOpacity onPress={() => {}}>
             <Image
               source={require("./../../../assets/auth/icons8-linkedin-logo-96.png")}
               style={styles.image}
-            ></Image>
+            />
           </TouchableOpacity>
         </View>
       </ScrollView>
@@ -168,8 +199,6 @@ export default withExpoSnack(SignIn);
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    //justifyContent: "start",
-    //alignItems: "start",
     backgroundColor: "#1C202F",
   },
   image: {
@@ -188,13 +217,11 @@ const styles = StyleSheet.create({
     marginBottom: 80,
   },
   informationView: {
-    // backgroundColor: "#FFF1FE",
     opacity: 0.9,
     flexDirection: "column",
     margin: 20,
     height: 330,
     borderRadius: 20,
-    //justifyContent: "start",
     padding: 8,
   },
   pressable: {
@@ -229,7 +256,6 @@ const styles = StyleSheet.create({
     textAlign: "right",
     color: "#fff",
     fontWeight: "bold",
-    //marginLeft: "20",
     fontSize: 15,
   },
   errorText: {
@@ -239,4 +265,18 @@ const styles = StyleSheet.create({
     marginBottom: 5,
     fontSize: 14,
   },
+  passwordContainer: {
+    flexDirection: "row",
+    justifyContent: "space-around",
+    alignItems: "center",
+    height: 65,
+    margin: 12,
+    borderWidth: 3,
+    borderColor: "#3AAF9F",
+    color: "#fff",
+    padding: 10,
+    borderRadius: 20,
+    backgroundColor: "#1C202F",
+  },
+  eyeIcon: {},
 });

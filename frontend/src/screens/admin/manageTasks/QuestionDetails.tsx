@@ -12,8 +12,10 @@ import {
 } from "react-native";
 import { Row, Table } from "react-native-table-component";
 import {
+  ConceptControllerApi,
   CoursControllerApi,
   QuestionControllerApi,
+  QuizControllerApi,
   UserControllerApi,
 } from "../../../../generated/index";
 import { useAuth } from "../../../context/AuthContext";
@@ -23,7 +25,7 @@ import QuestionDetailsStyle from "./QuestionDetailsStyles";
 
 type QuestionDetailsRouteParams = {
   params: {
-    type: "users" | "courses" | "questions";
+    type: "users" | "courses" | "questions" | "concepts" | "quizzes";
   };
 };
 
@@ -31,6 +33,8 @@ type DataItem = {
   id: number;
   username?: string;
   courseName?: string;
+  conceptTitle?: string;
+  quizTitle?: string;
   questionText?: string;
 };
 
@@ -55,6 +59,12 @@ const QuestionDetails = () => {
     } else if (type === "courses") {
       setTableHead(["ID", "Course Name", "Actions"]);
       AllCourses();
+    } else if (type === "concepts") {
+      setTableHead(["ID", "Concept Title", "Actions"]);
+      AllConcepts();
+    } else if (type === "quizzes") {
+      setTableHead(["ID", "Quiz Title", "Actions"]);
+      AllQuizzes();
     } else {
       setTableHead(["ID", "Question Text", "Actions"]);
       AllQuestions();
@@ -97,6 +107,48 @@ const QuestionDetails = () => {
         courseName: course.titre,
       }));
       setDataList(courses);
+    } catch (error) {
+      console.log(error);
+      Alert.alert("Error", error.message);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const AllConcepts = async () => {
+    try {
+      const conceptApi = new ConceptControllerApi(
+        environment,
+        environment.basePath,
+        axiosInstance
+      );
+      const response = await conceptApi.indexConcepts();
+      const concepts = response.data.map((concept: any) => ({
+        id: concept.id,
+        conceptTitle: concept.titre,
+      }));
+      setDataList(concepts);
+    } catch (error) {
+      console.log(error);
+      Alert.alert("Error", error.message);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const AllQuizzes = async () => {
+    try {
+      const quizApi = new QuizControllerApi(
+        environment,
+        environment.basePath,
+        axiosInstance
+      );
+      const response = await quizApi.indexQuizzes();
+      const quizzes = response.data.map((quiz: any) => ({
+        id: quiz.id,
+        quizTitle: quiz.titre,
+      }));
+      setDataList(quizzes);
     } catch (error) {
       console.log(error);
       Alert.alert("Error", error.message);
@@ -161,6 +213,20 @@ const QuestionDetails = () => {
                   axiosInstance
                 );
                 await userApi.deleteUser(id);
+              } else if (type === "concepts") {
+                const conceptApi = new ConceptControllerApi(
+                  environment,
+                  environment.basePath,
+                  axiosInstance
+                );
+                await conceptApi.delete1(id);
+              } else if (type === "quizzes") {
+                const quizApi = new QuizControllerApi(
+                  environment,
+                  environment.basePath,
+                  axiosInstance
+                );
+                await quizApi.deleteQuiz(id);
               }
               Alert.alert(
                 "Success",
@@ -173,6 +239,10 @@ const QuestionDetails = () => {
                 AllCourses();
               } else if (type === "users") {
                 AllUsers();
+              } else if (type === "concepts") {
+                AllConcepts();
+              } else if (type === "quizzes") {
+                AllQuizzes();
               }
             } catch (error) {
               console.log(error);
@@ -199,14 +269,18 @@ const QuestionDetails = () => {
         key={index}
         data={[
           <TouchableOpacity onPress={() => handleDetails(rowData.id)}>
-            <Text>{rowData.id}</Text>
+            <Text style={QuestionDetailsStyle.textCenter}>{rowData.id}</Text>
           </TouchableOpacity>,
           <TouchableOpacity onPress={() => handleDetails(rowData.id)}>
-            <Text>
+            <Text style={QuestionDetailsStyle.textCenter}>
               {type === "users"
                 ? rowData.username
                 : type === "courses"
                 ? rowData.courseName
+                : type === "concepts"
+                ? rowData.conceptTitle
+                : type === "quizzes"
+                ? rowData.quizTitle
                 : rowData.questionText}
             </Text>
           </TouchableOpacity>,
@@ -241,6 +315,10 @@ const QuestionDetails = () => {
             ? "Users"
             : type === "courses"
             ? "Courses"
+            : type === "concepts"
+            ? "Concepts"
+            : type === "quizzes"
+            ? "Quizzes"
             : "Questions"}
         </Text>
         <TouchableOpacity onPress={() => handleAdd()}>
@@ -254,7 +332,7 @@ const QuestionDetails = () => {
               data={tableHead}
               widthArr={widthArr}
               style={QuestionDetailsStyle.header}
-              textStyle={QuestionDetailsStyle.text}
+              textStyle={{ ...QuestionDetailsStyle.text, textAlign: "center" }}
             />
           </Table>
           <ScrollView style={QuestionDetailsStyle.dataWrapper}>

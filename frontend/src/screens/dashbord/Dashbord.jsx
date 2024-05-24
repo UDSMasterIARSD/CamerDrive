@@ -25,6 +25,8 @@ const Dashbord = () => {
   const { colorScheme, toggleColorScheme } = useColorScheme();
   const navigation = useNavigation();
   const { authState } = useAuth();
+  console.log("userName", authState?.userName);
+  console.log("initialLetter", authState?.userName?.charAt(0));
 
   const drawer = useRef(null);
   const windowWidth = Dimensions.get("window").width;

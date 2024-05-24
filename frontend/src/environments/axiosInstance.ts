@@ -1,7 +1,7 @@
 import axios from 'axios';
 import * as SecureStore from "expo-secure-store";
 const axiosInstance = axios.create({
-    baseURL: 'https://2a14-102-244-41-130.ngrok-free.app',
+    baseURL: 'https://68df-129-0-103-75.ngrok-free.app',
 });
 
 // Function to retrieve the token

@@ -2,6 +2,7 @@ import { RouteProp, useRoute } from "@react-navigation/native";
 import React from "react";
 import EditCourseForm from "./courses/EditCourseForm";
 import EditQuestionForm from "./questions/EditQuestionForm";
+import EditQuizForm from "./quizzes/EditQuizzesForm";
 import EditUserForm from "./users/EditUserForm";
 
 type EditFormRouteParams = {
@@ -21,7 +22,12 @@ const EditForm = () => {
     return <EditCourseForm id={id} />;
   } else if (type === "users") {
     return <EditUserForm id={id} />;
+  } else if (type === "quizzes") {
+    return <EditQuizForm id={id} />;
   } else {
+    /*else if (type === "concepts") {
+    return <EditConceptForm id={id} />; 
+  }*/
     return null;
   }
 };
