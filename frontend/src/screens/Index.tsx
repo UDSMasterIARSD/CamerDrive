@@ -5,6 +5,9 @@ import AboutUs from "./AboutUs";
 import Profile from "./Profile/Profile";
 import Statistiques from "./Statistiques/Statistiques";
 import AdminDashbord from "./admin/dashbord/AdminDashbord";
+import AddForm from "./admin/forms/AddForm";
+import DetailsPage from "./admin/forms/DetailsPage";
+import EditForm from "./admin/forms/EditForm";
 import QuestionDetails from "./admin/manageTasks/QuestionDetails";
 import SignIn from "./auth/SignIn";
 import SignUp from "./auth/SignUp";
@@ -13,12 +16,13 @@ import CoursesDetails from "./coursesDetails/CoursesDetails";
 import Dashbord from "./dashbord/Dashbord";
 import LastExam from "./lastExam/LastExam";
 import Quiz from "./quiz/Quiz";
+import QuizDetails from "./quiz/QuizDetails";
 import OnboardingCompo from "./welcome/onboarding/OnboardingCompo";
 
 const Stack = createNativeStackNavigator();
 
 const Index = () => {
-  const { authState, onLogout } = useAuth();
+  const { authState } = useAuth();
 
   return (
     <Stack.Navigator initialRouteName="Onboading">
@@ -35,7 +39,17 @@ const Index = () => {
               component={QuestionDetails}
               options={{ headerShown: false }}
             />
-            {/* Ajoutez d'autres écrans d'administration ici */}
+            <Stack.Screen
+              name="AddForm"
+              component={AddForm}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="EditForm"
+              component={EditForm}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen name="DetailsPage" component={DetailsPage} />
           </>
         ) : (
           <>
@@ -52,6 +66,11 @@ const Index = () => {
             <Stack.Screen
               name="Quiz"
               component={Quiz}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="QuizDetails"
+              component={QuizDetails}
               options={{ headerShown: false }}
             />
             <Stack.Screen

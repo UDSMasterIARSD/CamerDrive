@@ -29,6 +29,10 @@ const QuestionDetailsStyle = StyleSheet.create({
     textAlign: "center",
     fontWeight: "500",
   },
+  textCenter: {
+    margin: 6,
+    textAlign: "center",
+  },
   header: {
     height: 50,
     backgroundColor: "#537791",
