@@ -1,5 +1,5 @@
 import { Ionicons } from "@expo/vector-icons";
-import { useNavigation } from "@react-navigation/native";
+import { NavigationProp, useNavigation } from "@react-navigation/native";
 import React from "react";
 import {
   Dimensions,
@@ -9,10 +9,10 @@ import {
   View,
 } from "react-native";
 import StatistiqueStyle from "./StatistiqueStyle";
-import TestData from "./TestData";
+import { Test, TestData } from "./TestData";
 
-const Statistiques = () => {
-  const navigation = useNavigation();
+const Statistiques: React.FC = () => {
+  const navigation = useNavigation<NavigationProp<any>>();
 
   const handlePress = () => {
     navigation.goBack(); // Revenir à la page précédente
@@ -41,7 +41,7 @@ const Statistiques = () => {
         </View>
 
         <View style={StatistiqueStyle.container}>
-          {TestData.map((test) => (
+          {TestData.map((test: Test) => (
             <View
               key={test.id}
               style={[
@@ -56,7 +56,7 @@ const Statistiques = () => {
                 <Text style={StatistiqueStyle.text}>Status of the test:</Text>
                 <Text
                   style={[
-                    StatistiqueStyle.test,
+                    StatistiqueStyle.text,
                     { color: test.status === "FAILED" ? "red" : "green" },
                   ]}
                 >

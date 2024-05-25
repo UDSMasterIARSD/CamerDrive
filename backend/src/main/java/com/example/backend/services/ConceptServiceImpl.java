@@ -2,6 +2,7 @@ package com.example.backend.services;
 
 import com.example.backend.dto.ConceptRequest;
 import com.example.backend.dto.ConceptResponse;
+import com.example.backend.dto.CoursResponse;
 import com.example.backend.exceptions.NotFoundException;
 import com.example.backend.models.Concept;
 import com.example.backend.repositories.ConceptRepository;
@@ -32,6 +33,14 @@ public class ConceptServiceImpl implements ConceptService {
         Concept concept = conceptRepo.findById(id).orElseThrow(()
                 -> new NotFoundException("Le concept", "d'id", id));
         return mapper.map(concept, ConceptResponse.class);
+    }
+
+
+    @Override
+    public CoursResponse getCours(Long id) {
+        Concept concept = conceptRepo.findById(id).orElseThrow(()
+                -> new NotFoundException("Le concept", "d'id", id));
+        return mapper.map(concept.getCours(), CoursResponse.class);
     }
 
     @Override

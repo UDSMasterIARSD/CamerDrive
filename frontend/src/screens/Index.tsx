@@ -16,6 +16,7 @@ import CoursesDetails from "./coursesDetails/CoursesDetails";
 import Dashbord from "./dashbord/Dashbord";
 import LastExam from "./lastExam/LastExam";
 import Quiz from "./quiz/Quiz";
+import QuizDetails from "./quiz/QuizDetails";
 import OnboardingCompo from "./welcome/onboarding/OnboardingCompo";
 
 const Stack = createNativeStackNavigator();
@@ -49,7 +50,6 @@ const Index = () => {
               options={{ headerShown: false }}
             />
             <Stack.Screen name="DetailsPage" component={DetailsPage} />
-            {/* Ajoutez d'autres écrans d'administration ici */}
           </>
         ) : (
           <>
@@ -66,6 +66,11 @@ const Index = () => {
             <Stack.Screen
               name="Quiz"
               component={Quiz}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="QuizDetails"
+              component={QuizDetails}
               options={{ headerShown: false }}
             />
             <Stack.Screen

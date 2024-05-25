@@ -3,8 +3,7 @@ package com.example.backend.models;
 import jakarta.annotation.Nullable;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
-import lombok.Data;
-import lombok.RequiredArgsConstructor;
+import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
@@ -12,16 +11,17 @@ import java.io.Serializable;
 import java.sql.Timestamp;
 import java.util.List;
 
+
 @Data
 @Entity
 @Table(name = "roles")
-@RequiredArgsConstructor
 public class Role implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long Id;
 
     @NotNull(message = "nom : Ce champ est obligatoire")
+    @Column(unique = true)
     private String nom;
 
     @Nullable

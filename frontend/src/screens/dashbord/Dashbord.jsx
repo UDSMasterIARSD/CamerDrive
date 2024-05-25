@@ -1,7 +1,7 @@
 import { Ionicons } from "@expo/vector-icons";
-import { useNavigation } from "@react-navigation/native";
+import { useNavigation, useNavigationState } from "@react-navigation/native";
 import { styled, useColorScheme, withExpoSnack } from "nativewind";
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import {
   Alert,
   Dimensions,
@@ -25,8 +25,7 @@ const Dashbord = () => {
   const { colorScheme, toggleColorScheme } = useColorScheme();
   const navigation = useNavigation();
   const { authState } = useAuth();
-  console.log("userName", authState?.userName);
-  console.log("initialLetter", authState?.userName?.charAt(0));
+  const navigationState = useNavigationState((state) => state);
 
   const drawer = useRef(null);
   const windowWidth = Dimensions.get("window").width;
@@ -38,13 +37,18 @@ const Dashbord = () => {
 
   const [selectedCategory, setSelectedCategory] = useState("Home");
 
+  useEffect(() => {
+    console.log("Route change detected:", navigationState);
+    drawer.current?.closeDrawer();
+  }, [navigationState]);
+
   const renderSelectedOption = () => {
     switch (selectedCategory) {
       case "Courses":
         return "List of courses";
       case "Quiz":
-        return "quiz";
-      case "Last exam":
+        return "Quiz";
+      case "LastExam":
         return "Last exam";
       default:
         return "Home";
@@ -52,45 +56,36 @@ const Dashbord = () => {
   };
 
   const renderSelectedPage = () => {
+    console.log(`Selected category: ${selectedCategory}`);
     switch (selectedCategory) {
       case "Courses":
-        return <Courses />; // Affiche la page des cours lorsque "Courses" est sélectionné
+        return <Courses />;
       case "Quiz":
-        return <Quiz />; // Affiche la page du quiz lorsque "Quiz" est sélectionné
-      case "Last exam":
-        return <LastExam />; // Affiche la page du dernier examen lorsque "Last exam" est sélectionné
+        console.log("Rendering Quiz page");
+        return <Quiz />;
+
+      case "LastExam":
+        return <LastExam />;
       default:
-        return <Home />; // Par défaut, affiche le contenu de la page d'accueil
+        return <Home />;
     }
   };
 
   const { onLogout } = useAuth();
 
   const createTwoButtonAlert = () =>
-    Alert.alert(
-      "Confirm Logout",
-      "Are you sure you want to log out?",
-      [
-        {
-          text: "Cancel",
-
-          //onPress: () => console.log("Cancel Pressed"),
-          style: "cancel",
-        },
-        { text: "YES", onPress: () => onLogout() },
-      ],
+    Alert.alert("Confirm Logout", "Are you sure you want to log out?", [
       {
-        alertContainerStyle: DashbordStyle.alertContainer,
-      }
-    );
+        text: "Cancel",
+        style: "cancel",
+      },
+      { text: "YES", onPress: () => onLogout() },
+    ]);
 
   const menuItems = [
     { title: "Profile", iconName: "person" },
     { title: "Statistiques", iconName: "stats-chart" },
-    {
-      title: "About us",
-      iconName: "information-circle",
-    },
+    { title: "About us", iconName: "information-circle" },
     { title: "Logout", iconName: "log-out" },
     {
       title: "Theme",
@@ -109,30 +104,23 @@ const Dashbord = () => {
 
   const handleMenuItemClick = (menuItem) => {
     setSelectedMenuItem(menuItem);
+    drawer.current?.closeDrawer();
     switch (menuItem.title) {
       case "Logout":
-        drawer.current?.closeDrawer();
-        {
-          createTwoButtonAlert();
-        }
-
+        createTwoButtonAlert();
         break;
       case "Profile":
-        drawer.current?.closeDrawer();
         navigation.navigate("Profile");
-        // Handle "Home" case
         break;
       case "Statistiques":
-        drawer.current?.closeDrawer();
         navigation.navigate("Statistiques");
         break;
       case "About us":
-        drawer.current?.closeDrawer();
         navigation.navigate("AboutUs");
-        // Handle "About us" case
         break;
       case "Theme":
         handleDarkMode();
+        break;
       default:
         break;
     }
@@ -145,7 +133,6 @@ const Dashbord = () => {
   const navigationView = () => (
     <View style={[DashbordStyle.container, DashbordStyle.navigationContainer]}>
       <View style={DashbordStyle.navigationHeader}>
-        {/* Photo de l'utilisateur */}
         <View style={DashbordStyle.userInfoContainer}>
           <View style={DashbordStyle.initialLetterContainer}>
             <Pressable onPress={goToProfilePage}>
@@ -154,35 +141,15 @@ const Dashbord = () => {
               </Text>
             </Pressable>
           </View>
-          {/*{userPhoto ? (
-            <Pressable onPress={goToProfilePage}>
-              <Image
-                source={{ uri: userPhoto }}
-                style={DashbordStyle.userPhoto}
-              />
-            </Pressable>
-          ) : (
-            <View style={DashbordStyle.initialLetterContainer}>
-              <Text style={DashbordStyle.initialLetter}>
-                {username.charAt(0)}
-              </Text>
-            </View>
-          )}*/}
-
-          {/* Nom de l'utilisateur et rôle */}
           <View>
             <Text style={DashbordStyle.userName}>{authState?.userName}</Text>
             <Text style={DashbordStyle.userRole}>{authState?.role}</Text>
-            {/* Ligne foncée */}
             <View style={DashbordStyle.line}></View>
-            {/* Texte "Camer" à gauche de la ligne */}
             <Text style={DashbordStyle.textLeft}>Camer</Text>
-            {/* Texte "Drive" à droite de la ligne */}
             <Text style={DashbordStyle.textRight}>Drive</Text>
           </View>
         </View>
       </View>
-      {/* Menu des services */}
       <ScrollView className="dark:bg-slate-600 pt-5">
         {menuItems.map((menuItem) => (
           <TouchableOpacity
@@ -200,9 +167,7 @@ const Dashbord = () => {
                 name={menuItem.iconName}
                 size={24}
                 className="text-cyan-950 dark:text-cyan-50"
-                // color="#ffffff"
               />
-              {/* <Ionicons name={menuItem.iconName} size={24} color="#003f5c" /> */}
             </View>
             <StyledText
               className="text-cyan-950 dark:text-cyan-50 font-semibold"
@@ -212,18 +177,6 @@ const Dashbord = () => {
             </StyledText>
           </TouchableOpacity>
         ))}
-        {/* Fermeture du drawer 
-        <View style={{ alignItems: "center" }}>
-          <TouchableOpacity
-            style={DashbordStyle.closeBtn}
-            onPress={() => drawer.current?.closeDrawer()}
-          >
-            <Text style={{ color: "white", fontWeight: "bold", fontSize: 16 }}>
-              Close
-            </Text>
-          </TouchableOpacity>
-        </View>
-        */}
       </ScrollView>
     </View>
   );
@@ -234,22 +187,15 @@ const Dashbord = () => {
       drawerWidth={300}
       drawerPosition={"left"}
       renderNavigationView={navigationView}
-      // Appliquer le style d'overlay
-      // className="dark:bg-white"
     >
       <View style={DashbordStyle.header}>
-        <TouchableOpacity
-          onPress={() => drawer.current?.openDrawer()}
-          // style={DashbordStyle.iconContainer}
-          className="dark:text-slate-50"
-        >
+        <TouchableOpacity onPress={() => drawer.current?.openDrawer()}>
           <StyledIonicons
             name="menu"
             size={24}
             className="dark:text-slate-50"
           />
         </TouchableOpacity>
-
         <Text style={{ marginLeft: marginLeft }}>{renderSelectedOption()}</Text>
       </View>
       <View style={DashbordStyle.contentContainer}>{renderSelectedPage()}</View>
@@ -257,7 +203,6 @@ const Dashbord = () => {
         className="dark:bg-slate-700"
         style={DashbordStyle.bottomNavigation}
       >
-        {/* Barre de navigation inférieure */}
         <BottomNavigation
           activeCategory={selectedCategory}
           setActiveCategory={setSelectedCategory}

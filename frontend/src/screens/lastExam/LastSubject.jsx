@@ -1,16 +1,7 @@
-import React from "react";
 import { withExpoSnack } from "nativewind";
-import { MaterialIcons } from "@expo/vector-icons";
+import React from "react";
 
-import {
-  Image,
-  View,
-  Text,
-  Pressable,
-  SafeAreaView,
-  FlatList,
-  Dimensions,
-} from "react-native";
+import { FlatList, Image, SafeAreaView, Text, View } from "react-native";
 import { lastExamData } from "./data";
 
 const LastSubject = () => {
