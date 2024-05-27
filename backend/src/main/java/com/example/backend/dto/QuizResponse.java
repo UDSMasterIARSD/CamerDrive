@@ -13,6 +13,7 @@ import java.util.List;
 public class QuizResponse {
     private Long id;
     private String titre;
+    private CoursResponse cours;
     private List<QuestionResponse> questions;
     private Timestamp createdAt;
     private Timestamp updatedat;

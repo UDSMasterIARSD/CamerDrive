@@ -27,11 +27,11 @@ public class Test {
     @Column(name = "updated_at")
     private Timestamp updatedAt;
 
-    @ManyToMany(cascade = CascadeType.ALL)
-    @JoinTable(
-            name = "test_question",
+    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinTable(name = "test_question",
             joinColumns = @JoinColumn(name = "test_id"),
-            inverseJoinColumns = @JoinColumn(name = "question_id"))
+            inverseJoinColumns = @JoinColumn(name = "question_id")
+    )
     private List<Question> questions;
 
     @OneToMany(mappedBy = "test", fetch = FetchType.LAZY, cascade = CascadeType.ALL)

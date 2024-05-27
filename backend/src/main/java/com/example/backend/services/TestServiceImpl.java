@@ -40,6 +40,8 @@ public class TestServiceImpl implements TestService {
     @Override
     public TestResponse create(TestRequest test) {
         Test req = mapper.map(test, Test.class);
+
+        System.out.println(req);
         return mapper.map(testRepo.save(req), TestResponse.class);
     }
 

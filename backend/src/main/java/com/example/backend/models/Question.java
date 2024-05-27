@@ -48,7 +48,6 @@ public class Question {
     @ManyToMany(mappedBy = "questions")
     private List<Quiz> quizzes = new ArrayList<>();
 
-
     @ManyToMany(mappedBy = "questions")
     private List<Test> tests;
 }

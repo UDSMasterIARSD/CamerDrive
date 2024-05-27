@@ -28,10 +28,12 @@ public class User implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(unique = true)
     @NotNull(message = "username : Ce champ est obligatoire")
     @NotBlank(message = "username : Ce champ ne doit pas etre vide")
     private String username;
 
+    @Column(unique = true)
     @Email(message = "L'email n'est pas valide")
     @NotNull(message = "email : Ce champ est obligatoire")
     @NotBlank(message = "email : Ce champ ne doit pas etre vide")

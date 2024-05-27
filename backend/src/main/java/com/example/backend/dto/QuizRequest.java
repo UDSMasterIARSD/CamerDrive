@@ -11,5 +11,6 @@ import java.util.List;
 @AllArgsConstructor
 public class QuizRequest {
     private String titre;
+    private CoursResponse cours;
     private List<QuestionResponse> questions;
 }

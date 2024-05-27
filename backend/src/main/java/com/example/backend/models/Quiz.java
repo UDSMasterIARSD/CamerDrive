@@ -32,7 +32,7 @@ public class Quiz {
     @Column(name = "updated_at", nullable = false)
     private Timestamp updatedAt;
 
-    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinTable(name = "quiz_question",
             joinColumns = @JoinColumn(name = "quiz_id"),
             inverseJoinColumns = @JoinColumn(name = "question_id")

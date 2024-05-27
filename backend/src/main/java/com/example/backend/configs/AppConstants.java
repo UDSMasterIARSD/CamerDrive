@@ -26,4 +26,12 @@ public class AppConstants {
 
     public static final String ADMIN_ROLE = "ADMIN";
 
+    public static final String PROFILE_PATH = "fichiers/profiles/";
+
+    public static final String COURS_PATH = "fichiers/cours/";
+
+    public static final String QUESTION_PATH = "fichiers/questions/";
+
+    public static final String TEST_PATH = "fichiers/tests/";
+
 }

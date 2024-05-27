@@ -27,7 +27,7 @@ public class CoursController {
     @GetMapping("/")
     @Transactional(readOnly = true)
     @ResponseStatus(HttpStatus.OK)
-    public List<CoursResponse> indesCours() {
+    public List<CoursResponse> indexCours() {
         return coursService.index();
     }
 
