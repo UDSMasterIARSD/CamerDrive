@@ -19,6 +19,7 @@ public class Concept {
     private String titre;
 
     @Lob
+    @Column(unique = true)
     private String contenu;
 
     @CreationTimestamp

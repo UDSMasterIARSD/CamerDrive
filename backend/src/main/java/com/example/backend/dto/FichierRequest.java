@@ -4,13 +4,9 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.List;
-
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class TestRequest {
-    private String title;
-
-    private List<QuestionResponse> questions;
+public class FichierRequest {
+    private String url;
 }

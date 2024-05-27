@@ -37,6 +37,8 @@ public class QuizServiceImpl implements QuizService {
     public QuizResponse create(QuizRequest quiz){
         Quiz req = mapper.map(quiz, Quiz.class);
         System.out.println(req);
+        List<Question> questions = new ArrayList<>(req.getQuestions());
+        req.setQuestions(questions);
         return mapper.map(quizRepo.save(req), QuizResponse.class);
     }
 

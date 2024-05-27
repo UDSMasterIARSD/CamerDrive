@@ -20,8 +20,8 @@ public class Role implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long Id;
 
-    @NotNull(message = "nom : Ce champ est obligatoire")
     @Column(unique = true)
+    @NotNull(message = "nom : Ce champ est obligatoire")
     private String nom;
 
     @Nullable

@@ -12,11 +12,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @AllArgsConstructor
 public class ScoreUserQuizServiceImpl implements ScoreUserQuizService {
 
+    @Autowired
     private final ScoreUserQuizRepository scoreUserQuizRepo;
 
     @Autowired
@@ -36,8 +38,15 @@ public class ScoreUserQuizServiceImpl implements ScoreUserQuizService {
 
     @Override
     public ScoreUserQuizResponse createUserQuiz(ScoreUserQuizRequest req){
-        ScoreUserQuiz userQuiz = mapper.map(req, ScoreUserQuiz.class);
-        return mapper.map(scoreUserQuizRepo.save(userQuiz), ScoreUserQuizResponse.class);
+        Optional<ScoreUserQuiz> optional = scoreUserQuizRepo.findByUserIdAndQuizId(req.getUser().getId(), req.getQuiz().getId());
+        ScoreUserQuizResponse resp;
+        if (optional.isPresent()) {
+            resp = updateUserQuiz(optional.get().getId(), req);
+        } else {
+            ScoreUserQuiz userQuiz = mapper.map(req, ScoreUserQuiz.class);
+            resp = mapper.map(scoreUserQuizRepo.save(userQuiz), ScoreUserQuizResponse.class);
+        }
+        return resp;
     }
 
     @Override
