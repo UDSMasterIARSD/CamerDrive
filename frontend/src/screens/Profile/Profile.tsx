@@ -154,11 +154,13 @@ const styles = StyleSheet.create({
 
 export default Profile;*/
 
-import { Ionicons } from "@expo/vector-icons";
+import { useAuth } from "@/context/AuthContext";
+import { Feather, Ionicons } from "@expo/vector-icons";
+import DateTimePicker from "@react-native-community/datetimepicker";
 import { useNavigation } from "@react-navigation/native";
+import { UserControllerApi } from "generated/index";
 import React, { useState } from "react";
 import {
-  Alert,
   Button,
   Dimensions,
   Image,
@@ -169,15 +171,16 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-
+import axiosInstance from "../../environments/axiosInstance";
+import environment from "../../environments/environment";
 import styles from "./ProfileStyle";
-
-import Feather from "@expo/vector-icons/Feather";
-import { useAuth } from "../../context/AuthContext";
 
 const ProfilePage = () => {
   const navigation = useNavigation();
-  const { authState } = useAuth();
+
+  const maxDate = new Date(2007, 11, 31);
+
+  const { authState, setAuthState } = useAuth(); // Assurez-vous que setAuthState est disponible
 
   const handlePress = () => {
     navigation.goBack();
@@ -189,44 +192,151 @@ const ProfilePage = () => {
   const [modalVisible, setModalVisible] = useState(false);
   const [passwordModalVisible, setPasswordModalVisible] = useState(false);
   const [imageModalVisible, setImageModalVisible] = useState(false);
-  const [username, setUsername] = useState("lidelle123");
-  const [email, setEmail] = useState("vanella@2003");
-  const [dob, setDob] = useState("2349584");
-  const [status, setStatus] = useState("User");
+  const [username, setUsername] = useState(authState?.user?.username || "");
+  const [email, setEmail] = useState(authState?.user?.email || "");
+  const [dob, setDob] = useState(
+    new Date(authState?.user?.dateNaiss) || new Date()
+  );
+  const [showDatePicker, setShowDatePicker] = useState(false);
+  const [status, setStatus] = useState(authState?.user?.role || "");
   const [oldPassword, setOldPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
+  const [message, setMessage] = useState("");
+  const [messageType, setMessageType] = useState("");
+  const [decryptedPassword, setDecryptedPassword] = useState("");
+
+  const [errorMessage, setErrorMessage] = useState<{
+    username: string | null;
+    email: string | null;
+
+    oldPassword: string | null;
+    newPassword: string | null;
+  }>({
+    username: null,
+    email: null,
+    oldPassword: null,
+    newPassword: null,
+  });
 
   const handleEditProfile = () => {
     setModalVisible(true);
   };
 
-  const formatDate = (dateString) => {
-    const date = new Date(dateString);
+  const formatDate = (date) => {
     return date.toISOString().split("T")[0];
   };
 
-  const handleSaveProfile = () => {
-    setModalVisible(false);
-    Alert.alert(
-      "Profile Updated",
-      "Your profile has been updated successfully."
-    );
+  const handleSaveProfile = async () => {
+    let hasError = false;
+
+    if (!username) {
+      errorMessage.username = "Le champ username est obligatoire.";
+      hasError = true;
+    }
+
+    if (!email) {
+      errorMessage.email = "Le champ email est obligatoire.";
+      hasError = true;
+    } else if (!email.endsWith("@gmail.com")) {
+      errorMessage.email = "Veuillez utiliser une adresse Gmail valide.";
+      hasError = true;
+    }
+
+    if (hasError) {
+      return;
+    }
+
+    try {
+      const userApi = new UserControllerApi(
+        environment,
+        environment.basePath,
+        axiosInstance
+      );
+      const updatedUser = await userApi.updateUser(
+        {
+          username,
+          email,
+          dateNaiss: dob.toISOString(),
+          password: authState?.user?.password,
+        },
+        authState?.user?.id
+      );
+      setMessage("Profile updated successfully.");
+      setMessageType("success");
+      setTimeout(() => {
+        setModalVisible(false);
+      }, 2000);
+    } catch (error) {
+      console.log(error);
+      setMessage("Failed to update profile: " + error.message);
+      setMessageType("error");
+    }
   };
 
   const handleEditPassword = () => {
     setPasswordModalVisible(true);
   };
 
-  const handleSavePassword = () => {
-    setPasswordModalVisible(false);
-    Alert.alert(
-      "Password Updated",
-      "Your password has been updated successfully."
-    );
+  const handleSavePassword = async () => {
+    let hasError = false;
+    let errorMessage = {};
+
+    if (!oldPassword) {
+      errorMessage.oldPassword = "Veuillez entrer votre ancien mot de passe.";
+      hasError = true;
+    }
+
+    if (!newPassword) {
+      errorMessage.newPassword = "Veuillez entrer votre nouveau mot de passe.";
+      hasError = true;
+    } else if (
+      newPassword.length < 8 ||
+      !/[A-Z]/.test(newPassword) ||
+      !/\d/.test(newPassword) ||
+      !/[!@#$%^&*]/.test(newPassword)
+    ) {
+      errorMessage.newPassword =
+        "Le mot de passe doit comporter au moins 8 caractères, inclure au moins une lettre majuscule, un chiffre et un caractère spécial.";
+      hasError = true;
+    }
+
+    if (hasError) {
+      setErrorMessage(errorMessage);
+      return;
+    }
+
+    try {
+      const userApi = new UserControllerApi(
+        environment,
+        environment.basePath,
+        axiosInstance
+      );
+      await userApi.modifyPassword(
+        { oldPassword, newPassword },
+        authState?.user?.id
+      );
+      setMessage("Password updated successfully.");
+      setMessageType("success");
+      setTimeout(() => {
+        setPasswordModalVisible(false);
+      }, 2000);
+    } catch (error) {
+      console.log(error);
+      setMessage("Failed to update password: " + error.message);
+      setMessageType("error");
+    }
   };
 
   const handleImagePress = () => {
     setImageModalVisible(true);
+  };
+
+  const handleDateChange = (event, selectedDate) => {
+    setShowDatePicker(false);
+    if (event.type === "set") {
+      const currentDate = selectedDate || dob;
+      setDob(currentDate);
+    }
   };
 
   return (
@@ -255,6 +365,15 @@ const ProfilePage = () => {
               <Feather name="camera" size={24} color="white" />
             </TouchableOpacity>
           </View>
+          {message && (
+            <View
+              style={{
+                backgroundColor: messageType === "success" ? "green" : "red",
+              }}
+            >
+              <Text style={styles.messageText}>{message}</Text>
+            </View>
+          )}
           <View style={styles.infoContainer}>
             <View style={styles.infoRow}>
               <Text style={styles.label}>Username:</Text>
@@ -267,7 +386,7 @@ const ProfilePage = () => {
             <View style={styles.infoRow}>
               <Text style={styles.label}>Date of Birth:</Text>
               <Text style={styles.value}>
-                {formatDate(authState?.user?.dateNaiss)}
+                {formatDate(new Date(authState?.user?.dateNaiss))}
               </Text>
             </View>
             <View style={styles.infoRow}>
@@ -300,6 +419,9 @@ const ProfilePage = () => {
               value={username}
               onChangeText={setUsername}
             />
+            {errorMessage.username && (
+              <Text style={styles.errorMessage}>{errorMessage.username}</Text>
+            )}
             <Text style={styles.inputLabel}>Email</Text>
             <TextInput
               style={styles.input}
@@ -307,14 +429,32 @@ const ProfilePage = () => {
               value={email}
               onChangeText={setEmail}
             />
+            {errorMessage.email && (
+              <Text style={styles.errorMessage}>{errorMessage.email}</Text>
+            )}
             <Text style={styles.inputLabel}>Date of birth</Text>
+            <TouchableOpacity onPress={() => setShowDatePicker(true)}>
+              <Text style={styles.input}>{formatDate(dob)}</Text>
+            </TouchableOpacity>
+            {showDatePicker && (
+              <DateTimePicker
+                value={dob}
+                mode="date"
+                display="default"
+                onChange={handleDateChange}
+                maximumDate={maxDate}
+              />
+            )}
+            <Text style={styles.inputLabel}>Password</Text>
             <TextInput
               style={styles.input}
-              placeholder="Date of Birth"
-              value={dob}
-              onChangeText={setDob}
+              placeholder="Password"
+              value={decryptedPassword}
+              editable={false}
             />
-
+            {messageType === "error" && (
+              <Text style={styles.errorMessage}>{message}</Text>
+            )}
             <View style={styles.modalButtonContainer}>
               <Button title="Save" onPress={handleSaveProfile} />
               <Button
@@ -332,7 +472,7 @@ const ProfilePage = () => {
         transparent={true}
         visible={passwordModalVisible}
         onRequestClose={() => {
-          setModalVisible(!passwordModalVisible);
+          setPasswordModalVisible(!passwordModalVisible);
         }}
       >
         <View style={styles.modalView}>
@@ -345,6 +485,11 @@ const ProfilePage = () => {
               value={oldPassword}
               onChangeText={setOldPassword}
             />
+            {errorMessage.oldPassword && (
+              <Text style={styles.errorMessage}>
+                {errorMessage.oldPassword}
+              </Text>
+            )}
             <Text style={styles.inputLabel}>Nouveau mot de passe</Text>
             <TextInput
               style={styles.input}
@@ -352,6 +497,11 @@ const ProfilePage = () => {
               value={newPassword}
               onChangeText={setNewPassword}
             />
+            {errorMessage.newPassword && (
+              <Text style={styles.errorMessage}>
+                {errorMessage.newPassword}
+              </Text>
+            )}
             <View style={styles.modalButtonContainer}>
               <Button title="Save" onPress={handleSavePassword} />
               <Button

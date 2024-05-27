@@ -1,7 +1,7 @@
-import { Ionicons } from "@expo/vector-icons"; // Assurez-vous d'avoir installé @expo/vector-icons
+import { Ionicons } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 import { withExpoSnack } from "nativewind";
-import { useState } from "react";
+import React, { useState } from "react";
 import {
   ActivityIndicator,
   Image,
@@ -13,8 +13,6 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-
-import React from "react";
 import { useAuth } from "../../context/AuthContext";
 
 const SignIn = () => {
@@ -48,10 +46,12 @@ const SignIn = () => {
       const result = await onLogin!(name, password);
       console.log("Login result:", result);
 
-      if (result && result.error) {
-        setLoginError("Invalid username or password.");
+      if (result && !result.success) {
+        setLoginError(result.error);
       } else {
         setLoginError(null);
+        // Navigation vers l'écran suivant en cas de succès
+        navigation.navigate("HomeScreen");
       }
     } finally {
       setIsLoading(false);
@@ -72,7 +72,9 @@ const SignIn = () => {
         </View>
         <View style={styles.informationView}>
           <View>
+            {loginError && <Text style={styles.errorText}>{loginError}</Text>}
             <Text style={styles.textInfo}>Username:</Text>
+
             <TextInput
               style={styles.textInput}
               value={name}
@@ -106,7 +108,6 @@ const SignIn = () => {
                 />
               </TouchableOpacity>
             </View>
-            {loginError && <Text style={styles.errorText}>{loginError}</Text>}
             {validationError && (
               <Text style={styles.errorText}>{validationError}</Text>
             )}
@@ -138,6 +139,7 @@ const SignIn = () => {
               )}
             </Pressable>
           </View>
+
           <View
             style={{
               height: 20,

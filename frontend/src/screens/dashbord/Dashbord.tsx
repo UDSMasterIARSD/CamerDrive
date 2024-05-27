@@ -1,10 +1,21 @@
 import { Ionicons } from "@expo/vector-icons";
-import { useNavigation, useNavigationState } from "@react-navigation/native";
+import {
+  useFocusEffect,
+  useNavigation,
+  useNavigationState,
+} from "@react-navigation/native";
 import { styled, useColorScheme, withExpoSnack } from "nativewind";
-import { default as React, useEffect, useRef, useState } from "react";
+import {
+  default as React,
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
 import {
   Alert,
   AlertOptions,
+  BackHandler,
   Dimensions,
   DrawerLayoutAndroid,
   Pressable,
@@ -39,6 +50,42 @@ const Dashbord = () => {
   console.log("initialLetter", authState?.userName?.charAt(0));
 
   const navigationState = useNavigationState((state) => state);
+
+  useFocusEffect(
+    useCallback(() => {
+      const onBackPress = () => {
+        createTwoButtonAlertQuit();
+        return true;
+      };
+
+      BackHandler.addEventListener("hardwareBackPress", onBackPress);
+
+      return () => {
+        BackHandler.removeEventListener("hardwareBackPress", onBackPress);
+      };
+    }, [])
+  );
+
+  const createTwoButtonAlertQuit = () =>
+    Alert.alert(
+      "Confirm Quit",
+      "Are you sure you want to quit?",
+      [
+        {
+          text: "Cancel",
+          style: "cancel",
+        },
+        {
+          text: "YES",
+          onPress: () => {
+            BackHandler.exitApp();
+          },
+        },
+      ],
+      {
+        alertContainerStyle: DashbordStyle.alertContainer,
+      } as CustomAlertOptions
+    );
 
   useEffect(() => {
     console.log("Route change detected:", navigationState);

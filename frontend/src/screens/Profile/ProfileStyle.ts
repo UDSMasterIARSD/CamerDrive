@@ -105,6 +105,14 @@ const styles = StyleSheet.create({
     width: Dimensions.get("window").width,
     height: Dimensions.get("window").height * 0.5,
   },
+  messageText:{
+    color:"black",
+  },
+  errorMessage: {
+    color: "red",
+    fontSize: 12,
+    marginLeft: 10,
+  },
 });
 
 export default styles;

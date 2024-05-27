@@ -73,7 +73,7 @@ const EditConceptForm = ({ id }: EditConceptFormProps) => {
           environment.basePath,
           axiosInstance
         );
-        const response = await courseApi.indesCours();
+        const response = await courseApi.indexCours();
         const courseList = response.data.map((course) => ({
           label: course.titre,
           value: course,

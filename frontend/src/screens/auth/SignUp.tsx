@@ -1,7 +1,6 @@
-import React, { useState } from "react";
-
 import DateTimePicker from "@react-native-community/datetimepicker";
 import { useNavigation } from "@react-navigation/native";
+import React, { useState } from "react";
 import {
   ActivityIndicator,
   Dimensions,
@@ -23,7 +22,8 @@ const SignUp = () => {
   const [password, setPassword] = useState<string>("");
   const [confirmPassword, setConfirmPassword] = useState<string>("");
   const [isLoading, setIsLoading] = useState(false); // State for showing the loading indicator
-  const [showDatePicker, setShowDatePicker] = useState<boolean>(false); //
+  const [showDatePicker, setShowDatePicker] = useState<boolean>(false);
+  const [registerError, setRegisterError] = useState<string | null>(null); //
   const { onRegister } = useAuth();
 
   const [errors, setErrors] = useState<{
@@ -85,8 +85,12 @@ const SignUp = () => {
 
       const result = await onRegister!(name, email, dateOfBirth!, password);
 
-      if (result && result.error) {
-        alert(result.message + result.error);
+      if (result && !result.success) {
+        setRegisterError(result.error);
+      } else {
+        setRegisterError(null);
+        // Navigation vers l'écran suivant en cas de succès
+        navigation.navigate("SignIn");
       }
     } finally {
       setIsLoading(false);
@@ -95,17 +99,11 @@ const SignUp = () => {
 
   const handleDateChange = (event: any, selectedDate: Date | undefined) => {
     const currentDate = selectedDate || dateOfBirth;
-    const minDate = new Date();
-    minDate.setFullYear(minDate.getFullYear() - 18);
-
-    if (currentDate && currentDate.getTime() > minDate.getTime()) {
-      alert("You must be 18 years or older to sign up.");
-      return;
-    }
-
     setShowDatePicker(false);
     setDateOfBirth(currentDate);
   };
+
+  const maxDate = new Date(2007, 11, 31);
 
   return (
     <SafeAreaView style={styles.SafeAreaView}>
@@ -119,6 +117,9 @@ const SignUp = () => {
         </View>
         <View style={styles.Informationview}>
           <View>
+            {registerError && (
+              <Text style={styles.errorText}>{registerError}</Text>
+            )}
             <Text style={styles.Text}>Username:</Text>
             <TextInput
               style={styles.TextInput}
@@ -155,6 +156,7 @@ const SignUp = () => {
                 mode="date"
                 display="default"
                 onChange={handleDateChange}
+                maximumDate={maxDate}
               />
             )}
             {errors.dateOfBirth && (

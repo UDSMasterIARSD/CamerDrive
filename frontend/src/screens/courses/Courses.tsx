@@ -27,7 +27,7 @@ const Courses: React.FC = () => {
         environment.basePath,
         axiosInstance
       );
-      const response = await courseApi.indesCours();
+      const response = await courseApi.indexCours();
       const courses = response.data.map((course: any) => ({
         id: course.id,
         courseName: course.titre,

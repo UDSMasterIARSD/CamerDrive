@@ -68,7 +68,7 @@ const AddQuizForm = () => {
           environment.basePath,
           axiosInstance
         );
-        const response = await courseApi.indesCours();
+        const response = await courseApi.indexCours();
         const courseList = response.data.map((course) => ({
           label: course.titre,
           value: course,
@@ -99,12 +99,12 @@ const AddQuizForm = () => {
       setTitleError("");
     }
 
-    /* if (!selectedCourse) {
+    if (!selectedCourse) {
       setCourseError("Veuillez sélectionner un cours.");
       hasError = true;
     } else {
       setCourseError("");
-    }*/
+    }
 
     if (selectedQuestions.length === 0) {
       setQuestionError("Veuillez sélectionner au moins une question.");
@@ -123,8 +123,11 @@ const AddQuizForm = () => {
       );
       await quizApi.createQuiz({
         titre: titre,
+        cours: selectedCourse.value,
         questions: selectedQuestions,
       });
+      console.log("cours :", selectedCourse);
+      //console.log("questions :", selectedQuestions);
       setMessage("Quiz ajouté avec succès.");
       setMessageType("success");
       setSelectedQuestions([]);
@@ -133,6 +136,8 @@ const AddQuizForm = () => {
       }, 2000);
     } catch (error) {
       console.log(error);
+      console.log("cours :", selectedCourse);
+      console.log("questions :", selectedQuestions);
       setMessage("Échec de l'ajout du quiz : " + error.message);
       setMessageType("error");
       setTimeout(() => {
@@ -184,11 +189,13 @@ const AddQuizForm = () => {
               maxHeight={300}
               labelField="label"
               valueField="value"
-              placeholder="Select a course"
+              placeholder={
+                selectedCourse ? selectedCourse.label : "Select a course"
+              }
               searchPlaceholder="Search..."
               value={selectedCourse}
               onChange={(item) => {
-                setSelectedCourse(item.value);
+                setSelectedCourse(item);
               }}
               renderLeftIcon={() => (
                 <AntDesign

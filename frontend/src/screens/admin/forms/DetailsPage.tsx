@@ -4,6 +4,7 @@ import QuestionDetailsPage from "./questions/QuestionDetailsPage";
 //import EditUserForm from "./EditUserForm";
 //import EditCourseForm from "./EditCourseForm";
 import ConceptDetailsPage from "./concepts/ConceptDetailsPage";
+import CourseDetailsPage from "./courses/CourseDetailsPage";
 import QuizDetailsPage from "./quizzes/QuizDetailsPage";
 import UserDetailsPage from "./users/UserDetailsPage";
 
@@ -23,7 +24,7 @@ const DetailsPage = () => {
   } else if (type === "users") {
     return <UserDetailsPage id={id} />;
   } else if (type === "courses") {
-    // return <EditUserForm id={id} />;
+    return <CourseDetailsPage id={id} />;
   } else if (type === "quizzes") {
     return <QuizDetailsPage id={id} />;
   } else if (type === "concepts") {

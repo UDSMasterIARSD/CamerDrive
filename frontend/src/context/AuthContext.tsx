@@ -10,9 +10,11 @@ interface AuthProps {
     token: string | null;
     authenticated: boolean | null;
     user: {
+      id: number | null;
       username: string | null;
       email: string | null;
       dateNaiss: Date | null;
+      password: string | null;
       role: string | null;
     } | null;
   };
@@ -42,9 +44,11 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
     token: string | null;
     authenticated: boolean | null;
     user: {
+      id: number | null;
       username: string | null;
       email: string | null;
       dateNaiss: Date | null;
+      password: string | null;
       role: string | null;
     } | null;
   }>({
@@ -71,10 +75,13 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
     try {
       const response = await authApi.register(apiParams);
       console.log(response.data.email);
-      navigation.navigate("SignIn"); // Redirection vers la page de connexion
+      return { success: true };
     } catch (error) {
       console.log(error);
-      alert(error.message);
+      if (error.response?.status === 400) {
+        return { success: false, error: "Invalid username or password." };
+      }
+      return { success: false, error: error.message };
     }
   };
 
@@ -87,32 +94,36 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
 
     console.log(apiParams);
 
-    await authApi
-      .login(apiParams)
-      .then(async (response) => {
-        const user = response?.data?.user;
-        setAuthState({
-          token: response?.data?.token!,
-          token: response?.data?.token!,
-          authenticated: true,
-          user: {
-            username: user?.username!,
-            email: user?.email!,
-            dateNaiss: user?.dateNaiss!,
-            role: user?.role?.nom!,
-          },
-        });
-        const currentTime = new Date().toISOString();
-        await SecureStore.setItemAsync("TIME", currentTime);
-        await SecureStore.setItemAsync(TOKEN, response?.data?.token!);
-        await SecureStore.setItemAsync(TOKEN, response?.data?.token!);
+    try {
+      const response = await authApi.login(apiParams);
+      const user = response?.data?.user;
 
-        console.log(user);
-      })
-      .catch((error) => {
-        console.log(error);
-        alert(error);
+      setAuthState({
+        token: response?.data?.token!,
+        authenticated: true,
+        user: {
+          id: user?.id!,
+          username: user?.username!,
+          email: user?.email!,
+          dateNaiss: user?.dateNaiss!,
+          password: user?.password!,
+          role: user?.role?.nom!,
+        },
       });
+
+      const currentTime = new Date().toISOString();
+      await SecureStore.setItemAsync("TIME", currentTime);
+      await SecureStore.setItemAsync(TOKEN, response?.data?.token!);
+
+      console.log(user);
+      return { success: true, user: user };
+    } catch (error) {
+      console.log(error);
+      if (error.response?.status === 403) {
+        return { success: false, error: "Invalid username or password." };
+      }
+      return { success: false, error: error.message };
+    }
   };
 
   const logout = async () => {
