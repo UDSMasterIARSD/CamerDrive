@@ -63,7 +63,12 @@ const CourseConcepts: React.FC = () => {
   }
 
   return (
-    <View>
+    <View
+      style={{
+        backgroundColor: "#f0f8ff",
+        height: Dimensions.get("window").height,
+      }}
+    >
       <View style={CourseDetailsStyle.header}>
         <TouchableOpacity onPress={handlePress}>
           <Ionicons name="arrow-back" size={24} color="#000000" />

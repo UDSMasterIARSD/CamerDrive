@@ -1,6 +1,11 @@
 import { Ionicons } from "@expo/vector-icons";
-import { RouteProp, useNavigation, useRoute } from "@react-navigation/native";
-import React, { useEffect, useState } from "react";
+import {
+  RouteProp,
+  useFocusEffect,
+  useNavigation,
+  useRoute,
+} from "@react-navigation/native";
+import React, { useCallback, useEffect, useState } from "react";
 import {
   ActivityIndicator,
   Alert,
@@ -10,6 +15,7 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
+
 import { Row, Table } from "react-native-table-component";
 import {
   ConceptControllerApi,
@@ -51,138 +57,102 @@ const QuestionDetails = () => {
     screenWidth * 0.6,
     screenWidth * 0.3,
   ]);
+  const [refresh, setRefresh] = useState(false);
+
+  const { authState } = useAuth();
+
+  const fetchData = async () => {
+    setLoading(true);
+    try {
+      if (type === "users") {
+        const userApi = new UserControllerApi(
+          environment,
+          environment.basePath,
+          axiosInstance
+        );
+        const response = await userApi.indexUsers();
+        const users = response.data.map((user: any) => ({
+          id: user.id,
+          username: user.username,
+        }));
+        setDataList(users);
+      } else if (type === "courses") {
+        const courseApi = new CoursControllerApi(
+          environment,
+          environment.basePath,
+          axiosInstance
+        );
+        const response = await courseApi.indexCours();
+        const courses = response.data.map((course: any) => ({
+          id: course.id,
+          courseName: course.titre,
+        }));
+        setDataList(courses);
+      } else if (type === "concepts") {
+        const conceptApi = new ConceptControllerApi(
+          environment,
+          environment.basePath,
+          axiosInstance
+        );
+        const response = await conceptApi.indexConcepts();
+        const concepts = response.data.map((concept: any) => ({
+          id: concept.id,
+          conceptTitle: concept.titre,
+        }));
+        setDataList(concepts);
+      } else if (type === "quizzes") {
+        const quizApi = new QuizControllerApi(
+          environment,
+          environment.basePath,
+          axiosInstance
+        );
+        const response = await quizApi.indexQuizzes();
+        const quizzes = response.data.map((quiz: any) => ({
+          id: quiz.id,
+          quizTitle: quiz.titre,
+        }));
+        setDataList(quizzes);
+      } else {
+        const questionApi = new QuestionControllerApi(
+          environment,
+          environment.basePath,
+          axiosInstance
+        );
+        const response = await questionApi.indexQuestions();
+        const questions = response.data.map((question: any) => ({
+          id: question.id,
+          questionText: question.libelle,
+        }));
+        setDataList(questions);
+      }
+    } catch (error) {
+      console.log(error);
+      Alert.alert("Error", error.message);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   useEffect(() => {
     if (type === "users") {
       setTableHead(["ID", "User Name", "Actions"]);
-      AllUsers();
     } else if (type === "courses") {
       setTableHead(["ID", "Course Name", "Actions"]);
-      AllCourses();
     } else if (type === "concepts") {
       setTableHead(["ID", "Concept Title", "Actions"]);
-      AllConcepts();
     } else if (type === "quizzes") {
       setTableHead(["ID", "Quiz Title", "Actions"]);
-      AllQuizzes();
     } else {
       setTableHead(["ID", "Question Text", "Actions"]);
-      AllQuestions();
     }
-  }, [type]);
+    fetchData();
+  }, [type, refresh]);
 
-  const { authState } = useAuth();
-
-  const AllQuestions = async () => {
-    try {
-      const questionApi = new QuestionControllerApi(
-        environment,
-        environment.basePath,
-        axiosInstance
-      );
-      const response = await questionApi.indexQuestions();
-      const questions = response.data.map((question: any) => ({
-        id: question.id,
-        questionText: question.libelle,
-      }));
-      setDataList(questions);
-    } catch (error) {
-      console.log(error);
-      Alert.alert("Error", error.message);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const AllCourses = async () => {
-    try {
-      const courseApi = new CoursControllerApi(
-        environment,
-        environment.basePath,
-        axiosInstance
-      );
-      const response = await courseApi.indesCours();
-      const courses = response.data.map((course: any) => ({
-        id: course.id,
-        courseName: course.titre,
-      }));
-      setDataList(courses);
-    } catch (error) {
-      console.log(error);
-      Alert.alert("Error", error.message);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  /*useFocusEffect(
+  useFocusEffect(
     useCallback(() => {
-      AllUsers();
-    }, [])
-  );*/
-
-  const AllConcepts = async () => {
-    try {
-      const conceptApi = new ConceptControllerApi(
-        environment,
-        environment.basePath,
-        axiosInstance
-      );
-      const response = await conceptApi.indexConcepts();
-      const concepts = response.data.map((concept: any) => ({
-        id: concept.id,
-        conceptTitle: concept.titre,
-      }));
-      setDataList(concepts);
-    } catch (error) {
-      console.log(error);
-      Alert.alert("Error", error.message);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const AllQuizzes = async () => {
-    try {
-      const quizApi = new QuizControllerApi(
-        environment,
-        environment.basePath,
-        axiosInstance
-      );
-      const response = await quizApi.indexQuizzes();
-      const quizzes = response.data.map((quiz: any) => ({
-        id: quiz.id,
-        quizTitle: quiz.titre,
-      }));
-      setDataList(quizzes);
-    } catch (error) {
-      console.log(error);
-      Alert.alert("Error", error.message);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const AllUsers = async () => {
-    try {
-      const userApi = new UserControllerApi(
-        environment,
-        environment.basePath,
-        axiosInstance
-      );
-      const response = await userApi.indexUsers();
-      const users = response.data.map((user: any) => ({
-        id: user.id,
-        username: user.username,
-      }));
-      setDataList(users);
-    } catch (error) {
-      console.log(error);
-      Alert.alert("Error", error.message);
-    } finally {
-      setLoading(false);
-    }
-  };
+      fetchData();
+    }, [type, refresh])
+  );
 
   const handleDelete = (id: number) => {
     Alert.alert(
@@ -238,18 +208,7 @@ const QuestionDetails = () => {
                 "Success",
                 `${type.slice(0, -1)} deleted successfully`
               );
-
-              if (type === "questions") {
-                AllQuestions();
-              } else if (type === "courses") {
-                AllCourses();
-              } else if (type === "users") {
-                AllUsers();
-              } else if (type === "concepts") {
-                AllConcepts();
-              } else if (type === "quizzes") {
-                AllQuizzes();
-              }
+              fetchData();
             } catch (error) {
               console.log(error);
               Alert.alert("Error", `Failed to delete ${type.slice(0, -1)}`);
@@ -274,8 +233,8 @@ const QuestionDetails = () => {
       <Row
         key={index}
         data={[
-          <TouchableOpacity onPress={() => handleDetails(rowData.id)}>
-            <Text style={QuestionDetailsStyle.textCenter}>{rowData.id}</Text>
+          <TouchableOpacity>
+            <Text style={QuestionDetailsStyle.textCenter}>{index}</Text>
           </TouchableOpacity>,
           <TouchableOpacity onPress={() => handleDetails(rowData.id)}>
             <Text style={QuestionDetailsStyle.textCenter}>
@@ -310,7 +269,6 @@ const QuestionDetails = () => {
   };
 
   const handleAdd = () => {
-    navigation.navigate("AddForm", { type });
     navigation.navigate("AddForm", { type });
   };
 

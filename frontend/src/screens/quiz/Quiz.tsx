@@ -8,6 +8,7 @@ import environment from "../../environments/environment";
 interface Quiz {
   id: number;
   titre: string;
+  questions: any[];
 }
 
 const Quizzes = () => {
@@ -27,6 +28,7 @@ const Quizzes = () => {
       const quizzes = response.data.map((quiz: any) => ({
         id: quiz.id,
         titre: quiz.titre,
+        questions: quiz.questions,
       }));
       setQuizzes(quizzes);
     } catch (error: any) {
@@ -46,25 +48,35 @@ const Quizzes = () => {
   };
 
   return (
-    <FlatList
-      data={quizzes}
-      keyExtractor={(item) => item.id.toString()}
+    <View
       style={{
         backgroundColor: "#f0f8ff",
-        borderTopRightRadius: 10,
-        marginBottom: 40,
+        height: Dimensions.get("window").height,
       }}
-      renderItem={({ item }) => (
-        <View style={QuizStyle.container}>
-          <TouchableOpacity onPress={() => handleQuizPress(item.id)}>
-            <View style={QuizStyle.itemContainer}>
-              <Text style={QuizStyle.title}>{item.titre}</Text>
-            </View>
-          </TouchableOpacity>
-        </View>
-      )}
-      ListFooterComponent={loading ? <Text>Loading...</Text> : null}
-    />
+    >
+      <FlatList
+        data={quizzes}
+        keyExtractor={(item) => item.id.toString()}
+        style={{
+          backgroundColor: "#f0f8ff",
+          borderTopRightRadius: 10,
+          marginBottom: 40,
+        }}
+        renderItem={({ item }) => (
+          <View style={QuizStyle.container}>
+            <TouchableOpacity onPress={() => handleQuizPress(item.id)}>
+              <View style={QuizStyle.itemContainer}>
+                <Text style={QuizStyle.title}>{item.titre}</Text>
+                <Text style={QuizStyle.questionCount}>
+                  {item.questions.length} questions
+                </Text>
+              </View>
+            </TouchableOpacity>
+          </View>
+        )}
+        ListFooterComponent={loading ? <Text>Loading...</Text> : null}
+      />
+    </View>
   );
 };
 
@@ -87,12 +99,15 @@ const QuizStyle = StyleSheet.create({
     alignItems: "center",
     padding: 15,
     overflow: "hidden",
-    //marginRight: 10,
-    //marginTop: 5,
   },
 
   title: {
     width: Dimensions.get("window").width * 0.5,
     fontWeight: "bold",
+  },
+
+  questionCount: {
+    marginLeft: 10,
+    color: "gray",
   },
 });

@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import {
   ActivityIndicator,
   Alert,
+  Dimensions,
   ScrollView,
   StyleSheet,
   Text,
@@ -51,12 +52,19 @@ const ConceptDetails: React.FC = () => {
   }
 
   return (
-    <ScrollView>
-      <View style={styles.container}>
-        <Text style={styles.titleText}>{titre}</Text>
-        <Text style={styles.contentText}>{contenu}</Text>
-      </View>
-    </ScrollView>
+    <View
+      style={{
+        backgroundColor: "#f0f8ff",
+        height: Dimensions.get("window").height,
+      }}
+    >
+      <ScrollView>
+        <View style={styles.container}>
+          <Text style={styles.titleText}>{titre}</Text>
+          <Text style={styles.contentText}>{contenu}</Text>
+        </View>
+      </ScrollView>
+    </View>
   );
 };
 

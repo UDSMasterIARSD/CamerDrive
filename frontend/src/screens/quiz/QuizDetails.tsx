@@ -4,6 +4,7 @@ import {
   ActivityIndicator,
   BackHandler,
   Modal,
+  Pressable,
   ScrollView,
   StatusBar,
   StyleSheet,
@@ -24,7 +25,6 @@ const QuizDetails = ({ route }) => {
   const [loading, setLoading] = useState(true);
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [selectedOption, setSelectedOption] = useState(null);
-  const [timer, setTimer] = useState(10);
   const [score, setScore] = useState(0);
   const [answered, setAnswered] = useState(false);
   const [startTime, setStartTime] = useState(null);
@@ -32,6 +32,8 @@ const QuizDetails = ({ route }) => {
   const [errorMessage, setErrorMessage] = useState("");
   const [buttonText, setButtonText] = useState("Valider");
   const [optionsDisabled, setOptionsDisabled] = useState(false);
+  const [emoji, setEmoji] = useState("");
+
   useEffect(() => {
     const fetchQuizDetails = async () => {
       try {
@@ -53,17 +55,6 @@ const QuizDetails = ({ route }) => {
     fetchQuizDetails();
   }, [id]);
 
-  useEffect(() => {
-    if (timer === 0) {
-      setOptionsDisabled(true);
-      setButtonText("Continuer");
-    }
-    const countdown = setInterval(() => {
-      setTimer((prevTimer) => (prevTimer > 0 ? prevTimer - 1 : 0));
-    }, 1000);
-    return () => clearInterval(countdown);
-  }, [timer]);
-
   useFocusEffect(
     useCallback(() => {
       const onBackPress = () => {
@@ -79,19 +70,31 @@ const QuizDetails = ({ route }) => {
     }, [])
   );
 
+  const formatDuration = (duration) => {
+    const hours = Math.floor(duration / 3600);
+    const minutes = Math.floor((duration % 3600) / 60);
+    const seconds = duration % 60;
+    return `${hours}:${minutes}:${seconds}`;
+  };
+
   const handleNextQuestion = () => {
     if (currentQuestionIndex < quizDetails.questions.length - 1) {
       setCurrentQuestionIndex(currentQuestionIndex + 1);
       setSelectedOption(null);
-      setTimer(10);
       setAnswered(false);
       setErrorMessage("");
       setButtonText("Valider");
       setOptionsDisabled(false);
+      setEmoji("");
     } else {
       const endTime = new Date();
       const duration = Math.floor((endTime - startTime) / 1000);
-      navigation.navigate("ScorePage", { score, duration });
+      const formattedDuration = formatDuration(duration);
+      navigation.navigate("ScorePage", {
+        score,
+        totalQuestions: quizDetails.questions.length,
+        duration: formattedDuration,
+      });
     }
   };
 
@@ -114,6 +117,9 @@ const QuizDetails = ({ route }) => {
 
     if (selectedOption === currentQuestion.correctOption) {
       setScore(score + 1);
+      setEmoji("😊");
+    } else {
+      setEmoji("😢");
     }
   };
 
@@ -145,8 +151,6 @@ const QuizDetails = ({ route }) => {
     <View style={styles.container}>
       <View style={styles.titleContainer}>
         <Text style={styles.titleText}>QuizTitle: {quizDetails.titre}</Text>
-
-        <Text style={styles.timerText}>Time left: {timer}s</Text>
       </View>
       <ScrollView style={styles.detailsContainer}>
         <Text style={styles.questionText}>
@@ -154,7 +158,7 @@ const QuizDetails = ({ route }) => {
         </Text>
         <View style={styles.optionsContainer}>
           {options.map((option, index) => (
-            <TouchableOpacity
+            <Pressable
               key={index}
               onPress={() => handleOptionPress(option)}
               style={[
@@ -176,14 +180,14 @@ const QuizDetails = ({ route }) => {
               disabled={optionsDisabled}
             >
               <Text style={styles.optionText}>{option}</Text>
-            </TouchableOpacity>
+            </Pressable>
           ))}
         </View>
         {errorMessage ? (
           <Text style={styles.errorMessage}>{errorMessage}</Text>
         ) : null}
         <View style={styles.buttonsContainer}>
-          <TouchableOpacity
+          <Pressable
             style={[
               styles.button,
               buttonText === "Valider"
@@ -192,9 +196,15 @@ const QuizDetails = ({ route }) => {
             ]}
             onPress={buttonText === "Valider" ? handleValidate : handleContinue}
           >
-            <Text style={styles.buttonText}>{buttonText}</Text>
-          </TouchableOpacity>
+            <Text style={styles.buttonText}>
+              {buttonText}{" "}
+              {buttonText === "Continuer" && (
+                <Icon name="arrow-forward" size={16} color="#fff" />
+              )}
+            </Text>
+          </Pressable>
         </View>
+        {answered && <Text style={styles.emojiText}>{emoji}</Text>}
       </ScrollView>
 
       <Modal
@@ -222,7 +232,7 @@ const QuizDetails = ({ route }) => {
               style={[styles.modalButton, styles.modalButtonDanger]}
               onPress={() => {
                 setModalVisible(false);
-                navigation.navigate("Quiz");
+                navigation.navigate("Home");
               }}
             >
               <Text style={styles.modalButtonText}>Retourner au menu</Text>
@@ -281,14 +291,6 @@ const styles = StyleSheet.create({
     textAlign: "center",
     color: "#333",
   },
-  timerContainer: {
-    marginBottom: 20,
-  },
-  timerText: {
-    fontSize: 18,
-    color: "red",
-    textAlign: "center",
-  },
   questionsContainer: {
     marginTop: 10,
   },
@@ -344,7 +346,7 @@ const styles = StyleSheet.create({
     backgroundColor: "blue",
   },
   continueButton: {
-    backgroundColor: "green",
+    backgroundColor: "#808080",
   },
   buttonText: {
     color: "white",
@@ -355,6 +357,11 @@ const styles = StyleSheet.create({
     color: "red",
     textAlign: "center",
     marginTop: 10,
+  },
+  emojiText: {
+    fontSize: 24,
+    textAlign: "center",
+    marginTop: 20,
   },
   modalContainer: {
     flex: 1,
