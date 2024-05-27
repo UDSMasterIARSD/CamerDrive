@@ -46,8 +46,8 @@ const Courses: React.FC = () => {
     AllCourses();
   }, []);
 
-  const handleCoursePress = (item: Course) => {
-    navigation.navigate("CoursesDetails", { item });
+  const handleCoursePress = (id: number) => {
+    navigation.navigate("CourseConcepts", { id });
   };
 
   return (
@@ -61,7 +61,7 @@ const Courses: React.FC = () => {
       }}
       renderItem={({ item }) => (
         <View style={CoursesStyle.container}>
-          <TouchableOpacity onPress={() => handleCoursePress(item)}>
+          <TouchableOpacity onPress={() => handleCoursePress(item.id)}>
             <View style={CoursesStyle.itemContainer}>
               {/* <Image source={{ uri: item.image }} style={CoursesStyle.courseImage} /> */}
               <View>

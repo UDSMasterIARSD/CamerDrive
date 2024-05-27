@@ -38,7 +38,7 @@ const AddUserForm = () => {
   const [confirmPassword, setConfirmPassword] = useState<string>("");
 
   const handlePress = () => {
-    navigation.goBack(); // Revenir à la page précédente
+    navigation.goBack();
   };
 
   const handleSubmit = async () => {

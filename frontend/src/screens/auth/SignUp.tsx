@@ -1,5 +1,4 @@
-import React from "react";
-import { useState } from "react";
+import React, { useState } from "react";
 
 import DateTimePicker from "@react-native-community/datetimepicker";
 import { useNavigation } from "@react-navigation/native";
@@ -208,7 +207,7 @@ const SignUp = () => {
           </Pressable>
           <Pressable
             onPress={() => {
-              navigation.navigate("SignIn");
+              navigation.navigate("SignIn" as never);
             }}
           >
             <Text style={styles.textSignUp}>

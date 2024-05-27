@@ -1,20 +1,23 @@
-/*import { AntDesign, Ionicons } from "@expo/vector-icons";
+import { AntDesign, Ionicons } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 import React, { useEffect, useState } from "react";
 import {
   ActivityIndicator,
+  Alert,
   Dimensions,
   ScrollView,
+  StatusBar,
   StyleSheet,
   Text,
   TextInput,
   TouchableOpacity,
   View,
-  Alert,
-  StatusBar
 } from "react-native";
 import { Dropdown } from "react-native-element-dropdown";
-import { ConceptControllerApi, CoursControllerApi, QuestionControllerApi } from "../../../../../generated/index";
+import {
+  ConceptControllerApi,
+  CoursControllerApi,
+} from "../../../../../generated/index";
 import axiosInstance from "../../../../environments/axiosInstance";
 import environment from "../../../../environments/environment";
 
@@ -24,36 +27,42 @@ type EditConceptFormProps = {
 
 const EditConceptForm = ({ id }: EditConceptFormProps) => {
   const [titre, setTitre] = useState("");
-  const [selectedCourse, setSelectedCourse] = useState("");
+  const [selectedCourse, setSelectedCourse] = useState(null);
   const [contenu, setContenu] = useState("");
-  const [courses, setCourses] = useState("");
-  const [option4, setOption4] = useState("");
-  const [correctOption, setCorrectOption] = useState("");
+  const [courses, setCourses] = useState([]);
   const [message, setMessage] = useState("");
   const [messageType, setMessageType] = useState("");
-  const navigation = useNavigation();
-  const [dropdownOptions, setDropdownOptions] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [questionError, setQuestionError] = useState("");
-  const [optionsError, setOptionsError] = useState("");
+  const [titleError, setTitleError] = useState("");
+  const [contentError, setContentError] = useState("");
   const [correctOptionError, setCorrectOptionError] = useState("");
+  const navigation = useNavigation();
 
   useEffect(() => {
-    const fetchConcept = async () => {
+    const fetchConceptAndCourse = async () => {
       try {
         const conceptApi = new ConceptControllerApi(
           environment,
           environment.basePath,
           axiosInstance
         );
-        const response = await conceptApi.showConcept(id);
-        const concept = response.data;
+
+        const conceptResponse = await conceptApi.showConcept(id);
+        const concept = conceptResponse.data;
         setTitre(concept.titre);
         setContenu(concept.contenu);
-        setSelectedCourse(concept.cours);
+
+        const courseResponse = await conceptApi.getCours(id);
+        const associatedCourse = {
+          label: courseResponse.data.titre,
+          value: courseResponse.data,
+        };
+        setSelectedCourse(associatedCourse);
       } catch (error) {
         console.log(error);
         Alert.alert("Error", error.message);
+      } finally {
+        setLoading(false);
       }
     };
 
@@ -64,10 +73,10 @@ const EditConceptForm = ({ id }: EditConceptFormProps) => {
           environment.basePath,
           axiosInstance
         );
-        const response = await courseApi.indesCours(); // Remplacer "indesCours" par "indexCours"
+        const response = await courseApi.indesCours();
         const courseList = response.data.map((course) => ({
           label: course.titre,
-          value: course, // Stocker tout l'objet `course`
+          value: course,
         }));
         setCourses(courseList);
       } catch (error) {
@@ -78,19 +87,13 @@ const EditConceptForm = ({ id }: EditConceptFormProps) => {
       }
     };
 
-    fetchConcept();
+    fetchConceptAndCourse();
     fetchCourses();
   }, [id]);
 
   if (loading) {
     return (
-      <View
-        style={{
-          alignItems: "center",
-          justifyContent: "center",
-          marginTop: Dimensions.get("window").height * 0.5,
-        }}
-      >
+      <View style={styles.loaderContainer}>
         <ActivityIndicator size="large" color="#0000ff" />
       </View>
     );
@@ -132,15 +135,16 @@ const EditConceptForm = ({ id }: EditConceptFormProps) => {
         environment.basePath,
         axiosInstance
       );
-      await conceptApi.update1(id, {
-        titre: titre,
-        contenu: contenu,
-        cours: selectedCourse,
-      });
+      await conceptApi.update1(
+        {
+          titre: titre,
+          contenu: contenu,
+          cours: selectedCourse.value,
+        },
+        id
+      );
       setMessage("Concept modifié avec succès.");
       setMessageType("success");
-      setTitleError("");
-      setContentError("");
       setTimeout(() => {
         navigation.goBack();
       }, 2000);
@@ -210,11 +214,13 @@ const EditConceptForm = ({ id }: EditConceptFormProps) => {
               maxHeight={300}
               labelField="label"
               valueField="value"
-              placeholder="Select a course"
+              placeholder={
+                selectedCourse ? selectedCourse.label : "Select a course"
+              }
               searchPlaceholder="Search..."
               value={selectedCourse}
               onChange={(item) => {
-                setSelectedCourse(item.value);
+                setSelectedCourse(item);
               }}
               renderLeftIcon={() => (
                 <AntDesign
@@ -359,7 +365,11 @@ const styles = StyleSheet.create({
   icon: {
     marginRight: 5,
   },
+  loaderContainer: {
+    alignItems: "center",
+    justifyContent: "center",
+    marginTop: Dimensions.get("window").height * 0.5,
+  },
 });
 
 export default EditConceptForm;
-*/

@@ -3,6 +3,7 @@ import React from "react";
 import { useAuth } from "../context/AuthContext";
 import AboutUs from "./AboutUs";
 import Profile from "./Profile/Profile";
+import ScorePage from "./ScorePage";
 import Statistiques from "./Statistiques/Statistiques";
 import AdminDashbord from "./admin/dashbord/AdminDashbord";
 import AddForm from "./admin/forms/AddForm";
@@ -12,7 +13,8 @@ import QuestionDetails from "./admin/manageTasks/QuestionDetails";
 import SignIn from "./auth/SignIn";
 import SignUp from "./auth/SignUp";
 import Courses from "./courses/Courses";
-import CoursesDetails from "./coursesDetails/CoursesDetails";
+import ConceptDetails from "./coursesDetails/ConceptDetails";
+import CourseConcepts from "./coursesDetails/CourseConcepts";
 import Dashbord from "./dashbord/Dashbord";
 import LastExam from "./lastExam/LastExam";
 import Quiz from "./quiz/Quiz";
@@ -27,7 +29,7 @@ const Index = () => {
   return (
     <Stack.Navigator initialRouteName="Onboading">
       {authState?.authenticated ? (
-        authState.role === "ADMIN" ? (
+        authState.user?.role === "ADMIN" ? (
           <>
             <Stack.Screen
               name="AdminDashboard"
@@ -74,15 +76,21 @@ const Index = () => {
               options={{ headerShown: false }}
             />
             <Stack.Screen
+              name="ScorePage"
+              component={ScorePage}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
               name="LastExam"
               component={LastExam}
               options={{ headerShown: false }}
             />
             <Stack.Screen
-              name="CoursesDetails"
-              component={CoursesDetails}
+              name="CourseConcepts"
+              component={CourseConcepts}
               options={{ headerShown: false }}
             />
+            <Stack.Screen name="ConceptDetails" component={ConceptDetails} />
             <Stack.Screen
               name="Profile"
               component={Profile}

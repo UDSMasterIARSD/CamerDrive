@@ -3,6 +3,7 @@ import React from "react";
 import QuestionDetailsPage from "./questions/QuestionDetailsPage";
 //import EditUserForm from "./EditUserForm";
 //import EditCourseForm from "./EditCourseForm";
+import ConceptDetailsPage from "./concepts/ConceptDetailsPage";
 import QuizDetailsPage from "./quizzes/QuizDetailsPage";
 import UserDetailsPage from "./users/UserDetailsPage";
 
@@ -25,6 +26,8 @@ const DetailsPage = () => {
     // return <EditUserForm id={id} />;
   } else if (type === "quizzes") {
     return <QuizDetailsPage id={id} />;
+  } else if (type === "concepts") {
+    return <ConceptDetailsPage id={id} />;
   } else {
     return null;
   }

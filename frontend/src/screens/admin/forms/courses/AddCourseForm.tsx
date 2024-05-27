@@ -63,10 +63,10 @@ const AddCourseForm = () => {
       setTitleError("");
       setDescriptionError("");
       setTitre("");
-      setDescription(""),
-        setTimeout(() => {
-          navigation.goBack();
-        }, 2000);
+      setDescription("");
+      setTimeout(() => {
+        navigation.goBack();
+      }, 2000);
     } catch (error) {
       console.log(error);
       setMessage("Failed to add course: " + error.message);

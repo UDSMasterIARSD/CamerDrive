@@ -1,16 +1,16 @@
-import React from "react";
 import { AntDesign, Ionicons } from "@expo/vector-icons";
+import React from "react";
 import { Pressable, StyleSheet, Text, View } from "react-native";
 
 interface BottomNavigationProps {
-  activeCategory: String,
-  setActiveCategory: (component: String) => void,
+  activeCategory: string;
+  setActiveCategory: (category: string) => void;
 }
 
 const BottomNavigation = (props: BottomNavigationProps) => {
   return (
     <View style={styles.container}>
-      <Pressable  
+      <Pressable
         style={({ pressed }) => [
           {
             backgroundColor: pressed ? "rgba(0, 0, 0, 0.1)" : "transparent",
@@ -91,22 +91,22 @@ const BottomNavigation = (props: BottomNavigationProps) => {
             backgroundColor: pressed ? "rgba(0, 0, 0, 0.1)" : "transparent",
           },
           styles.categoryIcon,
-          props.activeCategory === "Last exam" && styles.activeIcon,
+          props.activeCategory === "LastExam" && styles.activeIcon,
         ]}
-        onPress={() => props.setActiveCategory("Last exam")}
+        onPress={() => props.setActiveCategory("LastExam")}
       >
         <AntDesign
           name="copy1"
           size={20}
-          color={props.activeCategory === "Last exam" ? "red" : "black"}
+          color={props.activeCategory === "LastExam" ? "red" : "black"}
         />
         <Text
           style={[
             styles.categoryName,
-            props.activeCategory === "Last exam" && styles.activeText,
+            props.activeCategory === "LastExam" && styles.activeText,
           ]}
         >
-          Last exam
+          Last Exam
         </Text>
       </Pressable>
     </View>

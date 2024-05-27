@@ -15,7 +15,7 @@ const Statistiques: React.FC = () => {
   const navigation = useNavigation<NavigationProp<any>>();
 
   const handlePress = () => {
-    navigation.goBack(); // Revenir à la page précédente
+    navigation.goBack();
   };
 
   const windowWidth = Dimensions.get("window").width;

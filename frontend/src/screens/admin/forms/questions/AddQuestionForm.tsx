@@ -41,7 +41,7 @@ const AddQuestionForm = () => {
   }, [option1, option2, option3, option4]);
 
   const handlePress = () => {
-    navigation.goBack(); // Revenir à la page précédente
+    navigation.goBack();
   };
 
   const handleSubmit = async () => {
