@@ -2,37 +2,34 @@ package com.example.backend.services;
 
 import com.example.backend.configs.AppConstants;
 import com.example.backend.dto.PasswordRequest;
-import com.example.backend.dto.RoleResponse;
 import com.example.backend.dto.UserRequest;
 import com.example.backend.dto.UserResponse;
 import com.example.backend.exceptions.BADException;
 import com.example.backend.exceptions.NotFoundException;
 import com.example.backend.models.User;
-import com.example.backend.repositories.UserRepository;
 import com.example.backend.repositories.RoleRepository;
-import lombok.AllArgsConstructor;
+import com.example.backend.repositories.UserRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.Collections;
 import java.util.List;
 
 @Service
-@AllArgsConstructor
 public class UserServiceImpl implements UserService {
 
-    private final UserRepository userRepo;
+    @Autowired
+    private UserRepository userRepo;
 
     @Autowired
-    private final ModelMapper mapper;
+    private ModelMapper mapper;
 
     @Autowired
-    private final PasswordEncoder passwordEncoder;
+    private PasswordEncoder passwordEncoder;
 
     @Autowired
-    private final RoleRepository roleRepo;
+    private RoleRepository roleRepo;
 
     @Override
     public List<UserResponse> index() {

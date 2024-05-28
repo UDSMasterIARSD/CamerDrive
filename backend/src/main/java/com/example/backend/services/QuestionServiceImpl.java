@@ -5,7 +5,6 @@ import com.example.backend.dto.QuestionResponse;
 import com.example.backend.exceptions.NotFoundException;
 import com.example.backend.models.Question;
 import com.example.backend.repositories.QuestionRepository;
-import lombok.AllArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
@@ -14,10 +13,10 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
-@AllArgsConstructor
 public class QuestionServiceImpl implements QuestionService{
-    
-    private final QuestionRepository questionRepo;
+
+    @Autowired
+    private QuestionRepository questionRepo;
 
     @Autowired
     private ModelMapper mapper;
@@ -32,7 +31,7 @@ public class QuestionServiceImpl implements QuestionService{
     @Override
     public QuestionResponse show(Long id){
         Question question = questionRepo.findById(id).orElseThrow(() ->
-                new NotFoundException("La Question ", "d'id: ", id));
+                new NotFoundException("La Question ", "d'id", id));
         return mapper.map(question, QuestionResponse.class);
     }
     
@@ -45,7 +44,7 @@ public class QuestionServiceImpl implements QuestionService{
     @Override
     public QuestionResponse update(Long id, QuestionRequest updated){
         Question old = questionRepo.findById(id).orElseThrow(() ->
-                new NotFoundException("La question que vous voulez modifier ", "d'id: ", id));
+                new NotFoundException("La question que vous voulez modifier ", "d'id", id));
         Question newQuestion = mapper.map(updated, Question.class);
         newQuestion.setId(id);
         return mapper.map(questionRepo.save(newQuestion), QuestionResponse.class);
@@ -54,7 +53,7 @@ public class QuestionServiceImpl implements QuestionService{
     @Override
     public void delete(Long id){
         Question question = questionRepo.findById(id).orElseThrow(() ->
-                new NotFoundException("La Question que vous voulez supprimer ", "d'id: ", id));
+                new NotFoundException("La Question que vous voulez supprimer ", "d'id", id));
         questionRepo.delete(question);
     }
 }

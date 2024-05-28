@@ -6,7 +6,6 @@ import com.example.backend.dto.UserResponse;
 import com.example.backend.models.ScoreUserQuiz;
 import com.example.backend.repositories.ScoreUserQuizRepository;
 import jakarta.persistence.EntityNotFoundException;
-import lombok.AllArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -15,11 +14,10 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-@AllArgsConstructor
 public class ScoreUserQuizServiceImpl implements ScoreUserQuizService {
 
     @Autowired
-    private final ScoreUserQuizRepository scoreUserQuizRepo;
+    private ScoreUserQuizRepository scoreUserQuizRepo;
 
     @Autowired
     private ModelMapper mapper;

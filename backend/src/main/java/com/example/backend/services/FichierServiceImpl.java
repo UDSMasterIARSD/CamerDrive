@@ -38,7 +38,7 @@ public class FichierServiceImpl implements FichierService {
     @Override
     public Fichier show(Long id) {
         return fichierRepo.findById(id).orElseThrow(() ->
-                new NotFoundException("Le fichier", "d'id: ", id));
+                new NotFoundException("Le fichier", "d'id", id));
     }
 
     @Override

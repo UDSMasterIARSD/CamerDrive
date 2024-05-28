@@ -2,9 +2,8 @@ package com.example.backend.controllers;
 
 import com.example.backend.dto.QuestionRequest;
 import com.example.backend.dto.QuestionResponse;
-import com.example.backend.models.Question;
 import com.example.backend.services.QuestionService;
-import lombok.AllArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
@@ -13,10 +12,10 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/questions")
-@AllArgsConstructor
 public class QuestionController {
 
-    private final QuestionService questionService;
+    @Autowired
+    private QuestionService questionService;
 
     @GetMapping("/")
     @ResponseStatus(HttpStatus.OK)
