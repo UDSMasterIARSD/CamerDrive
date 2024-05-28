@@ -2,20 +2,19 @@ package com.example.backend.controllers;
 
 import com.example.backend.dto.QuizRequest;
 import com.example.backend.dto.QuizResponse;
-import com.example.backend.models.Question;
-import com.example.backend.models.Quiz;
 import com.example.backend.services.QuizService;
-import lombok.AllArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
 @RequestMapping("/quizzes")
-@AllArgsConstructor
 public class QuizController {
 
-    private final QuizService quizService;
+    @Autowired
+    private QuizService quizService;
 
     @GetMapping("/")
     public List<QuizResponse> indexQuizzes(){
@@ -34,6 +33,7 @@ public class QuizController {
     }
 
     @PostMapping("/")
+    @Transactional
     public QuizResponse createQuiz(@RequestBody QuizRequest quiz){
         return quizService.create(quiz);
     }

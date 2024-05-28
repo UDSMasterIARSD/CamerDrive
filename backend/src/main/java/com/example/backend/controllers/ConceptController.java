@@ -1,25 +1,23 @@
 package com.example.backend.controllers;
 
-import java.util.List;
-
 import com.example.backend.dto.ConceptRequest;
 import com.example.backend.dto.ConceptResponse;
 import com.example.backend.dto.CoursResponse;
 import com.example.backend.services.ConceptService;
 import jakarta.validation.Valid;
-import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
-@AllArgsConstructor
 @RequestMapping("/concepts")
 public class ConceptController {
 
     @Autowired
-    private final ConceptService conceptService;
+    private ConceptService conceptService;
 
 
     @GetMapping("/")

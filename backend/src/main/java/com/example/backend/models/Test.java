@@ -1,23 +1,27 @@
 package com.example.backend.models;
 
 import jakarta.persistence.*;
-import lombok.Data;
+import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.List;
 
-@Data
-@Table
-@Entity(name = "tests")
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@Entity
+@Table(name = "tests")
 public class Test {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(nullable = false, unique = true)
-    private String title;
+    private String titre;
 
     @CreationTimestamp
     @Column(name = "created_at", updatable = false)
@@ -27,12 +31,13 @@ public class Test {
     @Column(name = "updated_at")
     private Timestamp updatedAt;
 
-    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JoinTable(name = "test_question",
+    @ManyToMany
+    @JoinTable(
+            name = "test_question",
             joinColumns = @JoinColumn(name = "test_id"),
             inverseJoinColumns = @JoinColumn(name = "question_id")
     )
-    private List<Question> questions;
+    private List<Question> questions = new ArrayList<>();
 
     @OneToMany(mappedBy = "test", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<ScoreUserTest> scoreUserTests;

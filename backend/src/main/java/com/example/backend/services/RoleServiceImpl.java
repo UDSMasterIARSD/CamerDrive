@@ -5,7 +5,6 @@ import com.example.backend.dto.RoleResponse;
 import com.example.backend.exceptions.NotFoundException;
 import com.example.backend.models.Role;
 import com.example.backend.repositories.RoleRepository;
-import lombok.AllArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -14,13 +13,13 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
-@AllArgsConstructor
 public class RoleServiceImpl implements RoleService {
 
-    private final RoleRepository roleRepo;
+    @Autowired
+    private RoleRepository roleRepo;
 
     @Autowired
-    private final ModelMapper modelMapper;
+    private ModelMapper modelMapper;
 
     @Override
     public List<RoleResponse> index() {

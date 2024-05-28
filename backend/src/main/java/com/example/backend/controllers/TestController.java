@@ -3,7 +3,6 @@ package com.example.backend.controllers;
 import com.example.backend.dto.TestRequest;
 import com.example.backend.dto.TestResponse;
 import com.example.backend.services.TestService;
-import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.transaction.annotation.Transactional;
@@ -12,7 +11,6 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@AllArgsConstructor
 @RequestMapping("/test")
 public class TestController {
     @Autowired

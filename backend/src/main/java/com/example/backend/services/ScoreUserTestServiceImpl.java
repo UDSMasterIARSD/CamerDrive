@@ -1,14 +1,11 @@
 package com.example.backend.services;
 
-import com.example.backend.dto.ScoreUserQuizResponse;
 import com.example.backend.dto.ScoreUserTestRequest;
 import com.example.backend.dto.ScoreUserTestResponse;
 import com.example.backend.dto.UserResponse;
-import com.example.backend.models.ScoreUserQuiz;
 import com.example.backend.models.ScoreUserTest;
 import com.example.backend.repositories.ScoreUserTestRepository;
 import jakarta.persistence.EntityNotFoundException;
-import lombok.AllArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -17,10 +14,10 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-@AllArgsConstructor
 public class ScoreUserTestServiceImpl implements ScoreUserTestService {
 
-    private final ScoreUserTestRepository scoreUserTestRepo;
+    @Autowired
+    private ScoreUserTestRepository scoreUserTestRepo;
 
     @Autowired
     private ModelMapper mapper;

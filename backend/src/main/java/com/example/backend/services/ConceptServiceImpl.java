@@ -6,7 +6,6 @@ import com.example.backend.dto.CoursResponse;
 import com.example.backend.exceptions.NotFoundException;
 import com.example.backend.models.Concept;
 import com.example.backend.repositories.ConceptRepository;
-import lombok.AllArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -14,13 +13,13 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
-@AllArgsConstructor
 public class ConceptServiceImpl implements ConceptService {
 
-    private final ConceptRepository conceptRepo;
+    @Autowired
+    private ConceptRepository conceptRepo;
 
     @Autowired
-    private final ModelMapper mapper;
+    private ModelMapper mapper;
 
     @Override
     public List<ConceptResponse> index() {

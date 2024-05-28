@@ -4,7 +4,6 @@ import com.example.backend.dto.ScoreUserTestRequest;
 import com.example.backend.dto.ScoreUserTestResponse;
 import com.example.backend.repositories.ScoreUserTestRepository;
 import com.example.backend.services.ScoreUserTestService;
-import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.transaction.annotation.Transactional;
@@ -13,7 +12,6 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@AllArgsConstructor
 @RequestMapping("/score_user_test")
 public class ScoreUserTestController {
 

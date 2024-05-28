@@ -1,28 +1,25 @@
 package com.example.backend.controllers;
 
-import java.util.List;
-
 import com.example.backend.configs.AppConstants;
 import com.example.backend.dto.RoleRequest;
 import com.example.backend.dto.RoleResponse;
 import com.example.backend.services.RoleService;
 import jakarta.validation.Valid;
-import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/roles")
 @PreAuthorize(AppConstants.ADMIN_AUTHORITY)
-@AllArgsConstructor
 public class RoleController {
 
     @Autowired
-    private final RoleService roleService;
-
+    private RoleService roleService;
 
     @GetMapping("/")
     @Transactional(readOnly = true)
