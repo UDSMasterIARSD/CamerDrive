@@ -41,7 +41,8 @@
     "react-native-svg": "^15.3.0",
     "react-native-table-component": "^1.2.2",
     "react-native-web": "~0.19.6",
-    "typescript": "~5.3.3"
+    "typescript": "~5.3.3",
+    "expo-image-picker": "~15.0.5"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0"

@@ -65,9 +65,14 @@ const SignUp = () => {
 
       if (!password) {
         validationErrors.password = "Please enter your password.";
-      } else if (password.length < 8 || !/\d/.test(password)) {
+      } else if (
+        password.length < 8 ||
+        !/[A-Z]/.test(password) ||
+        !/\d/.test(password) ||
+        !/[!@#$%^&*]/.test(password)
+      ) {
         validationErrors.password =
-          "Password must be at least 8 characters long and contain at least one digit.";
+          "Le mot de passe doit comporter au moins 8 caractères, inclure au moins une lettre majuscule, un chiffre et un caractère spécial.";
       }
 
       if (!confirmPassword) {
