@@ -106,12 +106,104 @@ const styles = StyleSheet.create({
     height: Dimensions.get("window").height * 0.5,
   },
   messageText:{
-    color:"black",
+    color:"white",
   },
   errorMessage: {
     color: "red",
     fontSize: 12,
     marginLeft: 10,
+  },
+  messageContainer: {
+    alignItems: "center",
+    justifyContent: "center",
+    marginTop: StatusBar.currentHeight,
+    borderRadius: 10,
+    padding: 20,
+    width: Dimensions.get("window").width * 0.95,
+    alignSelf: "center",
+  },
+  success: {
+    backgroundColor: "#d4edda",
+    borderColor: "#c3e6cb",
+    color: "#155724",
+  },
+  error: {
+    backgroundColor: "#f8d7da",
+    borderColor: "#f5c6cb",
+    color: "#721c24",
+  },
+  initialLetter: {
+    fontSize: 40, // Taille de la lettre
+    color: "white", // Couleur de la lettre
+  },
+  initialLetterContainer: {
+    width: 100,
+    height: 100,
+    borderRadius: 50,
+    marginLeft: 30,
+    marginRight: 20,
+    backgroundColor: "green",
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  modalButton: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    padding: 10,
+    backgroundColor: '#fff',
+    marginBottom: 10,
+    borderRadius: 5,
+  },
+  modalButtonText: {
+    marginLeft: 10,
+    fontSize: 16,
+  },
+  modalContainer: {
+    flex: 1,
+    justifyContent: 'flex-end',
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+  },
+  PmodalView: {
+    backgroundColor: 'white',
+    padding: 20,
+    borderTopLeftRadius: 20,
+    borderTopRightRadius: 20,
+    alignItems: 'center',
+  },
+  imagePreviewContainer: {
+    alignItems: 'center',
+    marginTop: 20,
+  },
+  imagePreview: {
+    width: 100,
+    height: 100,
+    marginBottom: 10,
+  },
+
+  cancelButton: {
+    backgroundColor: 'red',
+    padding: 10,
+    borderRadius: 5,
+    flex: 1,
+    marginRight: 5,
+    alignItems: 'center',
+  },
+  confirmButton: {
+    backgroundColor: 'green',
+    padding: 10,
+    borderRadius: 5,
+    flex: 1,
+    marginLeft: 5,
+    alignItems: 'center',
+  },
+  buttonText: {
+    color: 'white',
+    fontSize: 16,
+  },
+  image: {
+    width: 130,
+    height: 130,
+    borderRadius:80,
   },
 });
 

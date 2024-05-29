@@ -1,170 +1,17 @@
-/*import { Ionicons } from "@expo/vector-icons";
-import { NavigationProp, useNavigation } from "@react-navigation/native";
-import React from "react";
-import {
-  Alert,
-  Dimensions,
-  Image,
-  ScrollView,
-  Text,
-  TextInput,
-  TouchableOpacity,
-  View,
-} from "react-native";
-import ProfileStyle from "./ProfileStyle";
-
-const Profile: React.FC = () => {
-  const navigation = useNavigation<NavigationProp<any>>();
-
-  const handlePress = () => {
-    navigation.goBack(); // Revenir à la page précédente
-  };
-
-  const windowWidth = Dimensions.get("window").width;
-  const marginLeft = windowWidth * 0.2;
-
-  const createOneButtonAlert = () =>
-    Alert.alert("Confirm update", "Successfully updated your information", [
-      {
-        text: "Ok",
-        // style: "ok",
-      },
-    ]);
-
-  return (
-    <>
-      <View style={ProfileStyle.header}>
-        <TouchableOpacity onPress={handlePress}>
-          <Ionicons name="arrow-back" size={24} color="#000000" />
-        </TouchableOpacity>
-
-        <Text
-          style={{ marginLeft: marginLeft, fontSize: 15, fontWeight: "bold" }}
-        >
-          Edit profile
-        </Text>
-      </View>
-      <ScrollView>
-        <View style={{ backgroundColor: "white" }}>
-          <View style={ProfileStyle.imageContainer}>
-            <TouchableOpacity>
-              <Image
-                source={require("../../../assets/V2.jpg")}
-                style={ProfileStyle.image}
-              />
-            </TouchableOpacity>
-            {/* Icône de crayon pour éditer le profil 
-          <TouchableOpacity
-            style={ProfileStyle.editIconContainer}
-            //onPress={handleEditProfile}
-          >
-            <Ionicons name="pencil" size={24} color="black" />
-          </TouchableOpacity>
-          
-          </View>
-          <View style={ProfileStyle.itemContainer}>
-            <View style={ProfileStyle.textInputContainer}>
-              <TextInput
-                placeholder="vanelladzikang1@gmail.com"
-                editable={false}
-              />
-            </View>
-            <View style={ProfileStyle.textInputContainer}>
-              <TextInput placeholder="password" editable={false} />
-            </View>
-            <View style={ProfileStyle.textInputContainer}>
-              <TextInput placeholder="Dzikang" editable={false} />
-            </View>
-            <View style={ProfileStyle.textInputContainer}>
-              <TextInput placeholder="vanella dzikang" editable={false} />
-            </View>
-            <View style={ProfileStyle.textInputContainer}>
-              <TextInput placeholder="12/01/2003" editable={false} />
-            </View>
-            <View style={ProfileStyle.textInputContainer}>
-              <TextInput placeholder="681916790" editable={false} />
-            </View>
-          </View>
-          <View style={ProfileStyle.container}>
-            <TouchableOpacity onPress={createOneButtonAlert}>
-              <View style={ProfileStyle.updateContainer}>
-                <Text style={{ color: "white" }}>Update</Text>
-              </View>
-            </TouchableOpacity>
-          </View>
-        </View>
-      </ScrollView>
-    </>
-  );
-};
-const handleImagePicker = () => {
-    launchImageLibrary({}, (response) => {
-      if (response.didCancel) {
-        console.log("User cancelled image picker");
-      } else if (response.error) {
-        console.log("ImagePicker Error: ", response.error);
-      } else {
-        const source = { uri: response.assets[0].uri };
-        setProfileImage(source);
-      }
-    });
-  };
-import { useState } from 'react';
-import { Button, Image, View, StyleSheet } from 'react-native';
-import * as ImagePicker from 'expo-image-picker';
-
-export default function ImagePickerExample() {
-  const [image, setImage] = useState(null);
-
-  const pickImage = async () => {
-    // No permissions request is necessary for launching the image library
-    let result = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ImagePicker.MediaTypeOptions.All,
-      allowsEditing: true,
-      aspect: [4, 3],
-      quality: 1,
-    });
-
-    console.log(result);
-
-    if (!result.canceled) {
-      setImage(result.assets[0].uri);
-    }
-  };
-
-  return (
-    <View style={styles.container}>
-      <Button title="Pick an image from camera roll" onPress={pickImage} />
-      {image && <Image source={{ uri: image }} style={styles.image} />}
-    </View>
-  );
-}
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    alignItems: "center",
-    justifyContent: "center",
-  },
-  image: {
-    width: 200,
-    height: 200,
-  },
-});
-
-export default Profile;*/
-
 import { useAuth } from "@/context/AuthContext";
 import { Feather, Ionicons } from "@expo/vector-icons";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import { useNavigation } from "@react-navigation/native";
-import { UserControllerApi } from "generated/index";
+import axios from "axios";
+import * as ImagePicker from "expo-image-picker";
+import { FichierControllerApi, UserControllerApi } from "generated/index";
 import React, { useState } from "react";
 import {
   Button,
   Dimensions,
   Image,
   Modal,
+  Pressable,
   ScrollView,
   Text,
   TextInput,
@@ -173,17 +20,21 @@ import {
 } from "react-native";
 import axiosInstance from "../../environments/axiosInstance";
 import environment from "../../environments/environment";
+
 import styles from "./ProfileStyle";
 
 const ProfilePage = () => {
   const navigation = useNavigation();
+  const { authState } = useAuth();
 
   const maxDate = new Date(2007, 11, 31);
 
-  const { authState, setAuthState } = useAuth(); // Assurez-vous que setAuthState est disponible
-
   const handlePress = () => {
     navigation.goBack();
+  };
+
+  const formatDate = (date) => {
+    return date.toISOString().split("T")[0];
   };
 
   const windowWidth = Dimensions.get("window").width;
@@ -203,12 +54,14 @@ const ProfilePage = () => {
   const [newPassword, setNewPassword] = useState("");
   const [message, setMessage] = useState("");
   const [messageType, setMessageType] = useState("");
-  const [decryptedPassword, setDecryptedPassword] = useState("");
+  const [cameraModalVisible, setCameraModalVisible] = useState(false);
+  const [selectedImage, setSelectedImage] = useState(null);
+  const [image, setImage] = useState(null);
+  const [downloadedImage, setDownloadedImage] = useState(null);
 
   const [errorMessage, setErrorMessage] = useState<{
     username: string | null;
     email: string | null;
-
     oldPassword: string | null;
     newPassword: string | null;
   }>({
@@ -218,31 +71,50 @@ const ProfilePage = () => {
     newPassword: null,
   });
 
+  const resetProfileModal = () => {
+    setEmail(authState?.user?.email || "");
+    setDob(new Date(authState?.user?.dateNaiss) || new Date());
+    setErrorMessage({
+      username: null,
+      email: null,
+      oldPassword: null,
+      newPassword: null,
+    });
+    setMessage("");
+    setMessageType("");
+  };
+
+  const resetPasswordModal = () => {
+    setOldPassword("");
+    setNewPassword("");
+    setErrorMessage({
+      username: null,
+      email: null,
+      oldPassword: null,
+      newPassword: null,
+    });
+    setMessage("");
+    setMessageType("");
+  };
+
   const handleEditProfile = () => {
     setModalVisible(true);
   };
 
-  const formatDate = (date) => {
-    return date.toISOString().split("T")[0];
-  };
-
   const handleSaveProfile = async () => {
     let hasError = false;
-
-    if (!username) {
-      errorMessage.username = "Le champ username est obligatoire.";
-      hasError = true;
-    }
+    let errorMessages = { ...errorMessage };
 
     if (!email) {
-      errorMessage.email = "Le champ email est obligatoire.";
+      errorMessages.email = "Le champ email est obligatoire.";
       hasError = true;
     } else if (!email.endsWith("@gmail.com")) {
-      errorMessage.email = "Veuillez utiliser une adresse Gmail valide.";
+      errorMessages.email = "Veuillez utiliser une adresse Gmail valide.";
       hasError = true;
     }
 
     if (hasError) {
+      setErrorMessage(errorMessages);
       return;
     }
 
@@ -261,15 +133,22 @@ const ProfilePage = () => {
         },
         authState?.user?.id
       );
+      authState!.user!.dateNaiss = dob;
+      authState!.user!.email = email;
       setMessage("Profile updated successfully.");
       setMessageType("success");
+      setModalVisible(false);
       setTimeout(() => {
-        setModalVisible(false);
+        setMessage("");
       }, 2000);
     } catch (error) {
       console.log(error);
-      setMessage("Failed to update profile: " + error.message);
+      setMessage("Failed to update profile: " + error.response.message);
       setMessageType("error");
+      setModalVisible(false);
+      setTimeout(() => {
+        setMessage("");
+      }, 2000);
     }
   };
 
@@ -279,15 +158,15 @@ const ProfilePage = () => {
 
   const handleSavePassword = async () => {
     let hasError = false;
-    let errorMessage = {};
+    let errorMessages = { ...errorMessage };
 
     if (!oldPassword) {
-      errorMessage.oldPassword = "Veuillez entrer votre ancien mot de passe.";
+      errorMessages.oldPassword = "Veuillez entrer votre ancien mot de passe.";
       hasError = true;
     }
 
     if (!newPassword) {
-      errorMessage.newPassword = "Veuillez entrer votre nouveau mot de passe.";
+      errorMessages.newPassword = "Veuillez entrer votre nouveau mot de passe.";
       hasError = true;
     } else if (
       newPassword.length < 8 ||
@@ -295,13 +174,13 @@ const ProfilePage = () => {
       !/\d/.test(newPassword) ||
       !/[!@#$%^&*]/.test(newPassword)
     ) {
-      errorMessage.newPassword =
+      errorMessages.newPassword =
         "Le mot de passe doit comporter au moins 8 caractères, inclure au moins une lettre majuscule, un chiffre et un caractère spécial.";
       hasError = true;
     }
 
     if (hasError) {
-      setErrorMessage(errorMessage);
+      setErrorMessage(errorMessages);
       return;
     }
 
@@ -317,13 +196,18 @@ const ProfilePage = () => {
       );
       setMessage("Password updated successfully.");
       setMessageType("success");
+      setPasswordModalVisible(false);
       setTimeout(() => {
-        setPasswordModalVisible(false);
+        setMessage("");
       }, 2000);
     } catch (error) {
       console.log(error);
-      setMessage("Failed to update password: " + error.message);
+      setMessage("Failed to update password: The old password is incorrect");
       setMessageType("error");
+      setPasswordModalVisible(false);
+      setTimeout(() => {
+        setMessage("");
+      }, 2000);
     }
   };
 
@@ -336,6 +220,65 @@ const ProfilePage = () => {
     if (event.type === "set") {
       const currentDate = selectedDate || dob;
       setDob(currentDate);
+    }
+  };
+
+  const pickImage = async () => {
+    let result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.All,
+      allowsEditing: true,
+      aspect: [4, 3],
+      quality: 1,
+    });
+
+    if (!result.canceled) {
+      try {
+        const uri = result.assets[0].uri;
+        const formData = new FormData();
+
+        formData.append("file", {
+          uri: uri,
+          type: "image/jpeg",
+          name: "upload.jpg",
+        });
+        const fileApi = new FichierControllerApi(
+          environment,
+          environment.basePath,
+          axiosInstance
+        );
+        //const fichier = fileApi.uploadForm(formData);
+        const response = await axios.post(
+          `${environment.basePath}/files/`,
+          formData,
+          {
+            headers: {
+              "Content-Type": "multipart/form-data",
+              Authorization: `Bearer ${authState?.token}`,
+            },
+          }
+        );
+
+        console.log(response.data);
+
+        setMessage("Image uploaded successfully.");
+        setMessageType("success");
+        setModalVisible(false);
+        setTimeout(() => {
+          setMessage("");
+        }, 2000);
+      } catch (error) {
+        console.log(error);
+        setMessage(
+          "Failed to upload image: " +
+            (error.response?.message || error.message)
+        );
+        setMessageType("error");
+        setModalVisible(false);
+        setTimeout(() => {
+          setMessage("");
+        }, 2000);
+      }
+      setImage(result.assets[0].uri);
     }
   };
 
@@ -355,21 +298,28 @@ const ProfilePage = () => {
       <ScrollView>
         <View style={styles.container}>
           <View style={styles.header}>
-            <TouchableOpacity onPress={handleImagePress}>
-              <Image
-                source={require("../../../assets/V2.jpg")}
-                style={styles.profileImage}
-              />
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.cameraIcon}>
+            {downloadedImage ? (
+              <Pressable onPress={handleImagePress}>
+                <Image source={{ uri: downloadedImage }} style={styles.image} />
+              </Pressable>
+            ) : (
+              <View style={styles.initialLetterContainer}>
+                <Text style={styles.initialLetter}>
+                  {authState?.user?.username.charAt(0)}
+                </Text>
+              </View>
+            )}
+
+            <TouchableOpacity style={styles.cameraIcon} onPress={pickImage}>
               <Feather name="camera" size={24} color="white" />
             </TouchableOpacity>
           </View>
           {message && (
             <View
-              style={{
-                backgroundColor: messageType === "success" ? "green" : "red",
-              }}
+              style={[
+                styles.messageContainer,
+                messageType === "success" ? styles.success : styles.error,
+              ]}
             >
               <Text style={styles.messageText}>{message}</Text>
             </View>
@@ -400,12 +350,15 @@ const ProfilePage = () => {
           </View>
         </View>
       </ScrollView>
-
+      <ScrollView>
+        <View style={styles.container}></View>
+      </ScrollView>
       <Modal
         animationType="slide"
         transparent={true}
         visible={modalVisible}
         onRequestClose={() => {
+          resetProfileModal();
           setModalVisible(!modalVisible);
         }}
       >
@@ -417,7 +370,7 @@ const ProfilePage = () => {
               style={styles.input}
               placeholder="Username"
               value={username}
-              onChangeText={setUsername}
+              editable={false}
             />
             {errorMessage.username && (
               <Text style={styles.errorMessage}>{errorMessage.username}</Text>
@@ -445,21 +398,15 @@ const ProfilePage = () => {
                 maximumDate={maxDate}
               />
             )}
-            <Text style={styles.inputLabel}>Password</Text>
-            <TextInput
-              style={styles.input}
-              placeholder="Password"
-              value={decryptedPassword}
-              editable={false}
-            />
-            {messageType === "error" && (
-              <Text style={styles.errorMessage}>{message}</Text>
-            )}
+
             <View style={styles.modalButtonContainer}>
               <Button title="Save" onPress={handleSaveProfile} />
               <Button
                 title="Cancel"
-                onPress={() => setModalVisible(false)}
+                onPress={() => {
+                  resetProfileModal();
+                  setModalVisible(false);
+                }}
                 color="red"
               />
             </View>
@@ -472,6 +419,7 @@ const ProfilePage = () => {
         transparent={true}
         visible={passwordModalVisible}
         onRequestClose={() => {
+          resetPasswordModal();
           setPasswordModalVisible(!passwordModalVisible);
         }}
       >
@@ -484,6 +432,7 @@ const ProfilePage = () => {
               placeholder=""
               value={oldPassword}
               onChangeText={setOldPassword}
+              secureTextEntry
             />
             {errorMessage.oldPassword && (
               <Text style={styles.errorMessage}>
@@ -496,6 +445,7 @@ const ProfilePage = () => {
               placeholder=""
               value={newPassword}
               onChangeText={setNewPassword}
+              secureTextEntry
             />
             {errorMessage.newPassword && (
               <Text style={styles.errorMessage}>
@@ -506,30 +456,14 @@ const ProfilePage = () => {
               <Button title="Save" onPress={handleSavePassword} />
               <Button
                 title="Cancel"
-                onPress={() => setPasswordModalVisible(false)}
+                onPress={() => {
+                  resetPasswordModal();
+                  setPasswordModalVisible(false);
+                }}
                 color="red"
               />
             </View>
           </ScrollView>
-        </View>
-      </Modal>
-
-      <Modal
-        animationType="fade"
-        transparent={true}
-        visible={imageModalVisible}
-        onRequestClose={() => {
-          setImageModalVisible(!imageModalVisible);
-        }}
-      >
-        <View style={styles.fullScreenImageContainer}>
-          <View style={styles.fullScreenImage}>
-            <Image
-              source={require("../../../assets/V2.jpg")}
-              style={styles.fullScreenImage}
-              resizeMode="cover"
-            />
-          </View>
         </View>
       </Modal>
     </>
