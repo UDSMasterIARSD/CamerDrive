@@ -14,6 +14,7 @@ public class CoursResponse {
     private Long id;
     private String titre;
     private String description;
+    private FichierResponse image;
     private List<ConceptResponse> concepts;
     private Timestamp createdAt;
     private Timestamp updatedAt;

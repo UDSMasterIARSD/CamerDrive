@@ -1,8 +1,11 @@
 package com.example.backend.services;
 
+import com.example.backend.configs.AppConstants;
+import com.example.backend.dto.FichierResponse;
 import com.example.backend.dto.QuestionRequest;
 import com.example.backend.dto.QuestionResponse;
 import com.example.backend.exceptions.NotFoundException;
+import com.example.backend.models.Fichier;
 import com.example.backend.models.Question;
 import com.example.backend.repositories.QuestionRepository;
 import org.modelmapper.ModelMapper;
@@ -21,6 +24,9 @@ public class QuestionServiceImpl implements QuestionService{
     @Autowired
     private ModelMapper mapper;
 
+    @Autowired
+    private FichierService fichierService;
+
     @Override
     public List<QuestionResponse> index(){
         Pageable pageable = Pageable.ofSize(15);
@@ -37,7 +43,13 @@ public class QuestionServiceImpl implements QuestionService{
     
     @Override
     public QuestionResponse create(QuestionRequest question){
+        Fichier fichier = null;
+        if (!question.getFichier().isEmpty()) {
+            FichierResponse fichierResp = fichierService.upload(question.getFichier(), AppConstants.QUESTION_PATH);
+            fichier = mapper.map(fichierResp, Fichier.class);
+        }
         Question req = mapper.map(question, Question.class);
+        req.setImage(mapper.map(fichier, Fichier.class));
         return mapper.map(questionRepo.save(req), QuestionResponse.class);
     }
 

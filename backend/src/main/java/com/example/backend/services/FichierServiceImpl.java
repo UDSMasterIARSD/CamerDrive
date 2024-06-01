@@ -1,8 +1,11 @@
 package com.example.backend.services;
 
+import com.example.backend.configs.AppConstants;
+import com.example.backend.configs.FileFilter;
 import com.example.backend.dto.FichierResponse;
 import com.example.backend.exceptions.BADException;
 import com.example.backend.exceptions.NotFoundException;
+import com.example.backend.exceptions.UnsupportedFileTypeException;
 import com.example.backend.models.Fichier;
 import com.example.backend.repositories.FichierRepository;
 import jakarta.xml.bind.DatatypeConverter;
@@ -10,16 +13,16 @@ import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.io.Resource;
-import org.springframework.core.io.UrlResource;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.IOException;
-import java.net.MalformedURLException;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.security.MessageDigest;
@@ -35,6 +38,9 @@ public class FichierServiceImpl implements FichierService {
     @Autowired
     private ModelMapper mapper;
 
+    @Autowired
+    private FileFilter fileFilter;
+
     @Override
     public Fichier show(Long id) {
         return fichierRepo.findById(id).orElseThrow(() ->
@@ -42,22 +48,24 @@ public class FichierServiceImpl implements FichierService {
     }
 
     @Override
-    public ResponseEntity<Resource> download(Long id) {
+    public ResponseEntity<byte[]> download(Long id) {
         Fichier fichier = show(id);
-        Path filePath = Paths.get(fichier.getUrl());
-//        System.out.println("\nFilePath: " + filePath);
+        String cheminFichierImage = fichier.getUrl();
+        return getProfileByName(cheminFichierImage);
+    }
+
+    @Override
+    public FichierResponse changeUserProfile(Long id, MultipartFile image) {
         try {
-            Resource resource = new UrlResource(filePath.toUri());
-//            System.out.println("\n\n Resource: " + resource);
-            if (resource.exists() || resource.isReadable()) {
-                return ResponseEntity.ok()
-                        .header(HttpHeaders.CONTENT_DISPOSITION, "inline; filename=\"" + resource.getFilename() + "\"")
-                        .body(resource);
-            } else {
-                return ResponseEntity.notFound().build();
-            }
-        } catch (MalformedURLException e) {
-            return ResponseEntity.badRequest().build();
+            Fichier profile = fichierRepo.findById(id).orElseThrow(() -> new NotFoundException("Le profile ", "d'id", id));
+            Path toDelete = Paths.get(AppConstants.PROFILE_PATH, profile.getUrl());
+            if (Files.exists(toDelete))
+                Files.delete(toDelete);
+            String nouvNom = copyImgToPath(image, AppConstants.PROFILE_PATH);
+            profile.setUrl(nouvNom);
+            return mapper.map(fichierRepo.save(profile), FichierResponse.class);
+        } catch (IOException e){
+            throw new BADException("Echec de la modification de l'image");
         }
     }
 
@@ -120,5 +128,25 @@ public class FichierServiceImpl implements FichierService {
             e.printStackTrace();
         }
         return nouveauNom;
+    }
+
+    public ResponseEntity<byte[]> getProfileByName(String name) {
+        try {
+            Path cheminVersImages = Paths.get(name);
+            byte[] imageBytes = Files.readAllBytes(cheminVersImages);
+            String contentType = fileFilter.determineContentType(name);
+
+            HttpHeaders headers = new HttpHeaders();
+            headers.setContentType(MediaType.parseMediaType(contentType));
+            headers.setContentLength(imageBytes.length);
+            return new ResponseEntity<>(imageBytes, headers, HttpStatus.OK);
+        } catch (UnsupportedFileTypeException e) {
+            // Gestion des exceptions lorsque le type MIME ne peut pas être résolu
+            e.printStackTrace();
+            return new ResponseEntity<>(HttpStatus.UNSUPPORTED_MEDIA_TYPE);
+        } catch (IOException e) {
+            // Gestion des exceptions liées à la lecture du fichier
+            throw new BADException("Echec. Veillez reessayer");
+        }
     }
 }

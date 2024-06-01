@@ -25,7 +25,7 @@ public class FichierController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Resource> download(@PathVariable Long id) {
+    public ResponseEntity<byte[]> download(@PathVariable Long id) {
         return fichierService.download(id);
     }
 }

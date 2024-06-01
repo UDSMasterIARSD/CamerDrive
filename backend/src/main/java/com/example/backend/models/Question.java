@@ -45,9 +45,13 @@ public class Question {
     @Column(name = "updated_at", nullable = false)
     private Timestamp updatedAt;
 
-    @ManyToMany(mappedBy = "questions")
+    @ManyToMany(mappedBy = "questions", cascade = CascadeType.ALL)
     private List<Quiz> quizzes = new ArrayList<>();
 
-    @ManyToMany(mappedBy = "questions")
+    @ManyToMany(mappedBy = "questions", cascade = CascadeType.ALL)
     private List<Test> tests = new ArrayList<>();
+
+    @OneToOne
+    @JoinColumn(name = "image")
+    private Fichier image;
 }
