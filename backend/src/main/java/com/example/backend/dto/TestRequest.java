@@ -10,7 +10,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 public class TestRequest {
-    private String title;
+    private String titre;
 
     private List<QuestionResponse> questions;
 }

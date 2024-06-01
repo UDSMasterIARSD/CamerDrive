@@ -3,8 +3,14 @@ package com.example.backend.services;
 import com.example.backend.dto.ScoreUserTestRequest;
 import com.example.backend.dto.ScoreUserTestResponse;
 import com.example.backend.dto.UserResponse;
+import com.example.backend.exceptions.NotFoundException;
+import com.example.backend.models.Quiz;
 import com.example.backend.models.ScoreUserTest;
+import com.example.backend.models.Test;
+import com.example.backend.models.User;
 import com.example.backend.repositories.ScoreUserTestRepository;
+import com.example.backend.repositories.TestRepository;
+import com.example.backend.repositories.UserRepository;
 import jakarta.persistence.EntityNotFoundException;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +24,12 @@ public class ScoreUserTestServiceImpl implements ScoreUserTestService {
 
     @Autowired
     private ScoreUserTestRepository scoreUserTestRepo;
+
+    @Autowired
+    private UserRepository userRepo;
+
+    @Autowired
+    private TestRepository testRepo;
 
     @Autowired
     private ModelMapper mapper;
@@ -41,7 +53,12 @@ public class ScoreUserTestServiceImpl implements ScoreUserTestService {
         if (optional.isPresent()) {
             resp = updateUserTest(optional.get().getId(), req);
         } else {
-            ScoreUserTest userTest = mapper.map(req, ScoreUserTest.class);
+            User user = userRepo.findById(req.getUser().getId()).orElseThrow(() ->
+                    new NotFoundException("L'Utilisateur", "d'id", req.getUser().getId()));
+            Test test = testRepo.findById(req.getTest().getId()).orElseThrow(() ->
+                    new NotFoundException("Le Test", "d'id", req.getTest().getId()));
+            ScoreUserTest userTest = new ScoreUserTest(null, user, test, req.getNote());
+//            ScoreUserTest userTest = mapper.map(req, ScoreUserTest.class);
             resp = mapper.map(scoreUserTestRepo.save(userTest), ScoreUserTestResponse.class);
         }
         return resp;

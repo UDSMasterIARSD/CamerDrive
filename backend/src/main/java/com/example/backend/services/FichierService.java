@@ -1,6 +1,7 @@
 package com.example.backend.services;
 
 import com.example.backend.dto.FichierResponse;
+import com.example.backend.dto.UserResponse;
 import com.example.backend.models.Fichier;
 import org.springframework.core.io.Resource;
 import org.springframework.http.ResponseEntity;
@@ -11,5 +12,7 @@ public interface FichierService {
 
     public Fichier show(Long id);
 
-    ResponseEntity<Resource> download(Long id);
+    public ResponseEntity<byte[]> download(Long id);
+
+    public FichierResponse changeUserProfile(Long id, MultipartFile image);
 }

@@ -3,8 +3,12 @@ package com.example.backend.controllers;
 import com.example.backend.dto.QuestionRequest;
 import com.example.backend.dto.QuestionResponse;
 import com.example.backend.services.QuestionService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
@@ -31,9 +35,17 @@ public class QuestionController {
         return questionService.show(id);
     }
 
-    @PostMapping("/")
+    @Operation( requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(
+            required = true,
+            content = @Content(
+                    mediaType = MediaType.MULTIPART_FORM_DATA_VALUE,
+                    schema = @Schema(implementation = QuestionRequest.class)
+            )
+    )
+    )
+    @PostMapping(value = "/", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
     @ResponseStatus(HttpStatus.CREATED)
-    public QuestionResponse createQuestion(@RequestBody QuestionRequest question){
+    public QuestionResponse createQuestion(@ModelAttribute QuestionRequest question){
         return questionService.create(question);
     }
 

@@ -18,6 +18,7 @@ public class UserResponse {
     private String password;
     private Date dateNaiss;
     private RoleResponse role;
+    private FichierResponse profile;
     private Timestamp createdAt;
     private Timestamp updatedAt;
 }

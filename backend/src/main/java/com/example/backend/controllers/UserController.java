@@ -1,16 +1,20 @@
 package com.example.backend.controllers;
 
 import com.example.backend.configs.AppConstants;
+import com.example.backend.dto.FichierResponse;
 import com.example.backend.dto.PasswordRequest;
 import com.example.backend.dto.UserRequest;
 import com.example.backend.dto.UserResponse;
+import com.example.backend.services.FichierService;
 import com.example.backend.services.UserService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -20,6 +24,9 @@ public class UserController {
 
     @Autowired
     private UserService userService;
+
+//    @Autowired
+//    private FichierService fichierService;
 
     @GetMapping("/")
     @Transactional(readOnly = true)
@@ -59,4 +66,16 @@ public class UserController {
     public UserResponse modifyPassword(@PathVariable Long id, @Valid @RequestBody PasswordRequest request){
         return  userService.modifyPassword(id, request);
     }
+
+    @PutMapping(value = "/profile/{id}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @ResponseStatus(HttpStatus.ACCEPTED)
+    public UserResponse createProfile(@PathVariable Long id, @RequestParam("profile") MultipartFile profile) {
+        return userService.createProfile(id, profile);
+    }
+
+//    @PutMapping(value = "profile/{id}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+//    @ResponseStatus(HttpStatus.ACCEPTED)
+//    public FichierResponse changeProfile(@PathVariable Long id, @RequestParam("image") MultipartFile image) {
+//        return fichierService.changeUserProfile(id, image);
+//    }
 }

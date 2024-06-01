@@ -47,4 +47,8 @@ public class Cours implements Serializable {
 
     @OneToMany(mappedBy = "cours", cascade = CascadeType.ALL)
     private List<Quiz> quizzes;
+
+    @OneToOne
+    @JoinColumn(name = "image")
+    private Fichier image;
 }

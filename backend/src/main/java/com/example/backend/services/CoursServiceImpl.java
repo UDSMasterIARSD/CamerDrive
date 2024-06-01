@@ -1,10 +1,13 @@
 package com.example.backend.services;
 
+import com.example.backend.configs.AppConstants;
 import com.example.backend.dto.ConceptResponse;
 import com.example.backend.dto.CoursRequest;
 import com.example.backend.dto.CoursResponse;
+import com.example.backend.dto.FichierResponse;
 import com.example.backend.exceptions.NotFoundException;
 import com.example.backend.models.Cours;
+import com.example.backend.models.Fichier;
 import com.example.backend.repositories.CoursRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,6 +25,10 @@ public class CoursServiceImpl implements CoursService {
     @Autowired
     private ModelMapper mapper;
 
+    @Autowired
+    private FichierService fichierService;
+
+
     @Override
     public List<CoursResponse> index() {
         Pageable pageable = Pageable.ofSize(15);
@@ -37,7 +44,13 @@ public class CoursServiceImpl implements CoursService {
 
     @Override
     public CoursResponse create(CoursRequest cours) {
+        Fichier fichier = null;
+        if (!cours.getFichier().isEmpty()) {
+            FichierResponse fichierResp = fichierService.upload(cours.getFichier(), AppConstants.COURS_PATH);
+            fichier = mapper.map(fichierResp, Fichier.class);
+        }
         Cours req = mapper.map(cours, Cours.class);
+        req.setImage(fichier);
         return mapper.map(coursRepo.save(req), CoursResponse.class);
     }
 

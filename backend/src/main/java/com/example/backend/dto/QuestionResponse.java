@@ -17,6 +17,7 @@ public class QuestionResponse {
     private String option3;
     private String option4;
     private String correctOption;
+    private FichierResponse image;
     private Timestamp createdAt;
     private Timestamp updatedAt;
 }

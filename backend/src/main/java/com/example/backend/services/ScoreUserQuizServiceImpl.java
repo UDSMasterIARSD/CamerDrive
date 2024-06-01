@@ -3,8 +3,13 @@ package com.example.backend.services;
 import com.example.backend.dto.ScoreUserQuizRequest;
 import com.example.backend.dto.ScoreUserQuizResponse;
 import com.example.backend.dto.UserResponse;
+import com.example.backend.exceptions.NotFoundException;
+import com.example.backend.models.Quiz;
 import com.example.backend.models.ScoreUserQuiz;
+import com.example.backend.models.User;
+import com.example.backend.repositories.QuizRepository;
 import com.example.backend.repositories.ScoreUserQuizRepository;
+import com.example.backend.repositories.UserRepository;
 import jakarta.persistence.EntityNotFoundException;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +23,12 @@ public class ScoreUserQuizServiceImpl implements ScoreUserQuizService {
 
     @Autowired
     private ScoreUserQuizRepository scoreUserQuizRepo;
+
+    @Autowired
+    private UserRepository userRepo;
+
+    @Autowired
+    private QuizRepository quizRepo;
 
     @Autowired
     private ModelMapper mapper;
@@ -41,7 +52,11 @@ public class ScoreUserQuizServiceImpl implements ScoreUserQuizService {
         if (optional.isPresent()) {
             resp = updateUserQuiz(optional.get().getId(), req);
         } else {
-            ScoreUserQuiz userQuiz = mapper.map(req, ScoreUserQuiz.class);
+            User user = userRepo.findById(req.getUser().getId()).orElseThrow(() ->
+                    new NotFoundException("L'Utilisateur", "d'id", req.getUser().getId()));
+            Quiz quiz = quizRepo.findById(req.getQuiz().getId()).orElseThrow(() ->
+                    new NotFoundException("Le Quiz", "d'id", req.getQuiz().getId()));
+            ScoreUserQuiz userQuiz = new ScoreUserQuiz(null, user, quiz, req.getNote());
             resp = mapper.map(scoreUserQuizRepo.save(userQuiz), ScoreUserQuizResponse.class);
         }
         return resp;
