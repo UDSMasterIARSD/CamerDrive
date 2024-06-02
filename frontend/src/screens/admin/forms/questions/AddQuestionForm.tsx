@@ -177,7 +177,7 @@ const AddQuestionForm = () => {
           fichier
         );*/
         setLoading(false);
-        setMessage("Question added successfully");
+        setMessage("Question ajoute avec success");
         setMessageType("success");
         setQuestionError("");
         setOptionsError("");
@@ -188,7 +188,7 @@ const AddQuestionForm = () => {
       }
     } catch (error) {
       console.log(error);
-      setMessage("Failed to add question: " + error.message);
+      setMessage("Erreur d'ajout: " + error.message);
       setMessageType("error");
       setTimeout(() => {
         navigation.goBack();
@@ -202,7 +202,7 @@ const AddQuestionForm = () => {
         <TouchableOpacity onPress={handlePress}>
           <Ionicons name="arrow-back" size={24} color="#000000" />
         </TouchableOpacity>
-        <Text style={styles.headerText}>Add Question</Text>
+        <Text style={styles.headerText}>Ajouter une question</Text>
       </View>
       {message && (
         <View
@@ -220,7 +220,7 @@ const AddQuestionForm = () => {
           {/* Add SelectImage component */}
           <View style={styles.textInputContainer}>
             <TextInput
-              placeholder="Enter question libelle"
+              placeholder="Entrer le Libelle"
               value={libelle}
               onChangeText={setLibelle}
               style={styles.textInput}
@@ -231,7 +231,7 @@ const AddQuestionForm = () => {
           </View>
           <View style={styles.textInputContainer}>
             <TextInput
-              placeholder="Enter option1"
+              placeholder="Entrer l'option1"
               value={option1}
               onChangeText={setOption1}
               style={styles.textInput}
@@ -239,7 +239,7 @@ const AddQuestionForm = () => {
           </View>
           <View style={styles.textInputContainer}>
             <TextInput
-              placeholder="Enter option2"
+              placeholder="Entrer l'option2"
               value={option2}
               onChangeText={setOption2}
               style={styles.textInput}
@@ -247,7 +247,7 @@ const AddQuestionForm = () => {
           </View>
           <View style={styles.textInputContainer}>
             <TextInput
-              placeholder="Enter option3"
+              placeholder="Entrer l'option3"
               value={option3}
               onChangeText={setOption3}
               style={styles.textInput}
@@ -255,7 +255,7 @@ const AddQuestionForm = () => {
           </View>
           <View style={styles.textInputContainer}>
             <TextInput
-              placeholder="Enter option4"
+              placeholder="Entrer l'option4"
               value={option4}
               onChangeText={setOption4}
               style={styles.textInput}
@@ -276,7 +276,7 @@ const AddQuestionForm = () => {
               maxHeight={300}
               labelField="label"
               valueField="value"
-              placeholder="Select correct option"
+              placeholder="Select une option correcte"
               searchPlaceholder="Search..."
               value={correctOption}
               onChange={(item) => {
@@ -302,7 +302,7 @@ const AddQuestionForm = () => {
               {loading ? (
                 <ActivityIndicator size="small" color="white" />
               ) : (
-                <Text style={styles.buttonText}>Add</Text>
+                <Text style={styles.buttonText}>Ajouter</Text>
               )}
             </View>
           </TouchableOpacity>

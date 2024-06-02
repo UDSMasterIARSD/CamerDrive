@@ -68,15 +68,15 @@ const Dashbord = () => {
 
   const createTwoButtonAlertQuit = () =>
     Alert.alert(
-      "Confirm Quit",
-      "Are you sure you want to quit?",
+      "Confirmer la sortie",
+      "Êtes-vous sûr de vouloir quitter ?",
       [
         {
-          text: "Cancel",
+          text: "Annuler",
           style: "cancel",
         },
         {
-          text: "YES",
+          text: "OUI",
           onPress: () => {
             BackHandler.exitApp();
           },
@@ -102,21 +102,16 @@ const Dashbord = () => {
 
   const [selectedCategory, setSelectedCategory] = useState("Home");
 
-  useEffect(() => {
-    console.log("Route change detected:", navigationState);
-    drawer.current?.closeDrawer();
-  }, [navigationState]);
-
   const renderSelectedOption = () => {
     switch (selectedCategory) {
       case "Courses":
-        return "List of courses";
+        return "Liste des cours";
       case "Quiz":
-        return "Quiz";
+        return "Liste des Quiz";
       case "LastExam":
-        return "Last exam";
+        return "Anciens Sujets";
       default:
-        return "Home";
+        return "Accueil";
     }
   };
 
@@ -139,15 +134,15 @@ const Dashbord = () => {
 
   const createTwoButtonAlert = () =>
     Alert.alert(
-      "Confirm Logout",
-      "Are you sure you want to log out?",
+      "Confirmer la déconnexion",
+      "Êtes-vous sûr de vouloir vous déconnecter ?",
       [
         {
-          text: "Cancel",
+          text: "Annuler",
           style: "cancel",
         },
         {
-          text: "YES",
+          text: "OUI",
           onPress: () => {
             if (onLogout) {
               onLogout();
@@ -163,10 +158,10 @@ const Dashbord = () => {
     );
 
   const menuItems: MenuItem[] = [
-    { title: "Profile", iconName: "person" },
+    { title: "Profil", iconName: "person" },
     { title: "Statistiques", iconName: "stats-chart" },
-    { title: "About us", iconName: "information-circle" },
-    { title: "Logout", iconName: "log-out" },
+    { title: "A Propos", iconName: "information-circle" },
+    { title: "Deconnexion", iconName: "log-out" },
     {
       title: "Theme",
       iconName: colorScheme === "dark" ? "moon" : "sunny-outline",
@@ -182,16 +177,16 @@ const Dashbord = () => {
     setSelectedMenuItem(menuItem);
     drawer.current?.closeDrawer();
     switch (menuItem.title) {
-      case "Logout":
+      case "Deconnexion":
         createTwoButtonAlert();
         break;
-      case "Profile":
+      case "Profil":
         navigation.navigate("Profile" as never);
         break;
       case "Statistiques":
         navigation.navigate("Statistiques" as never);
         break;
-      case "About us":
+      case "A Propos":
         navigation.navigate("AboutUs" as never);
         break;
       case "Theme":

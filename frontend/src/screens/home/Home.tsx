@@ -27,7 +27,7 @@ const Home = () => {
               className="text-gray-700 dark:text-gray-50"
               style={Homestyles.welcomeText}
             >
-              Welcome to CarmerDrive
+              Bienvenue sur CarmerDrive
             </Text>
             <Text className="text-gray-900 dark:text-gray-200">
               {authState?.user?.username}
@@ -38,7 +38,7 @@ const Home = () => {
           <Carousel />
           <View style={Homestyles.serviceContainer}>
             <Text className="" style={{ fontSize: 20, fontWeight: "bold" }}>
-              Our Services
+              Nos Services
             </Text>
           </View>
 

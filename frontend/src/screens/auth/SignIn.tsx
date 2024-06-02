@@ -32,11 +32,11 @@ const SignIn = () => {
     setLoginError(null);
 
     if (!name) {
-      setValidationError("Username is required.");
+      setValidationError("Le nom d'utilisateur est requis.");
       return;
     }
     if (!password) {
-      setValidationError("Password is required.");
+      setValidationError("Le mot de passe est requis.");
       return;
     }
 
@@ -67,28 +67,28 @@ const SignIn = () => {
             style={{ width: 300, height: 200 }}
           />
           <Text style={{ fontSize: 40, fontWeight: "bold", color: "#fff" }}>
-            Login Screen
+            Connexion
           </Text>
         </View>
         <View style={styles.informationView}>
           <View>
             {loginError && <Text style={styles.errorText}>{loginError}</Text>}
-            <Text style={styles.textInfo}>Username:</Text>
+            <Text style={styles.textInfo}>Nom d'utilisateur:</Text>
 
             <TextInput
               style={styles.textInput}
               value={name}
-              placeholder="Enter your username here ..."
+              placeholder="Entrer votre nom d'utilisateur..."
               placeholderTextColor="#fff"
               onChangeText={(text) => setName(text)}
             />
           </View>
           <View>
-            <Text style={styles.textInfo}>Password:</Text>
+            <Text style={styles.textInfo}>Mot de passe:</Text>
             <View style={styles.passwordContainer}>
               <TextInput
                 style={{ color: "#fff", fontSize: 16, marginLeft: 15 }}
-                placeholder="Enter your password here ..."
+                placeholder="Entrer votre mot de passe..."
                 placeholderTextColor="#fff"
                 value={password}
                 onChangeText={(text) => setPassword(text)}
@@ -134,7 +134,7 @@ const SignIn = () => {
                     color: "white",
                   }}
                 >
-                  Login
+                  Se connecter
                 </Text>
               )}
             </Pressable>
@@ -154,7 +154,7 @@ const SignIn = () => {
               }}
             >
               <Text style={styles.textSignUp}>
-                Don't have an account? SignUp
+                Pas de compte? S'enregistrer
               </Text>
             </TouchableOpacity>
           </View>
@@ -166,7 +166,7 @@ const SignIn = () => {
               fontSize: 16,
             }}
           >
-            Or, login with ...
+            Ou, se connecter avec ...
           </Text>
         </View>
 

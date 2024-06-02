@@ -39,7 +39,7 @@ const QuestionDetailsPage = ({ id }) => {
   return (
     <View style={QuestionDetailsStyle.container}>
       <View style={QuestionDetailsStyle.detailsContainer}>
-        <Text style={QuestionDetailsStyle.titleText}>Question Details</Text>
+        <Text style={QuestionDetailsStyle.titleText}>Details Question</Text>
         <View style={QuestionDetailsStyle.sectionContainer}>
           <Text style={QuestionDetailsStyle.labelText}>ID:</Text>
           <Text style={QuestionDetailsStyle.detailText}>
@@ -53,7 +53,7 @@ const QuestionDetailsPage = ({ id }) => {
           </Text>
         </View>
         <View style={QuestionDetailsStyle.sectionContainer}>
-          <Text style={QuestionDetailsStyle.labelText}>Correct Option:</Text>
+          <Text style={QuestionDetailsStyle.labelText}>L'option correcte:</Text>
           <Text style={QuestionDetailsStyle.detailText}>
             {questionDetails.correctOption}
           </Text>

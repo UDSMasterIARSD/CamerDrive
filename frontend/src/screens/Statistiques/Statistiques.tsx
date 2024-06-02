@@ -31,13 +31,13 @@ const Statistiques: React.FC = () => {
           <Text
             style={{ marginLeft: marginLeft, fontSize: 15, fontWeight: "bold" }}
           >
-            Test History
+            Historique des Test
           </Text>
         </View>
       </View>
       <ScrollView>
         <View style={{ marginTop: 15 }}>
-          <Text style={{ fontSize: 20, marginLeft: 20 }}>Overview</Text>
+          <Text style={{ fontSize: 20, marginLeft: 20 }}>Vue d'ensemble</Text>
         </View>
 
         <View style={StatistiqueStyle.container}>
@@ -53,7 +53,7 @@ const Statistiques: React.FC = () => {
               ]}
             >
               <View style={StatistiqueStyle.testItemContainer}>
-                <Text style={StatistiqueStyle.text}>Status of the test:</Text>
+                <Text style={StatistiqueStyle.text}>Status du test:</Text>
                 <Text
                   style={[
                     StatistiqueStyle.text,
@@ -64,19 +64,19 @@ const Statistiques: React.FC = () => {
                 </Text>
               </View>
               <View style={StatistiqueStyle.testItemContainer}>
-                <Text style={StatistiqueStyle.text}>Test number</Text>
+                <Text style={StatistiqueStyle.text}>Numero du Test</Text>
                 <Text style={StatistiqueStyle.text}>{test.id}</Text>
               </View>
               <View style={StatistiqueStyle.testItemContainer}>
                 <Text style={StatistiqueStyle.text}>
-                  Number of Correct Answers:
+                  Number de reponses justes:
                 </Text>
                 <Text style={StatistiqueStyle.text}>
                   {test.numberOfCorrectAnswers}/{test.numberOfQuestions}
                 </Text>
               </View>
               <View style={StatistiqueStyle.testItemContainer}>
-                <Text style={StatistiqueStyle.text}>Total learning time:</Text>
+                <Text style={StatistiqueStyle.text}>Duree Totale:</Text>
                 <Text style={StatistiqueStyle.text}>{test.Time} min</Text>
               </View>
             </View>

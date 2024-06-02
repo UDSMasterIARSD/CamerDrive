@@ -99,14 +99,14 @@ const EditCourseForm = ({ id }: EditCourseFormProps) => {
         },
         id
       );
-      setMessage("course updated successfully.");
+      setMessage("cours modifie avec success.");
       setMessageType("success");
       setTimeout(() => {
         navigation.goBack();
       }, 2000);
     } catch (error) {
       console.log(error);
-      setMessage("Failed to update course: " + error.message);
+      setMessage("Erreure de Modification: " + error.message);
       setMessageType("error");
     }
   };
@@ -121,7 +121,7 @@ const EditCourseForm = ({ id }: EditCourseFormProps) => {
         <TouchableOpacity onPress={handlePress}>
           <Ionicons name="arrow-back" size={24} color="#000000" />
         </TouchableOpacity>
-        <Text style={styles.headerText}>Edit Course</Text>
+        <Text style={styles.headerText}>Modifier un Cours</Text>
       </View>
       {message && (
         <View
@@ -137,7 +137,7 @@ const EditCourseForm = ({ id }: EditCourseFormProps) => {
         <View style={styles.formContainer}>
           <View style={styles.textInputContainer}>
             <TextInput
-              placeholder="Enter course title"
+              placeholder="Entrer le titre du cours"
               value={titre}
               onChangeText={setTitre}
               style={styles.textInput}
@@ -148,7 +148,7 @@ const EditCourseForm = ({ id }: EditCourseFormProps) => {
           </View>
           <View style={styles.textInputContainer}>
             <TextInput
-              placeholder="Enter a description"
+              placeholder="Entrer la description"
               value={description}
               onChangeText={setDescription}
               style={styles.textInput}
@@ -161,7 +161,7 @@ const EditCourseForm = ({ id }: EditCourseFormProps) => {
         <View style={styles.buttonContainer}>
           <TouchableOpacity onPress={handleSubmit}>
             <View style={styles.button}>
-              <Text style={styles.buttonText}>Update</Text>
+              <Text style={styles.buttonText}>Modifier</Text>
             </View>
           </TouchableOpacity>
         </View>

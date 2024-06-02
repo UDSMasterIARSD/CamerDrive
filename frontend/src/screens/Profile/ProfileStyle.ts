@@ -57,8 +57,10 @@ const styles = StyleSheet.create({
     color: "#666",
   },
   buttonContainer: {
-    flexDirection: "row",
-    justifyContent: "space-between",
+    //flex:1,
+   flexDirection: "column",
+   justifyContent:"space-between"
+    //justifyContent: "space-between",
   },
   modalView: {
     margin: 20,

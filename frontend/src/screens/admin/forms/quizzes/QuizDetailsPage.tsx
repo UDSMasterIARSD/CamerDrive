@@ -45,7 +45,7 @@ const QuizDetailsPage = ({ id }) => {
   return (
     <ScrollView style={styles.container}>
       <View style={styles.detailsContainer}>
-        <Text style={styles.titleText}>QuizTitle: {quizDetails.titre}</Text>
+        <Text style={styles.titleText}>Titre du QUiz: {quizDetails.titre}</Text>
         <View style={styles.questionsContainer}>
           <Text style={styles.titleText}>Liste des Question:</Text>
           {quizDetails.questions.map((question, index) => (

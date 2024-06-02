@@ -51,7 +51,7 @@ const AddQuizForm = () => {
         setQuestions(questionList);
       } catch (error) {
         console.log(error);
-        Alert.alert("Error", error.message);
+        Alert.alert("Erreure", error.message);
       } finally {
         setLoading(false);
       }
@@ -190,7 +190,7 @@ const AddQuizForm = () => {
               labelField="label"
               valueField="value"
               placeholder={
-                selectedCourse ? selectedCourse.label : "Select a course"
+                selectedCourse ? selectedCourse.label : "Selectionner un Cours"
               }
               searchPlaceholder="Search..."
               value={selectedCourse}
@@ -222,7 +222,7 @@ const AddQuizForm = () => {
               maxHeight={300}
               labelField="label"
               valueField="value"
-              placeholder="Select questions"
+              placeholder="Selectionner une questions"
               searchPlaceholder="Search..."
               value={selectedQuestions}
               //multiple={true}

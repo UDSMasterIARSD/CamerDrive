@@ -3,31 +3,31 @@ import React from "react";
 import { StyleSheet, Text, View } from "react-native";
 
 interface DataType {
-  id: number,
-  icon: keyof typeof AntDesign.glyphMap,
-  title: string,
+  id: number;
+  icon: keyof typeof AntDesign.glyphMap;
+  title: string;
 }
 
 const data: DataType[] = [
   {
     id: 1,
     icon: "filetext1",
-    title: "Mock Test",
+    title: "Test Simulé",
   },
   {
     id: 2,
     icon: "car",
-    title: "Driving Lessons",
+    title: "Leçons de Conduite",
   },
   {
     id: 3,
     icon: "enviromento",
-    title: "Coverage Area",
+    title: "Zone de Couverture",
   },
   {
     id: 4,
     icon: "team",
-    title: "Experienced Instructors",
+    title: "Instructeurs Expérimentés",
   },
 ];
 

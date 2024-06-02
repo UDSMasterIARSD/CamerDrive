@@ -79,7 +79,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
     } catch (error) {
       console.log(error);
       if (error.response?.status === 400) {
-        return { success: false, error: "Invalid username or password." };
+        return { success: false, error: "Nom d'utilisateur existant." };
       }
       return { success: false, error: error.message };
     }
@@ -120,7 +120,10 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
     } catch (error) {
       console.log(error);
       if (error.response?.status === 403) {
-        return { success: false, error: "Invalid username or password." };
+        return {
+          success: false,
+          error: "Nom d'utilisateur ou Mot de passe incorrect.",
+        };
       }
       return { success: false, error: error.message };
     }
@@ -138,7 +141,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
       });
 
       await SecureStore.deleteItemAsync(TOKEN);
-      alert("You have been logged out");
+      alert("Vous avez ete deconnecte");
     }
   };
 

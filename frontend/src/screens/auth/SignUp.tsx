@@ -21,9 +21,9 @@ const SignUp = () => {
   const [dateOfBirth, setDateOfBirth] = useState<Date | null>(null);
   const [password, setPassword] = useState<string>("");
   const [confirmPassword, setConfirmPassword] = useState<string>("");
-  const [isLoading, setIsLoading] = useState(false); // State for showing the loading indicator
+  const [isLoading, setIsLoading] = useState(false);
   const [showDatePicker, setShowDatePicker] = useState<boolean>(false);
-  const [registerError, setRegisterError] = useState<string | null>(null); //
+  const [registerError, setRegisterError] = useState<string | null>(null);
   const { onRegister } = useAuth();
 
   const [errors, setErrors] = useState<{
@@ -50,21 +50,21 @@ const SignUp = () => {
       const validationErrors: any = {};
 
       if (!name) {
-        validationErrors.name = "Please enter your username.";
+        validationErrors.name = "Entrer votre nom d'utilisateur.";
       }
 
       if (!email) {
-        validationErrors.email = "Please enter your email address.";
+        validationErrors.email = "Entrer votre adresse email.";
       } else if (!email.endsWith("@gmail.com")) {
-        validationErrors.email = "Please use a valid Gmail address.";
+        validationErrors.email = "Entrer une adresse email valide.";
       }
 
       if (!dateOfBirth) {
-        validationErrors.dateOfBirth = "Please select your date of birth.";
+        validationErrors.dateOfBirth = "Selectionner votre date de naissance.";
       }
 
       if (!password) {
-        validationErrors.password = "Please enter your password.";
+        validationErrors.password = "Entrer votre mot de passe.";
       } else if (
         password.length < 8 ||
         !/[A-Z]/.test(password) ||
@@ -76,9 +76,10 @@ const SignUp = () => {
       }
 
       if (!confirmPassword) {
-        validationErrors.confirmPassword = "Please confirm your password.";
+        validationErrors.confirmPassword = "Confimer votre mot de passe.";
       } else if (password !== confirmPassword) {
-        validationErrors.confirmPassword = "Passwords do not match.";
+        validationErrors.confirmPassword =
+          "lLes mots de passe ne correspondent pas.";
       }
 
       setErrors(validationErrors);
@@ -118,18 +119,18 @@ const SignUp = () => {
             source={require("./../../../assets/auth/createAccount.png")}
             style={styles.Image}
           ></Image>
-          <Text style={styles.createAccountText}>Create my Account</Text>
+          <Text style={styles.createAccountText}>Creation du Compte</Text>
         </View>
         <View style={styles.Informationview}>
           <View>
             {registerError && (
               <Text style={styles.errorText}>{registerError}</Text>
             )}
-            <Text style={styles.Text}>Username:</Text>
+            <Text style={styles.Text}>Nom d'utilisateur:</Text>
             <TextInput
               style={styles.TextInput}
               value={name}
-              placeholder="Enter your username here ..."
+              placeholder="Entrer votre nom d'utilisateur ici ..."
               placeholderTextColor="#fff"
               onChangeText={(text) => setName(text)}
             />
@@ -140,7 +141,7 @@ const SignUp = () => {
             <TextInput
               style={styles.TextInput}
               value={email}
-              placeholder="Enter your email address here ..."
+              placeholder="Entrer votre adresse email ici ..."
               placeholderTextColor="#fff"
               onChangeText={(text) => setEmail(text)}
             />
@@ -149,10 +150,12 @@ const SignUp = () => {
             )}
           </View>
           <View>
-            <Text style={styles.Text}>Date of Birth:</Text>
+            <Text style={styles.Text}>Date de naissance:</Text>
             <Pressable onPress={() => setShowDatePicker(true)}>
               <Text style={styles.dateText}>
-                {dateOfBirth ? dateOfBirth.toDateString() : "Select Date"}
+                {dateOfBirth
+                  ? dateOfBirth.toDateString()
+                  : "Selectionner une date"}
               </Text>
             </Pressable>
             {showDatePicker && (
@@ -170,11 +173,11 @@ const SignUp = () => {
           </View>
 
           <View>
-            <Text style={styles.Text}>Password:</Text>
+            <Text style={styles.Text}>Mot de passe:</Text>
             <TextInput
               style={styles.TextInput}
               value={password}
-              placeholder="Enter your password here ..."
+              placeholder="Entrer votre mot de passe ici ..."
               placeholderTextColor="#fff"
               keyboardType="default"
               textContentType="password"
@@ -187,10 +190,10 @@ const SignUp = () => {
             )}
           </View>
           <View>
-            <Text style={styles.Text}>Confirm Password :</Text>
+            <Text style={styles.Text}>Confirmer mot de passe :</Text>
             <TextInput
               style={styles.TextInput}
-              placeholder="Confirm your password here ..."
+              placeholder="Confirmer votre mot de passe ici ..."
               placeholderTextColor="#fff"
               keyboardType="default"
               textContentType="password"
@@ -209,7 +212,7 @@ const SignUp = () => {
             {isLoading ? (
               <ActivityIndicator size="small" color="white" />
             ) : (
-              <Text style={styles.TextRegister}>Register</Text>
+              <Text style={styles.TextRegister}>S'enregistrer</Text>
             )}
           </Pressable>
           <Pressable
@@ -218,7 +221,7 @@ const SignUp = () => {
             }}
           >
             <Text style={styles.textSignUp}>
-              Already have an account ? SignIn
+              Vous avez deja un compte ? Se connecter
             </Text>
           </Pressable>
         </View>

@@ -132,14 +132,14 @@ const EditQuestionForm = ({ id }: EditQuestionFormProps) => {
         },
         id
       );
-      setMessage("Question updated successfully.");
+      setMessage("Question modifie avec success");
       setMessageType("success");
       setTimeout(() => {
         navigation.goBack();
       }, 2000);
     } catch (error) {
       console.log(error);
-      setMessage("Failed to update question: " + error.message);
+      setMessage("Erreure de Modification: " + error.message);
       setMessageType("error");
     }
   };
@@ -154,7 +154,7 @@ const EditQuestionForm = ({ id }: EditQuestionFormProps) => {
         <TouchableOpacity onPress={handlePress}>
           <Ionicons name="arrow-back" size={24} color="#000000" />
         </TouchableOpacity>
-        <Text style={styles.headerText}>Edit Question</Text>
+        <Text style={styles.headerText}>Modifier une Queston</Text>
       </View>
       {message && (
         <View
@@ -170,7 +170,7 @@ const EditQuestionForm = ({ id }: EditQuestionFormProps) => {
         <View style={styles.formContainer}>
           <View style={styles.textInputContainer}>
             <TextInput
-              placeholder="Enter question libelle"
+              placeholder="Entrer le Libelle"
               value={libelle}
               onChangeText={setLibelle}
               style={styles.textInput}
@@ -181,7 +181,7 @@ const EditQuestionForm = ({ id }: EditQuestionFormProps) => {
           </View>
           <View style={styles.textInputContainer}>
             <TextInput
-              placeholder="Enter option1"
+              placeholder="Entrer l'option1"
               value={option1}
               onChangeText={setOption1}
               style={styles.textInput}
@@ -189,7 +189,7 @@ const EditQuestionForm = ({ id }: EditQuestionFormProps) => {
           </View>
           <View style={styles.textInputContainer}>
             <TextInput
-              placeholder="Enter option2"
+              placeholder="Entrer l'option2"
               value={option2}
               onChangeText={setOption2}
               style={styles.textInput}
@@ -197,7 +197,7 @@ const EditQuestionForm = ({ id }: EditQuestionFormProps) => {
           </View>
           <View style={styles.textInputContainer}>
             <TextInput
-              placeholder="Enter option3"
+              placeholder="Entrer l'option3"
               value={option3}
               onChangeText={setOption3}
               style={styles.textInput}
@@ -205,7 +205,7 @@ const EditQuestionForm = ({ id }: EditQuestionFormProps) => {
           </View>
           <View style={styles.textInputContainer}>
             <TextInput
-              placeholder="Enter option4"
+              placeholder="Entrer l'option4"
               value={option4}
               onChangeText={setOption4}
               style={styles.textInput}
@@ -226,7 +226,7 @@ const EditQuestionForm = ({ id }: EditQuestionFormProps) => {
               maxHeight={300}
               labelField="label"
               valueField="value"
-              placeholder="Select correct option"
+              placeholder="Selectionner l'option correcte"
               searchPlaceholder="Search..."
               value={correctOption}
               onChange={(item) => {
@@ -249,7 +249,7 @@ const EditQuestionForm = ({ id }: EditQuestionFormProps) => {
         <View style={styles.buttonContainer}>
           <TouchableOpacity onPress={handleSubmit}>
             <View style={styles.button}>
-              <Text style={styles.buttonText}>Update</Text>
+              <Text style={styles.buttonText}>Modifier</Text>
             </View>
           </TouchableOpacity>
         </View>

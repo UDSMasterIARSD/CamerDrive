@@ -44,13 +44,13 @@ const UserDetailsPage = ({ id }) => {
   return (
     <View style={UserDetailsStyle.container}>
       <View style={UserDetailsStyle.detailsContainer}>
-        <Text style={UserDetailsStyle.titleText}>User Details</Text>
+        <Text style={UserDetailsStyle.titleText}>Details Utilisateur</Text>
         <View style={UserDetailsStyle.sectionContainer}>
           <Text style={UserDetailsStyle.labelText}>ID:</Text>
           <Text style={UserDetailsStyle.detailText}>{userDetails.id}</Text>
         </View>
         <View style={UserDetailsStyle.sectionContainer}>
-          <Text style={UserDetailsStyle.labelText}>Username:</Text>
+          <Text style={UserDetailsStyle.labelText}>Nom d'utilisateur:</Text>
           <Text style={UserDetailsStyle.detailText}>
             {userDetails.username}
           </Text>
@@ -60,7 +60,7 @@ const UserDetailsPage = ({ id }) => {
           <Text style={UserDetailsStyle.detailText}>{userDetails.email}</Text>
         </View>
         <View style={UserDetailsStyle.sectionContainer}>
-          <Text style={UserDetailsStyle.labelText}>date of birth</Text>
+          <Text style={UserDetailsStyle.labelText}>date de naissance</Text>
           <Text style={UserDetailsStyle.detailText}>
             {formatDate(userDetails.dateNaiss)}
           </Text>

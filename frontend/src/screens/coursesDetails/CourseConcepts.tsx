@@ -77,7 +77,7 @@ const CourseConcepts: React.FC = () => {
         <Text
           style={{ marginLeft: marginLeft, fontSize: 15, fontWeight: "bold" }}
         >
-          Concepts
+          Liste des Concepts
         </Text>
       </View>
 

@@ -50,12 +50,12 @@ const ConceptDetailsPage = ({ id }) => {
     <ScrollView style={styles.container}>
       <View style={styles.detailsContainer}>
         <Text style={styles.titleText}>
-          Concept Title: {conceptDetails.titre}
+          Titre du Concept: {conceptDetails.titre}
         </Text>
         <Text style={styles.contentText}>
-          Content: {conceptDetails.contenu}
+          Contenu: {conceptDetails.contenu}
         </Text>
-        <Text style={styles.courseText}>Course: {course.titre}</Text>
+        <Text style={styles.courseText}>Cours: {course.titre}</Text>
       </View>
     </ScrollView>
   );

@@ -61,14 +61,14 @@ const ScorePage = ({ route }) => {
         <Text
           style={{ marginLeft: marginLeft, fontSize: 15, fontWeight: "bold" }}
         >
-          Result
+          Resultat
         </Text>
       </View>
       <ScrollView style={{ backgroundColor: "#f0f8ff" }}>
         <View style={styles.container}>
           <View style={styles.statusContainer}>
             <Text style={styles.Text}>
-              {isPassed ? "Congratulations!" : "Whoops, sorry...."}
+              {isPassed ? "Felicitations!" : "Whoops, desolee...."}
             </Text>
 
             <View style={styles.percentageContainer}>
@@ -109,8 +109,8 @@ const ScorePage = ({ route }) => {
           <Text style={styles.result}>{duration}</Text>
         </View>
         <View style={styles.resultContainer}>
-          <Text style={styles.resultText}>Results</Text>
-          <Text style={styles.resultText}>Time</Text>
+          <Text style={styles.resultText}>Resultat</Text>
+          <Text style={styles.resultText}>Temps</Text>
         </View>
         <View style={styles.container}>
           <TouchableOpacity style={styles.button} onPress={handlePress}>

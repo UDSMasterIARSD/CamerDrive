@@ -46,7 +46,7 @@ const EditQuizForm = ({ id }: EditQuizFormProps) => {
         setSelectedQuestions(quiz.questions.map((q) => q.id));
       } catch (error) {
         console.log(error);
-        setMessage("Failed to fetch quiz data.");
+        setMessage("Erreur de recuperation des donnees.");
         setMessageType("error");
       } finally {
         setLoading(false);
@@ -140,7 +140,7 @@ const EditQuizForm = ({ id }: EditQuizFormProps) => {
       console.log("updated question", updatedQuestions);
       console.log(title);
       console.log(selectedQuestions);
-      setMessage("Quiz updated successfully.");
+      setMessage("Quiz modifie avec success.");
       setMessageType("success");
       setTimeout(() => {
         navigation.goBack();
@@ -148,7 +148,7 @@ const EditQuizForm = ({ id }: EditQuizFormProps) => {
     } catch (error) {
       console.log(selectedQuestions);
       console.log(error);
-      setMessage("Failed to update quiz: " + error.message);
+      setMessage("Erreure de modification: " + error.message);
       setMessageType("error");
     }
   };
@@ -163,7 +163,7 @@ const EditQuizForm = ({ id }: EditQuizFormProps) => {
         <TouchableOpacity onPress={handlePress}>
           <Ionicons name="arrow-back" size={24} color="#000000" />
         </TouchableOpacity>
-        <Text style={styles.headerText}>Edit Quiz</Text>
+        <Text style={styles.headerText}>Modifier Quiz</Text>
       </View>
       {message && (
         <View
@@ -179,7 +179,7 @@ const EditQuizForm = ({ id }: EditQuizFormProps) => {
         <View style={styles.formContainer}>
           <View style={styles.textInputContainer}>
             <TextInput
-              placeholder="Enter quiz title"
+              placeholder="Entrer le titre du quiz"
               value={title}
               onChangeText={setTitle}
               style={styles.textInput}
@@ -195,7 +195,7 @@ const EditQuizForm = ({ id }: EditQuizFormProps) => {
               data={allQuestions}
               labelField="label"
               valueField="value"
-              placeholder="Select questions"
+              placeholder="Selectionner questions"
               search
               searchPlaceholder="Search..."
               value={selectedQuestions}
@@ -216,7 +216,7 @@ const EditQuizForm = ({ id }: EditQuizFormProps) => {
         <View style={styles.buttonContainer}>
           <TouchableOpacity onPress={handleSubmit}>
             <View style={styles.button}>
-              <Text style={styles.buttonText}>Update</Text>
+              <Text style={styles.buttonText}>Modifier</Text>
             </View>
           </TouchableOpacity>
         </View>
