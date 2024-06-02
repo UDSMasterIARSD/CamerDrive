@@ -1,7 +1,10 @@
+import { useAuth } from "@/context/AuthContext";
 import { AntDesign, Ionicons } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
+import axios from "axios";
 import React, { useEffect, useState } from "react";
 import {
+  ActivityIndicator,
   Dimensions,
   ScrollView,
   StatusBar,
@@ -12,7 +15,11 @@ import {
   View,
 } from "react-native";
 import { Dropdown } from "react-native-element-dropdown";
-import { QuestionControllerApi } from "../../../../../generated/index";
+import {
+  FichierControllerApi,
+  QuestionControllerApi,
+} from "../../../../../generated/index";
+import SelectImage from "../../../../components/SelectImage"; // Adjust the path as necessary
 import axiosInstance from "../../../../environments/axiosInstance";
 import environment from "../../../../environments/environment";
 
@@ -28,8 +35,11 @@ const AddQuestionForm = () => {
   const [questionError, setQuestionError] = useState("");
   const [optionsError, setOptionsError] = useState("");
   const [correctOptionError, setCorrectOptionError] = useState("");
+  const [imageUri, setImageUri] = useState<string | null>(null); // State for the image URI
   const navigation = useNavigation();
   const [dropdownOptions, setDropdownOptions] = useState([]);
+  const { authState } = useAuth();
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     setDropdownOptions([
@@ -71,30 +81,111 @@ const AddQuestionForm = () => {
       setCorrectOptionError("");
     }
 
-    if (hasError) return;
+    if (!imageUri) {
+      setMessage("Vous devez sélectionner une image.");
+      setMessageType("error");
+      hasError = true;
+    }
 
+    if (hasError) return;
+    setLoading(true);
     try {
-      const questionApi = new QuestionControllerApi(
-        environment,
-        environment.basePath,
-        axiosInstance
-      );
-      await questionApi.createQuestion({
-        libelle: libelle,
-        option1: option1,
-        option2: option2,
-        option3: option3,
-        option4: option4,
-        correctOption: correctOption,
-      });
-      setMessage("Question added successfully");
-      setMessageType("success");
-      setQuestionError("");
-      setOptionsError("");
-      setCorrectOptionError("");
-      setTimeout(() => {
-        navigation.goBack();
-      }, 2000);
+      let uploadedImageUrl = "";
+
+      if (imageUri) {
+        //const result = await fetch(imageUri);
+        //console.log(result);
+        //const blod = await result.blob();
+        const formData = new FormData();
+
+        formData.append("file", {
+          uri: imageUri,
+          type: "image/jpeg",
+          name: "upload.jpg",
+        });
+        //console.log("blod", formData);
+        const fileApi = new FichierControllerApi(
+          environment,
+          environment.basePath,
+          axiosInstance
+        );
+        console.log("FormData", formData);
+        //const fichier = fileApi.uploadForm(formData);
+        const response = await axios.post(
+          `${environment.basePath}/files/`,
+          formData,
+          {
+            headers: {
+              "Content-Type": "multipart/form-data",
+              Authorization: `Bearer ${authState?.token}`,
+            },
+          }
+        );
+        const result = response.data;
+        //console.log("image", imageUri);
+        //const response = await fichierApi.uploadForm(formData);
+        //console.log(response.data);
+        //console.log(response.status);
+
+        // uploadedImageUrl! = response!.data!.url!;
+        //console.log(uploadedImageUrl);
+        const formDataf = new FormData();
+        formDataf.append("libelle", libelle);
+        formDataf.append("option1", option1);
+        formDataf.append("option2", option2);
+        formDataf.append("option3", option3);
+        formDataf.append("option4", option4);
+        formDataf.append("correctOption", correctOption);
+        formDataf.append("fichier", {
+          uri: imageUri,
+          type: "image/jpeg",
+          name: "upload.jpg",
+        });
+
+        const responsef = await axios.post(
+          `${environment.basePath}/questions/`,
+          formDataf,
+          {
+            headers: {
+              "Content-Type": "multipart/form-data",
+              Authorization: `Bearer ${authState?.token}`,
+            },
+          }
+        );
+        console.log(responsef.data);
+        const questionApi = new QuestionControllerApi(
+          environment,
+          environment.basePath,
+          axiosInstance
+        );
+        /*console.log({
+          libelle: libelle,
+          option1: option1,
+          option2: option2,
+          option3: option3,
+          option4: option4,
+          correctOption: correctOption,
+          fichier: uploadedIm*/
+
+        /*await questionApi.createQuestionForm(
+          libelle,
+          option1,
+          option2,
+          option3,
+          option4,
+          correctOption,
+          fichier
+        );*/
+        setLoading(false);
+        setMessage("Question added successfully");
+        setMessageType("success");
+        setQuestionError("");
+        setOptionsError("");
+        setCorrectOptionError("");
+        setTimeout(() => {
+          navigation.goBack();
+        }, 2000);
+      }
     } catch (error) {
       console.log(error);
       setMessage("Failed to add question: " + error.message);
@@ -125,6 +216,8 @@ const AddQuestionForm = () => {
       )}
       <ScrollView style={styles.scrollView}>
         <View style={styles.formContainer}>
+          <SelectImage onImagePicked={setImageUri} />
+          {/* Add SelectImage component */}
           <View style={styles.textInputContainer}>
             <TextInput
               placeholder="Enter question libelle"
@@ -206,7 +299,11 @@ const AddQuestionForm = () => {
         <View style={styles.buttonContainer}>
           <TouchableOpacity onPress={handleSubmit}>
             <View style={styles.button}>
-              <Text style={styles.buttonText}>Add</Text>
+              {loading ? (
+                <ActivityIndicator size="small" color="white" />
+              ) : (
+                <Text style={styles.buttonText}>Add</Text>
+              )}
             </View>
           </TouchableOpacity>
         </View>
