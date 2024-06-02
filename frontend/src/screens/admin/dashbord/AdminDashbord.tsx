@@ -39,34 +39,41 @@ const AdminDashbord: React.FC = () => {
   );
 
   const createTwoButtonAlertQuit = () =>
-    Alert.alert("Confirm Quit", "Are you sure you want to quit?", [
-      {
-        text: "Cancel",
-        style: "cancel",
-      },
-      {
-        text: "YES",
-        onPress: () => {
-          BackHandler.exitApp();
+    Alert.alert(
+      "Confirmer la sortie",
+      "Êtes-vous sûr de vouloir quitter ?",
+      [
+        {
+          text: "Annuler",
+          style: "cancel",
         },
-      },
-    ]);
+        {
+          text: "OUI",
+          onPress: () => {
+            BackHandler.exitApp();
+          },
+        },
+      ],
+      {
+        alertContainerStyle: AdminDashbordStyle.alertContainer,
+      } as CustomAlertOptions
+    );
 
   const handleTaskPress = (task: Task) => {
     switch (task.text) {
-      case "Question Management":
+      case "Gestion des questions":
         navigation.navigate("QuestionDetails", { type: "questions" });
         break;
-      case "User Management":
+      case "Gestion des utilisateurs":
         navigation.navigate("QuestionDetails", { type: "users" });
         break;
-      case "Courses Management":
+      case "Gestion des cours":
         navigation.navigate("QuestionDetails", { type: "courses" });
         break;
-      case "Concepts Management":
+      case "Gestion des concepts":
         navigation.navigate("QuestionDetails", { type: "concepts" });
         break;
-      case "Quiz Management":
+      case "Gestion des quiz":
         navigation.navigate("QuestionDetails", { type: "quizzes" });
         break;
       default:
@@ -76,20 +83,20 @@ const AdminDashbord: React.FC = () => {
 
   const createTwoButtonAlert = () =>
     Alert.alert(
-      "Confirm Logout",
-      "Are you sure you want to log out?",
+      "Confirmer la déconnexion",
+      "Êtes-vous sûr de vouloir vous déconnecter ?",
       [
         {
-          text: "Cancel",
+          text: "Annuler",
           style: "cancel",
         },
         {
-          text: "YES",
+          text: "OUI",
           onPress: () => {
             if (onLogout) {
               onLogout();
             } else {
-              console.error("onLogout function is not defined");
+              console.error("La fonction de déconnexion n'est pas définie");
             }
           },
         },
@@ -107,7 +114,7 @@ const AdminDashbord: React.FC = () => {
             <Ionicons name="log-out" size={30} color="#003f5c" />
           </Pressable>
           <Text style={AdminDashbordStyle.textBelowLine}>
-            You can perform the following tasks
+            Vous pouvez effectuer les tâches suivantes
           </Text>
           <View style={AdminDashbordStyle.tasksContainer}>
             {Array.from({ length: Math.ceil(tasks.length / 2) }).map(

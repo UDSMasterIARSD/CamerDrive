@@ -58,7 +58,7 @@ const AddCourseForm = () => {
         titre: titre,
         description: description,
       });
-      setMessage("Course added successfully");
+      setMessage("Cours Ajoute avec success");
       setMessageType("success");
       setTitleError("");
       setDescriptionError("");
@@ -69,7 +69,7 @@ const AddCourseForm = () => {
       }, 2000);
     } catch (error) {
       console.log(error);
-      setMessage("Failed to add course: " + error.message);
+      setMessage("Erreur d'ajout: " + error.message);
       setMessageType("error");
       setTimeout(() => {
         navigation.goBack();
@@ -83,7 +83,7 @@ const AddCourseForm = () => {
         <TouchableOpacity onPress={handlePress}>
           <Ionicons name="arrow-back" size={24} color="#000000" />
         </TouchableOpacity>
-        <Text style={styles.headerText}>Add Course</Text>
+        <Text style={styles.headerText}>Ajouter un Cours</Text>
       </View>
       {message && (
         <View
@@ -99,7 +99,7 @@ const AddCourseForm = () => {
         <View style={styles.formContainer}>
           <View style={styles.textInputContainer}>
             <TextInput
-              placeholder="Enter course title"
+              placeholder="Entrer le titre du cours"
               value={titre}
               onChangeText={setTitre}
               style={styles.textInput}
@@ -110,7 +110,7 @@ const AddCourseForm = () => {
           </View>
           <View style={styles.textInputContainer}>
             <TextInput
-              placeholder="Enter a description"
+              placeholder="Entrer la description"
               value={description}
               onChangeText={setDescription}
               style={styles.textInput}
@@ -123,7 +123,7 @@ const AddCourseForm = () => {
         <View style={styles.buttonContainer}>
           <TouchableOpacity onPress={handleSubmit}>
             <View style={styles.button}>
-              <Text style={styles.buttonText}>Add</Text>
+              <Text style={styles.buttonText}>Ajouter</Text>
             </View>
           </TouchableOpacity>
         </View>

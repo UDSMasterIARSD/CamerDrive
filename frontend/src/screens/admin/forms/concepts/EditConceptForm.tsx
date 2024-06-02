@@ -60,7 +60,7 @@ const EditConceptForm = ({ id }: EditConceptFormProps) => {
         setSelectedCourse(associatedCourse);
       } catch (error) {
         console.log(error);
-        Alert.alert("Error", error.message);
+        Alert.alert("Erreure", error.message);
       } finally {
         setLoading(false);
       }

@@ -32,7 +32,7 @@ const AboutUs = () => {
         <Text
           style={{ marginLeft: marginLeft, fontSize: 15, fontWeight: "bold" }}
         >
-          About Us
+          A Propos de nous
         </Text>
       </View>
 
@@ -46,35 +46,35 @@ const AboutUs = () => {
         </View>
 
         <View>
-          <Text style={styles.aboutTitle}>About Us</Text>
+          <Text style={styles.aboutTitle}>À propos de nous</Text>
 
           <Text style={styles.aboutText}>
-            At CarmerDrive, we are passionate about empowering individuals to
-            achieve their driving aspirations. We understand that the journey to
-            obtaining a driver's license can be challenging, and we are
-            committed to providing a comprehensive and engaging learning
-            experience that simplifies the process and increases your chances of
-            success.
+            Chez CarmerDrive, nous sommes passionnés par l'autonomisation des
+            individus pour atteindre leurs aspirations en matière de conduite.
+            Nous comprenons que le parcours pour obtenir un permis de conduire
+            peut être difficile, et nous nous engageons à fournir une expérience
+            d'apprentissage complète et engageante qui simplifie le processus et
+            augmente vos chances de réussite.
           </Text>
 
-          <Text style={styles.aboutTitle}>Our Mission</Text>
+          <Text style={styles.aboutTitle}>Notre mission</Text>
 
           <Text style={styles.aboutText}>
-            Our mission is to revolutionize driver education by making it
-            accessible, affordable, and effective. We believe that everyone
-            deserves the opportunity to learn to drive and gain the independence
-            and freedom that comes with it.
+            Notre mission est de révolutionner l'éducation à la conduite en la
+            rendant accessible, abordable et efficace. Nous croyons que tout le
+            monde mérite la possibilité d'apprendre à conduire et de gagner
+            l'indépendance et la liberté qui en découlent.
           </Text>
 
-          <Text style={styles.aboutTitle}>Our Team</Text>
+          <Text style={styles.aboutTitle}>Notre équipe</Text>
 
           <Text style={styles.aboutText}>
-            Our team of experienced instructors, passionate about road safety
-            and driver education, is dedicated to providing you with the support
-            and guidance you need to excel in your driving tests. We are
-            committed to staying at the forefront of driver education technology
-            and methodologies to ensure you receive the most up-to-date and
-            effective training.
+            Notre équipe d'instructeurs expérimentés, passionnés par la sécurité
+            routière et l'éducation à la conduite, est dédiée à vous fournir le
+            soutien et l'orientation dont vous avez besoin pour exceller dans
+            vos tests de conduite. Nous nous engageons à rester à l'avant-garde
+            de la technologie et des méthodologies de l'éducation à la conduite
+            pour nous assurer que vous recevez une formation à jour et efficace.
           </Text>
         </View>
       </ScrollView>

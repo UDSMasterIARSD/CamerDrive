@@ -55,7 +55,9 @@ const EditUserForm = ({ id }: EditCourseFormProps) => {
         setPassword(user.password);
       } catch (error) {
         console.log(error);
-        setMessage("Failed to fetch user data.");
+        setMessage(
+          "Echec lors de la recuperation des donnees de l'utilisateur."
+        );
         setMessageType("error");
       } finally {
         setLoading(false);
@@ -95,28 +97,28 @@ const EditUserForm = ({ id }: EditCourseFormProps) => {
     }
 
     if (!email) {
-      setEmailError("Please enter your email address.");
+      setEmailError("Le champ email est obligatoire.");
       hasError = true;
     } else if (!email.endsWith("@gmail.com")) {
-      setEmailError("Please use a valid gmail adress");
+      setEmailError("Entrer une adresse email valide");
       hasError = true;
     } else {
       setEmailError("");
     }
 
     if (!password) {
-      setPasswordError("Please enter your password.");
+      setPasswordError("Entrer votre mot de passe.");
       hasError = true;
     } else if (password.length < 8 || !/\d/.test(password)) {
       setPasswordError(
-        "Password must be at least 8 characters long and contain at least one digit."
+        "Le mot de passe doit comporter au moins 8 caractères, inclure au moins une lettre majuscule, un chiffre et un caractère spécial.."
       );
       hasError = true;
     } else {
       setPasswordError("");
     }
     if (!confirmPassword) {
-      setConfirmPasswordError("password does not match");
+      setConfirmPasswordError("Les mots de passe ne correspondent pas");
       hasError = true;
     } else {
       setConfirmPasswordError("");
@@ -138,7 +140,7 @@ const EditUserForm = ({ id }: EditCourseFormProps) => {
         },
         id
       );
-      setMessage("Question updated successfully.");
+      setMessage("Utilisateur modifie avec success.");
       setMessageType("success");
       setNameError("");
       setEmailError("");
@@ -149,7 +151,9 @@ const EditUserForm = ({ id }: EditCourseFormProps) => {
       }, 2000);
     } catch (error) {
       console.log(error);
-      setMessage("Failed to update question: " + error.message);
+      setMessage(
+        "Echec lors de la modification de la question: " + error.message
+      );
       setMessageType("error");
     }
   };
@@ -170,7 +174,7 @@ const EditUserForm = ({ id }: EditCourseFormProps) => {
         <TouchableOpacity onPress={handlePress}>
           <Ionicons name="arrow-back" size={24} color="#000000" />
         </TouchableOpacity>
-        <Text style={styles.headerText}>Edit User</Text>
+        <Text style={styles.headerText}>Modifier un Utilisateur</Text>
       </View>
       {message && (
         <View
@@ -186,7 +190,7 @@ const EditUserForm = ({ id }: EditCourseFormProps) => {
         <View style={styles.formContainer}>
           <View style={styles.textInputContainer}>
             <TextInput
-              placeholder="Enter question libelle"
+              placeholder="Enter le nom d'utilisateur ici"
               value={username}
               onChangeText={setUsername}
               style={styles.textInput}
@@ -199,7 +203,7 @@ const EditUserForm = ({ id }: EditCourseFormProps) => {
             <TextInput
               style={styles.textInput}
               value={email}
-              placeholder="Enter your email address here ..."
+              placeholder="Entrer l'adresse Email ici..."
               onChangeText={(text) => setEmail(text)}
             />
             {emailError ? (
@@ -210,7 +214,7 @@ const EditUserForm = ({ id }: EditCourseFormProps) => {
             <TextInput
               style={styles.textInput}
               value={password}
-              placeholder="Enter your password here ..."
+              placeholder="Entrer le mot de passe ici ..."
               keyboardType="default"
               textContentType="password"
               secureTextEntry={true}
@@ -224,7 +228,7 @@ const EditUserForm = ({ id }: EditCourseFormProps) => {
           <View style={styles.textInputContainer}>
             <TextInput
               style={styles.textInput}
-              placeholder="Confirm your password here ..."
+              placeholder="Confirmer le mot de passe ici ..."
               keyboardType="default"
               textContentType="password"
               secureTextEntry={true}
@@ -240,7 +244,7 @@ const EditUserForm = ({ id }: EditCourseFormProps) => {
             <View>
               <Pressable onPress={() => setShowDatePicker(true)}>
                 <Text style={styles.textInput}>
-                  {dateNaiss ? formatDate(dateNaiss) : "Select Date"}
+                  {dateNaiss ? formatDate(dateNaiss) : "Selectionner une date"}
                 </Text>
               </Pressable>
 
@@ -258,7 +262,7 @@ const EditUserForm = ({ id }: EditCourseFormProps) => {
         <View style={styles.buttonContainer}>
           <TouchableOpacity onPress={handleSubmit}>
             <View style={styles.button}>
-              <Text style={styles.buttonText}>Update</Text>
+              <Text style={styles.buttonText}>Modifier</Text>
             </View>
           </TouchableOpacity>
         </View>

@@ -176,7 +176,7 @@ const AddConceptForm = () => {
               labelField="label"
               valueField="value"
               placeholder={
-                selectedCourse ? selectedCourse.label : "Select a course"
+                selectedCourse ? selectedCourse.label : "Selectionner un cours"
               }
               searchPlaceholder="Search..."
               value={selectedCourse}

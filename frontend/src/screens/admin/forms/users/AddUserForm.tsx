@@ -52,28 +52,28 @@ const AddUserForm = () => {
     }
 
     if (!email) {
-      setEmailError("Please enter your email address.");
+      setEmailError("Le champ email est obligatoire.");
       hasError = true;
     } else if (!email.endsWith("@gmail.com")) {
-      setEmailError("Please use a valid gmail adress");
+      setEmailError("Entrer une adresse email valide");
       hasError = true;
     } else {
       setEmailError("");
     }
 
     if (!password) {
-      setPasswordError("Please enter your password.");
+      setPasswordError("Entrer votre nom d'utilisateur.");
       hasError = true;
     } else if (password.length < 8 || !/\d/.test(password)) {
       setPasswordError(
-        "Password must be at least 8 characters long and contain at least one digit."
+        "Le mot de passe doit comporter au moins 8 caractères, inclure au moins une lettre majuscule, un chiffre et un caractère spécial."
       );
       hasError = true;
     } else {
       setPasswordError("");
     }
     if (!confirmPassword) {
-      setConfirmPasswordError("password does not match");
+      setConfirmPasswordError("le mot de passe ne correspond pas");
       hasError = true;
     } else {
       setConfirmPasswordError("");
@@ -118,7 +118,7 @@ const AddUserForm = () => {
         <TouchableOpacity onPress={handlePress}>
           <Ionicons name="arrow-back" size={24} color="#000000" />
         </TouchableOpacity>
-        <Text style={styles.headerText}>Add User</Text>
+        <Text style={styles.headerText}>Ajouter un Utilisateur</Text>
       </View>
       <ScrollView style={styles.scrollView}>
         <View style={styles.formContainer}>
@@ -126,7 +126,7 @@ const AddUserForm = () => {
             <TextInput
               style={styles.textInput}
               value={name}
-              placeholder="Enter your username here ..."
+              placeholder="Entrer votre nom d'utilisateur ici ..."
               onChangeText={(text) => setName(text)}
             />
             {nameError ? (
@@ -137,7 +137,7 @@ const AddUserForm = () => {
             <TextInput
               style={styles.textInput}
               value={email}
-              placeholder="Enter your email address here ..."
+              placeholder="Entrer votre adresse email ici ..."
               onChangeText={(text) => setEmail(text)}
             />
             {emailError ? (
@@ -148,7 +148,7 @@ const AddUserForm = () => {
             <TextInput
               style={styles.textInput}
               value={password}
-              placeholder="Enter your password here ..."
+              placeholder="Entrer votre mot de passe ici ..."
               keyboardType="default"
               textContentType="password"
               secureTextEntry={true}
@@ -162,7 +162,7 @@ const AddUserForm = () => {
           <View style={styles.textInputContainer}>
             <TextInput
               style={styles.textInput}
-              placeholder="Confirm your password here ..."
+              placeholder="Confirmer votre mot de passe ici ..."
               keyboardType="default"
               textContentType="password"
               secureTextEntry={true}
@@ -178,7 +178,9 @@ const AddUserForm = () => {
             <View>
               <Pressable onPress={() => setShowDatePicker(true)}>
                 <Text style={styles.textInput}>
-                  {dateOfBirth ? dateOfBirth.toDateString() : "Select Date"}
+                  {dateOfBirth
+                    ? dateOfBirth.toDateString()
+                    : "Selectionner une date"}
                 </Text>
               </Pressable>
               {showDatePicker && (
@@ -195,13 +197,15 @@ const AddUserForm = () => {
         <View style={styles.buttonContainer}>
           <TouchableOpacity onPress={handleSubmit}>
             <View style={styles.button}>
-              <Text style={styles.buttonText}>Add</Text>
+              <Text style={styles.buttonText}>Ajouter</Text>
             </View>
           </TouchableOpacity>
         </View>
         {success && (
           <View style={[styles.messageContainer, styles.success]}>
-            <Text style={styles.messageText}>Question added successfully</Text>
+            <Text style={styles.messageText}>
+              Utilisateur Ajoute avec success
+            </Text>
           </View>
         )}
       </ScrollView>

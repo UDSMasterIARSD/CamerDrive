@@ -48,7 +48,7 @@ const CourseDetailsPage = ({ id }) => {
     <ScrollView style={styles.container}>
       <View style={styles.detailsContainer}>
         <Text style={styles.titleText}>
-          Course Title: {courseDetails.titre}
+          Titre du Cours: {courseDetails.titre}
         </Text>
         <Text style={styles.contentText}>
           Description: {courseDetails.description}

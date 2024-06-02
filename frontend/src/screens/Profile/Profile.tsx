@@ -135,7 +135,7 @@ const ProfilePage = () => {
       );
       authState!.user!.dateNaiss = dob;
       authState!.user!.email = email;
-      setMessage("Profile updated successfully.");
+      setMessage("Profil modifie avec success.");
       setMessageType("success");
       setModalVisible(false);
       setTimeout(() => {
@@ -143,7 +143,9 @@ const ProfilePage = () => {
       }, 2000);
     } catch (error) {
       console.log(error);
-      setMessage("Failed to update profile: " + error.response.message);
+      setMessage(
+        "Erreure lors de la modification du profil: " + error.response.message
+      );
       setMessageType("error");
       setModalVisible(false);
       setTimeout(() => {
@@ -194,7 +196,7 @@ const ProfilePage = () => {
         { oldPassword, newPassword },
         authState?.user?.id
       );
-      setMessage("Password updated successfully.");
+      setMessage("Mot de passe modifie avec success.");
       setMessageType("success");
       setPasswordModalVisible(false);
       setTimeout(() => {
@@ -202,7 +204,9 @@ const ProfilePage = () => {
       }, 2000);
     } catch (error) {
       console.log(error);
-      setMessage("Failed to update password: The old password is incorrect");
+      setMessage(
+        "Erreur lors de la modification: L'ancien mot de passe est incorrect"
+      );
       setMessageType("error");
       setPasswordModalVisible(false);
       setTimeout(() => {
@@ -261,7 +265,7 @@ const ProfilePage = () => {
 
         console.log(response.data);
 
-        setMessage("Image uploaded successfully.");
+        setMessage("Image charge avec success.");
         setMessageType("success");
         setModalVisible(false);
         setTimeout(() => {
@@ -270,7 +274,7 @@ const ProfilePage = () => {
       } catch (error) {
         console.log(error);
         setMessage(
-          "Failed to upload image: " +
+          "erreure lors du chargement de l'image: " +
             (error.response?.message || error.message)
         );
         setMessageType("error");
@@ -293,7 +297,7 @@ const ProfilePage = () => {
         <Text
           style={{ marginLeft: marginLeft, fontSize: 15, fontWeight: "bold" }}
         >
-          Profile
+          Profil
         </Text>
       </View>
       <ScrollView>
@@ -327,7 +331,7 @@ const ProfilePage = () => {
           )}
           <View style={styles.infoContainer}>
             <View style={styles.infoRow}>
-              <Text style={styles.label}>Username:</Text>
+              <Text style={styles.label}>Nom d'utilisateur:</Text>
               <Text style={styles.value}>{authState?.user?.username}</Text>
             </View>
             <View style={styles.infoRow}>
@@ -335,19 +339,19 @@ const ProfilePage = () => {
               <Text style={styles.value}>{authState?.user?.email}</Text>
             </View>
             <View style={styles.infoRow}>
-              <Text style={styles.label}>Date of Birth:</Text>
+              <Text style={styles.label}>Date de naissance:</Text>
               <Text style={styles.value}>
                 {formatDate(new Date(authState?.user?.dateNaiss))}
               </Text>
             </View>
             <View style={styles.infoRow}>
-              <Text style={styles.label}>Status:</Text>
+              <Text style={styles.label}>Statut:</Text>
               <Text style={styles.value}>{authState?.user?.role}</Text>
             </View>
           </View>
           <View style={styles.buttonContainer}>
-            <Button title="Edit Profile" onPress={handleEditProfile} />
-            <Button title="Edit Password" onPress={handleEditPassword} />
+            <Button title="MOdifier Profil" onPress={handleEditProfile} />
+            <Button title="Modifier Password" onPress={handleEditPassword} />
           </View>
         </View>
       </ScrollView>
@@ -365,11 +369,11 @@ const ProfilePage = () => {
       >
         <View style={styles.modalView}>
           <ScrollView>
-            <Text style={styles.modalText}>Edit Profile</Text>
-            <Text style={styles.inputLabel}>Username</Text>
+            <Text style={styles.modalText}>Modifier le Profil</Text>
+            <Text style={styles.inputLabel}>Nom d'utilisateur</Text>
             <TextInput
               style={styles.input}
-              placeholder="Username"
+              placeholder="Nom d'utilisateur"
               value={username}
               editable={false}
             />
@@ -386,7 +390,7 @@ const ProfilePage = () => {
             {errorMessage.email && (
               <Text style={styles.errorMessage}>{errorMessage.email}</Text>
             )}
-            <Text style={styles.inputLabel}>Date of birth</Text>
+            <Text style={styles.inputLabel}>Date de naissance</Text>
             <TouchableOpacity onPress={() => setShowDatePicker(true)}>
               <Text style={styles.input}>{formatDate(dob)}</Text>
             </TouchableOpacity>
@@ -401,9 +405,9 @@ const ProfilePage = () => {
             )}
 
             <View style={styles.modalButtonContainer}>
-              <Button title="Save" onPress={handleSaveProfile} />
+              <Button title="Enregistrer" onPress={handleSaveProfile} />
               <Button
-                title="Cancel"
+                title="Annuler"
                 onPress={() => {
                   resetProfileModal();
                   setModalVisible(false);
@@ -426,7 +430,7 @@ const ProfilePage = () => {
       >
         <View style={styles.modalView}>
           <ScrollView>
-            <Text style={styles.modalText}>Edit Password</Text>
+            <Text style={styles.modalText}>Modifier le Mot de passe</Text>
             <Text style={styles.inputLabel}>Ancien mot de passe</Text>
             <TextInput
               style={styles.input}
@@ -454,9 +458,9 @@ const ProfilePage = () => {
               </Text>
             )}
             <View style={styles.modalButtonContainer}>
-              <Button title="Save" onPress={handleSavePassword} />
+              <Button title="Enregistrer" onPress={handleSavePassword} />
               <Button
-                title="Cancel"
+                title="Annuler"
                 onPress={() => {
                   resetPasswordModal();
                   setPasswordModalVisible(false);

@@ -135,15 +135,15 @@ const QuestionDetails = () => {
 
   useEffect(() => {
     if (type === "users") {
-      setTableHead(["ID", "User Name", "Actions"]);
+      setTableHead(["ID", "Nom d'utilisateur", "Actions"]);
     } else if (type === "courses") {
-      setTableHead(["ID", "Course Name", "Actions"]);
+      setTableHead(["ID", "Titre du Cours", "Actions"]);
     } else if (type === "concepts") {
-      setTableHead(["ID", "Concept Title", "Actions"]);
+      setTableHead(["ID", "Titre du Concept", "Actions"]);
     } else if (type === "quizzes") {
-      setTableHead(["ID", "Quiz Title", "Actions"]);
+      setTableHead(["ID", "Titre du Quiz", "Actions"]);
     } else {
-      setTableHead(["ID", "Question Text", "Actions"]);
+      setTableHead(["ID", "Libelle Question", "Actions"]);
     }
     fetchData();
   }, [type, refresh]);
@@ -156,16 +156,16 @@ const QuestionDetails = () => {
 
   const handleDelete = (id: number) => {
     Alert.alert(
-      "Delete Entry",
-      `Are you sure you want to delete this ${type.slice(0, -1)}?`,
+      "Supprimer l'entrée",
+      `Etes vous sure de vouloir supprimer ce ${type.slice(0, -1)}?`,
       [
         {
-          text: "No",
-          onPress: () => console.log("Deletion cancelled"),
+          text: "Non",
+          onPress: () => console.log("Suppression annulee"),
           style: "cancel",
         },
         {
-          text: "Yes",
+          text: "Oui",
           onPress: async () => {
             try {
               if (type === "questions") {
@@ -206,12 +206,15 @@ const QuestionDetails = () => {
               }
               Alert.alert(
                 "Success",
-                `${type.slice(0, -1)} deleted successfully`
+                `${type.slice(0, -1)} Entrée supprimée avec succès`
               );
               fetchData();
             } catch (error) {
               console.log(error);
-              Alert.alert("Error", `Failed to delete ${type.slice(0, -1)}`);
+              Alert.alert(
+                "Erreure",
+                `Echec lors de la suppression  ${type.slice(0, -1)}`
+              );
             }
           },
           style: "destructive",
@@ -277,9 +280,9 @@ const QuestionDetails = () => {
       <View style={QuestionDetailsStyle.titleHeader}>
         <Text style={QuestionDetailsStyle.titleText}>
           {type === "users"
-            ? "Users"
+            ? "Utilisateurs"
             : type === "courses"
-            ? "Courses"
+            ? "Cours"
             : type === "concepts"
             ? "Concepts"
             : type === "quizzes"
