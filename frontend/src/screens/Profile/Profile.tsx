@@ -246,6 +246,7 @@ const ProfilePage = () => {
           environment.basePath,
           axiosInstance
         );
+        console.log("FormData", formData);
         //const fichier = fileApi.uploadForm(formData);
         const response = await axios.post(
           `${environment.basePath}/files/`,
