@@ -1,4 +1,5 @@
-import { AntDesign, Ionicons } from "@expo/vector-icons";
+import Header from "@/components/Header";
+import { AntDesign } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 import React, { useEffect, useState } from "react";
 import {
@@ -33,6 +34,7 @@ const EditConceptForm = ({ id }: EditConceptFormProps) => {
   const [message, setMessage] = useState("");
   const [messageType, setMessageType] = useState("");
   const [loading, setLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
   const [titleError, setTitleError] = useState("");
   const [contentError, setContentError] = useState("");
   const [correctOptionError, setCorrectOptionError] = useState("");
@@ -99,10 +101,6 @@ const EditConceptForm = ({ id }: EditConceptFormProps) => {
     );
   }
 
-  const handlePress = () => {
-    navigation.goBack();
-  };
-
   const handleSubmit = async () => {
     let hasError = false;
 
@@ -130,6 +128,7 @@ const EditConceptForm = ({ id }: EditConceptFormProps) => {
     if (hasError) return;
 
     try {
+      setIsLoading(true);
       const conceptApi = new ConceptControllerApi(
         environment,
         environment.basePath,
@@ -143,13 +142,17 @@ const EditConceptForm = ({ id }: EditConceptFormProps) => {
         },
         id
       );
+      setIsLoading(false);
       setMessage("Concept modifié avec succès.");
       setMessageType("success");
+      setTitre("");
+      setContenu("");
       setTimeout(() => {
         navigation.goBack();
       }, 2000);
     } catch (error) {
       console.log(error);
+      setIsLoading(false);
       setMessage("Échec de la modification du concept : " + error.message);
       setMessageType("error");
       setTimeout(() => {
@@ -160,12 +163,7 @@ const EditConceptForm = ({ id }: EditConceptFormProps) => {
 
   return (
     <>
-      <View style={styles.header}>
-        <TouchableOpacity onPress={handlePress}>
-          <Ionicons name="arrow-back" size={24} color="#000000" />
-        </TouchableOpacity>
-        <Text style={styles.headerText}>Modifier un Concept</Text>
-      </View>
+      <Header titre={"Modifier un Concept"} />
       {message && (
         <View
           style={[
@@ -239,7 +237,11 @@ const EditConceptForm = ({ id }: EditConceptFormProps) => {
         <View style={styles.buttonContainer}>
           <TouchableOpacity onPress={handleSubmit}>
             <View style={styles.button}>
-              <Text style={styles.buttonText}>Modifier</Text>
+              {isLoading ? (
+                <ActivityIndicator size="small" color="white" />
+              ) : (
+                <Text style={styles.buttonText}>Modifier</Text>
+              )}
             </View>
           </TouchableOpacity>
         </View>
@@ -249,16 +251,6 @@ const EditConceptForm = ({ id }: EditConceptFormProps) => {
 };
 
 const styles = StyleSheet.create({
-  header: {
-    marginTop: StatusBar.currentHeight,
-    flexDirection: "row",
-    alignItems: "center",
-    paddingHorizontal: 20,
-    paddingVertical: 10,
-    backgroundColor: "#ffffff",
-    borderBottomWidth: 1,
-    borderBottomColor: "#dddddd",
-  },
   headerText: {
     marginLeft: "20%",
     fontSize: 15,

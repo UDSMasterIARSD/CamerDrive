@@ -1,4 +1,4 @@
-import { Ionicons } from "@expo/vector-icons";
+import Header from "@/components/Header";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import { useNavigation } from "@react-navigation/native";
 import React, { useEffect, useState } from "react";
@@ -26,6 +26,7 @@ const EditUserForm = ({ id }: EditCourseFormProps) => {
   const [messageType, setMessageType] = useState("");
   const navigation = useNavigation();
   const [loading, setLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [dateNaiss, setDateNaiss] = useState<Date | null>(null);
@@ -126,6 +127,7 @@ const EditUserForm = ({ id }: EditCourseFormProps) => {
 
     if (hasError) return;
     try {
+      setIsLoading(true);
       const userApi = new UserControllerApi(
         environment,
         environment.basePath,
@@ -140,6 +142,7 @@ const EditUserForm = ({ id }: EditCourseFormProps) => {
         },
         id
       );
+      setIsLoading(false);
       setMessage("Utilisateur modifie avec success.");
       setMessageType("success");
       setNameError("");
@@ -151,6 +154,7 @@ const EditUserForm = ({ id }: EditCourseFormProps) => {
       }, 2000);
     } catch (error) {
       console.log(error);
+      setIsLoading(false);
       setMessage(
         "Echec lors de la modification de la question: " + error.message
       );
@@ -170,12 +174,7 @@ const EditUserForm = ({ id }: EditCourseFormProps) => {
 
   return (
     <>
-      <View style={styles.header}>
-        <TouchableOpacity onPress={handlePress}>
-          <Ionicons name="arrow-back" size={24} color="#000000" />
-        </TouchableOpacity>
-        <Text style={styles.headerText}>Modifier un Utilisateur</Text>
-      </View>
+      <Header titre={"Modifier un Utilisateur"} />
       {message && (
         <View
           style={[
@@ -262,7 +261,11 @@ const EditUserForm = ({ id }: EditCourseFormProps) => {
         <View style={styles.buttonContainer}>
           <TouchableOpacity onPress={handleSubmit}>
             <View style={styles.button}>
-              <Text style={styles.buttonText}>Modifier</Text>
+              {isLoading ? (
+                <ActivityIndicator size="small" color="white" />
+              ) : (
+                <Text style={styles.buttonText}>Modifier</Text>
+              )}
             </View>
           </TouchableOpacity>
         </View>
@@ -272,16 +275,6 @@ const EditUserForm = ({ id }: EditCourseFormProps) => {
 };
 
 const styles = StyleSheet.create({
-  header: {
-    marginTop: 50,
-    flexDirection: "row",
-    alignItems: "center",
-    paddingHorizontal: 20,
-    paddingVertical: 10,
-    backgroundColor: "#ffffff",
-    borderBottomWidth: 1,
-    borderBottomColor: "#dddddd",
-  },
   headerText: {
     marginLeft: "20%",
     fontSize: 15,

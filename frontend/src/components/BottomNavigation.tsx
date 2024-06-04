@@ -31,7 +31,7 @@ const BottomNavigation = (props: BottomNavigationProps) => {
             props.activeCategory === "Home" && styles.activeText,
           ]}
         >
-          Home
+          Accueil
         </Text>
       </Pressable>
 
@@ -56,7 +56,7 @@ const BottomNavigation = (props: BottomNavigationProps) => {
             props.activeCategory === "Courses" && styles.activeText,
           ]}
         >
-          Courses
+          Cours
         </Text>
       </Pressable>
 
@@ -106,7 +106,7 @@ const BottomNavigation = (props: BottomNavigationProps) => {
             props.activeCategory === "LastExam" && styles.activeText,
           ]}
         >
-          Last Exam
+          Anciens Sujets
         </Text>
       </Pressable>
     </View>

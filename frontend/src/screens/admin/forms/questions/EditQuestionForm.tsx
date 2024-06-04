@@ -1,4 +1,5 @@
-import { AntDesign, Ionicons } from "@expo/vector-icons";
+import Header from "@/components/Header";
+import { AntDesign } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 import React, { useEffect, useState } from "react";
 import {
@@ -32,6 +33,7 @@ const EditQuestionForm = ({ id }: EditQuestionFormProps) => {
   const navigation = useNavigation();
   const [dropdownOptions, setDropdownOptions] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
   const [questionError, setQuestionError] = useState("");
   const [optionsError, setOptionsError] = useState("");
   const [correctOptionError, setCorrectOptionError] = useState("");
@@ -116,6 +118,7 @@ const EditQuestionForm = ({ id }: EditQuestionFormProps) => {
 
     if (hasError) return;
     try {
+      setIsLoading(true);
       const questionApi = new QuestionControllerApi(
         environment,
         environment.basePath,
@@ -132,6 +135,7 @@ const EditQuestionForm = ({ id }: EditQuestionFormProps) => {
         },
         id
       );
+      setIsLoading(false);
       setMessage("Question modifie avec success");
       setMessageType("success");
       setTimeout(() => {
@@ -139,23 +143,15 @@ const EditQuestionForm = ({ id }: EditQuestionFormProps) => {
       }, 2000);
     } catch (error) {
       console.log(error);
+      setIsLoading(false);
       setMessage("Erreure de Modification: " + error.message);
       setMessageType("error");
     }
   };
 
-  const handlePress = () => {
-    navigation.goBack();
-  };
-
   return (
     <>
-      <View style={styles.header}>
-        <TouchableOpacity onPress={handlePress}>
-          <Ionicons name="arrow-back" size={24} color="#000000" />
-        </TouchableOpacity>
-        <Text style={styles.headerText}>Modifier une Queston</Text>
-      </View>
+      <Header titre={"Modifier une Question"} />
       {message && (
         <View
           style={[
@@ -249,7 +245,11 @@ const EditQuestionForm = ({ id }: EditQuestionFormProps) => {
         <View style={styles.buttonContainer}>
           <TouchableOpacity onPress={handleSubmit}>
             <View style={styles.button}>
-              <Text style={styles.buttonText}>Modifier</Text>
+              {isLoading ? (
+                <ActivityIndicator size="small" color="white" />
+              ) : (
+                <Text style={styles.buttonText}>Modifier</Text>
+              )}
             </View>
           </TouchableOpacity>
         </View>

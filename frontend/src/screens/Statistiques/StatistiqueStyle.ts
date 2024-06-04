@@ -18,6 +18,11 @@ const StatistiqueStyle = StyleSheet.create({
     borderBottomWidth: 1,
     borderBottomColor: "#dddddd",
   },
+  loadingContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+  },
   testContainer: {
     //flexDirection: "row",
     //flex: 2,

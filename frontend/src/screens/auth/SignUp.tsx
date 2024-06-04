@@ -1,5 +1,5 @@
 import DateTimePicker from "@react-native-community/datetimepicker";
-import { useNavigation } from "@react-navigation/native";
+import { NavigationProp, useNavigation } from "@react-navigation/native";
 import React, { useState } from "react";
 import {
   ActivityIndicator,
@@ -40,7 +40,7 @@ const SignUp = () => {
     confirmPassword: null,
   });
 
-  const navigation = useNavigation();
+  const navigation = useNavigation<NavigationProp<any>>();
 
   const handleRegister = async () => {
     try {
@@ -95,7 +95,7 @@ const SignUp = () => {
         setRegisterError(result.error);
       } else {
         setRegisterError(null);
-        // Navigation vers l'écran suivant en cas de succès
+
         navigation.navigate("SignIn");
       }
     } finally {
@@ -217,7 +217,7 @@ const SignUp = () => {
           </Pressable>
           <Pressable
             onPress={() => {
-              navigation.navigate("SignIn" as never);
+              navigation.navigate("SignIn");
             }}
           >
             <Text style={styles.textSignUp}>

@@ -1,16 +1,15 @@
-import { StatusBar, StyleSheet } from "react-native";
+import { StyleSheet } from "react-native";
 
 const QuestionDetailsStyle = StyleSheet.create({
   container: {
     flex: 1,
     //padding: 16,
     backgroundColor: "#fff",
-    marginTop: StatusBar.currentHeight + 30,
+    
   },
   titleHeader: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
+    
+    alignItems:"flex-end",
     marginBottom: 20,
   },
   titleText: {

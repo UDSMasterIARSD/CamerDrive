@@ -1,5 +1,5 @@
 import { useAuth } from "@/context/AuthContext";
-import { Feather, Ionicons } from "@expo/vector-icons";
+import { Feather } from "@expo/vector-icons";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import { useNavigation } from "@react-navigation/native";
 import axios from "axios";
@@ -8,7 +8,6 @@ import { FichierControllerApi, UserControllerApi } from "generated/index";
 import React, { useState } from "react";
 import {
   Button,
-  Dimensions,
   Image,
   Modal,
   Pressable,
@@ -21,6 +20,7 @@ import {
 import axiosInstance from "../../environments/axiosInstance";
 import environment from "../../environments/environment";
 
+import Header from "@/components/Header";
 import styles from "./ProfileStyle";
 
 const ProfilePage = () => {
@@ -29,16 +29,10 @@ const ProfilePage = () => {
 
   const maxDate = new Date(2007, 11, 31);
 
-  const handlePress = () => {
-    navigation.goBack();
-  };
-
-  const formatDate = (date) => {
+  const formatDate = (date: any) => {
     return date.toISOString().split("T")[0];
   };
 
-  const windowWidth = Dimensions.get("window").width;
-  const marginLeft = windowWidth * 0.2;
   const [profileImage, setProfileImage] = useState("../../../assets/V2.jpg");
   const [modalVisible, setModalVisible] = useState(false);
   const [passwordModalVisible, setPasswordModalVisible] = useState(false);
@@ -289,17 +283,7 @@ const ProfilePage = () => {
 
   return (
     <>
-      <View style={styles.header1}>
-        <TouchableOpacity onPress={handlePress}>
-          <Ionicons name="arrow-back" size={24} color="#000000" />
-        </TouchableOpacity>
-
-        <Text
-          style={{ marginLeft: marginLeft, fontSize: 15, fontWeight: "bold" }}
-        >
-          Profil
-        </Text>
-      </View>
+      <Header titre={"Profil"} />
       <ScrollView>
         <View style={styles.container}>
           <View style={styles.header}>

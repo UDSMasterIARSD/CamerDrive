@@ -1,47 +1,89 @@
-import { Ionicons } from "@expo/vector-icons";
+import Header from "@/components/Header";
+import axiosInstance from "@/environments/axiosInstance";
+import environment from "@/environments/environment";
 import { NavigationProp, useNavigation } from "@react-navigation/native";
-import React from "react";
-import {
-  Dimensions,
-  ScrollView,
-  Text,
-  TouchableOpacity,
-  View,
-} from "react-native";
+import { QuizControllerApi, ScoreUserQuizControllerApi } from "generated/index";
+import React, { useEffect, useState } from "react";
+import { ActivityIndicator, ScrollView, Text, View } from "react-native";
 import StatistiqueStyle from "./StatistiqueStyle";
-import { Test, TestData } from "./TestData";
+
+interface ScoreDetail {
+  id: number;
+  note: number;
+  quiz: Quiz;
+  status: string;
+}
+
+interface Quiz {
+  id: number;
+  questions: Array<Question>;
+}
+
+interface Question {
+  questionText: string;
+}
 
 const Statistiques: React.FC = () => {
   const navigation = useNavigation<NavigationProp<any>>();
+  const [testDetails, setTestDetails] = useState<ScoreDetail[]>([]);
+  const [loading, setLoading] = useState<boolean>(true);
 
-  const handlePress = () => {
-    navigation.goBack();
-  };
+  useEffect(() => {
+    const fetchAllScores = async () => {
+      const scoreQuizApi = new ScoreUserQuizControllerApi(
+        environment,
+        environment.basePath,
+        axiosInstance
+      );
+      try {
+        const scoresResponse = await scoreQuizApi.indexScoreUserQuiz();
+        const scores = scoresResponse.data;
+        const detailedScores = await Promise.all(
+          scores.map(async (score: any) => {
+            const quizResponse = await new QuizControllerApi(
+              environment,
+              environment.basePath,
+              axiosInstance
+            ).showQuiz(score.quiz.id);
+            const quiz = quizResponse.data;
+            const status =
+              score.note >= quiz.questions!.length / 2 ? "PASSED" : "FAILED";
+            return {
+              ...score,
+              quiz,
+              status,
+              quizQuestionsTotal: quiz.questions!.length,
+            };
+          })
+        );
+        setTestDetails(detailedScores);
+      } catch (error) {
+        console.error("Error fetching details:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
 
-  const windowWidth = Dimensions.get("window").width;
-  const marginLeft = windowWidth * 0.2;
+    fetchAllScores();
+  }, []);
+
+  if (loading) {
+    return (
+      <View style={StatistiqueStyle.loadingContainer}>
+        <ActivityIndicator size="large" color="#0000ff" />
+      </View>
+    );
+  }
+
   return (
     <>
-      <View>
-        <View style={StatistiqueStyle.header}>
-          <TouchableOpacity onPress={handlePress}>
-            <Ionicons name="arrow-back" size={24} color="#000000" />
-          </TouchableOpacity>
-
-          <Text
-            style={{ marginLeft: marginLeft, fontSize: 15, fontWeight: "bold" }}
-          >
-            Historique des Test
-          </Text>
-        </View>
-      </View>
+      <Header titre="Historique des Tests" />
       <ScrollView>
         <View style={{ marginTop: 15 }}>
           <Text style={{ fontSize: 20, marginLeft: 20 }}>Vue d'ensemble</Text>
         </View>
-
         <View style={StatistiqueStyle.container}>
-          {TestData.map((test: Test) => (
+          {testDetails.map((test) => (
             <View
               key={test.id}
               style={[
@@ -64,20 +106,20 @@ const Statistiques: React.FC = () => {
                 </Text>
               </View>
               <View style={StatistiqueStyle.testItemContainer}>
-                <Text style={StatistiqueStyle.text}>Numero du Test</Text>
-                <Text style={StatistiqueStyle.text}>{test.id}</Text>
+                <Text style={StatistiqueStyle.text}>Numero du Test:</Text>
+                <Text style={StatistiqueStyle.text}>{test.quiz.id}</Text>
               </View>
               <View style={StatistiqueStyle.testItemContainer}>
                 <Text style={StatistiqueStyle.text}>
-                  Number de reponses justes:
+                  Nombre de réponses justes:
                 </Text>
                 <Text style={StatistiqueStyle.text}>
-                  {test.numberOfCorrectAnswers}/{test.numberOfQuestions}
+                  {test.note}/{test.quiz.questions.length}
                 </Text>
               </View>
               <View style={StatistiqueStyle.testItemContainer}>
-                <Text style={StatistiqueStyle.text}>Duree Totale:</Text>
-                <Text style={StatistiqueStyle.text}>{test.Time} min</Text>
+                <Text style={StatistiqueStyle.text}>Durée Totale:</Text>
+                <Text style={StatistiqueStyle.text}> min</Text>
               </View>
             </View>
           ))}

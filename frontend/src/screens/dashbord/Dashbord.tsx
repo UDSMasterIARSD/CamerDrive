@@ -47,7 +47,7 @@ const Dashbord = () => {
   const navigation = useNavigation();
   const { authState } = useAuth();
   console.log("userName", authState?.user?.username);
-  console.log("initialLetter", authState?.userName?.charAt(0));
+  console.log("initialLetter", authState!.user!.username!.charAt(0));
 
   const navigationState = useNavigationState((state) => state);
 
@@ -121,7 +121,6 @@ const Dashbord = () => {
       case "Courses":
         return <Courses />;
       case "Quiz":
-        console.log("Rendering Quiz page");
         return <Quiz />;
       case "LastExam":
         return <LastExam />;
@@ -207,7 +206,7 @@ const Dashbord = () => {
           <View style={DashbordStyle.initialLetterContainer}>
             <Pressable onPress={goToProfilePage}>
               <Text style={DashbordStyle.initialLetter}>
-                {authState?.user?.username.charAt(0)}
+                {authState!.user!.username!.charAt(0)}
               </Text>
             </Pressable>
           </View>

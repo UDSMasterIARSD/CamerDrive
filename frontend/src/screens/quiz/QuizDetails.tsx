@@ -1,8 +1,11 @@
+import { useAuth } from "@/context/AuthContext";
+import { Ionicons } from "@expo/vector-icons";
 import { useFocusEffect, useNavigation } from "@react-navigation/native";
 import React, { useCallback, useEffect, useState } from "react";
 import {
   ActivityIndicator,
   BackHandler,
+  Dimensions,
   Modal,
   Pressable,
   ScrollView,
@@ -13,7 +16,11 @@ import {
   View,
 } from "react-native";
 import Icon from "react-native-vector-icons/Ionicons"; // Assurez-vous d'avoir installé react-native-vector-icons
-import { QuizControllerApi } from "../../../generated/index";
+import {
+  QuizControllerApi,
+  ScoreUserQuizControllerApi,
+  UserControllerApi,
+} from "../../../generated/index";
 import axiosInstance from "../../environments/axiosInstance";
 import environment from "../../environments/environment";
 
@@ -22,6 +29,7 @@ const QuizDetails = ({ route }) => {
   const navigation = useNavigation();
 
   const [quizDetails, setQuizDetails] = useState(null);
+  const [userDetails, setUserDetails] = useState(null);
   const [loading, setLoading] = useState(true);
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [selectedOption, setSelectedOption] = useState(null);
@@ -33,6 +41,12 @@ const QuizDetails = ({ route }) => {
   const [buttonText, setButtonText] = useState("Valider");
   const [optionsDisabled, setOptionsDisabled] = useState(false);
   const [emoji, setEmoji] = useState("");
+  const windowWidth = Dimensions.get("window").width;
+  const marginLeft = windowWidth * 0.2;
+  const [currentQuestionNumber, setCurrentQuestionNumber] = useState(1);
+  const { authState } = useAuth();
+
+  const userId = authState?.user?.id;
 
   useEffect(() => {
     const fetchQuizDetails = async () => {
@@ -54,6 +68,28 @@ const QuizDetails = ({ route }) => {
 
     fetchQuizDetails();
   }, [id]);
+
+  useEffect(() => {
+    const fetchUserDetails = async () => {
+      try {
+        const userApi = new UserControllerApi(
+          environment,
+          environment.basePath,
+          axiosInstance
+        );
+
+        const response = await userApi.showUser(userId);
+        setUserDetails(response.data);
+        console.log(response.data);
+      } catch (error) {
+        console.log(error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchUserDetails();
+  }, [userId]);
 
   useFocusEffect(
     useCallback(() => {
@@ -80,6 +116,7 @@ const QuizDetails = ({ route }) => {
   const handleNextQuestion = () => {
     if (currentQuestionIndex < quizDetails.questions.length - 1) {
       setCurrentQuestionIndex(currentQuestionIndex + 1);
+      setCurrentQuestionNumber(currentQuestionNumber + 1);
       setSelectedOption(null);
       setAnswered(false);
       setErrorMessage("");
@@ -90,6 +127,9 @@ const QuizDetails = ({ route }) => {
       const endTime = new Date();
       const duration = Math.floor((endTime - startTime) / 1000);
       const formattedDuration = formatDuration(duration);
+
+      createUserScoreQuiz(userDetails, quizDetails!, score);
+
       navigation.navigate("ScorePage", {
         score,
         totalQuestions: quizDetails.questions.length,
@@ -148,218 +188,281 @@ const QuizDetails = ({ route }) => {
   ].filter((option) => option);
 
   return (
-    <View style={styles.container}>
-      <View style={styles.titleContainer}>
-        <Text style={styles.titleText}>QuizTitle: {quizDetails.titre}</Text>
-      </View>
-      <ScrollView style={styles.detailsContainer}>
-        <Text style={styles.questionText}>
-          {currentQuestionIndex + 1}. {currentQuestion.libelle}
-        </Text>
-        <View style={styles.optionsContainer}>
-          {options.map((option, index) => (
-            <Pressable
-              key={index}
-              onPress={() => handleOptionPress(option)}
-              style={[
-                styles.optionItem,
-                selectedOption === option ? styles.selectedOption : null,
-                answered &&
-                selectedOption === option &&
-                option === currentQuestion.correctOption
-                  ? styles.correctOption
-                  : answered &&
-                    selectedOption === option &&
-                    option !== currentQuestion.correctOption
-                  ? styles.incorrectOption
-                  : answered && option === currentQuestion.correctOption
-                  ? styles.correctOption
-                  : null,
-                options.length === 3 ? styles.optionItemThree : null,
-              ]}
-              disabled={optionsDisabled}
-            >
-              <Text style={styles.optionText}>{option}</Text>
-            </Pressable>
-          ))}
-        </View>
-        {errorMessage ? (
-          <Text style={styles.errorMessage}>{errorMessage}</Text>
-        ) : null}
-        <View style={styles.buttonsContainer}>
-          <Pressable
-            style={[
-              styles.button,
-              buttonText === "Valider"
-                ? styles.validateButton
-                : styles.continueButton,
-            ]}
-            onPress={buttonText === "Valider" ? handleValidate : handleContinue}
-          >
-            <Text style={styles.buttonText}>
-              {buttonText}{" "}
-              {buttonText === "Continuer" && (
-                <Icon name="arrow-forward" size={16} color="#fff" />
-              )}
-            </Text>
-          </Pressable>
-        </View>
-        {answered && <Text style={styles.emojiText}>{emoji}</Text>}
-      </ScrollView>
+    <>
+      <View style={styles.header1}>
+        <TouchableOpacity onPress={handlePress}>
+          <Ionicons name="arrow-back" size={24} color="#000000" />
+        </TouchableOpacity>
 
-      <Modal
-        animationType="slide"
-        transparent={true}
-        visible={modalVisible}
-        onRequestClose={() => {
-          setModalVisible(!modalVisible);
-        }}
-      >
-        <View style={styles.modalContainer}>
-          <View style={styles.modalContent}>
-            <Icon name="arrow-back" size={30} color="#000" />
-            <Text style={styles.modalText}>Voulez-vous revenir au menu?</Text>
-            <Text style={styles.modalSubText}>
-              La progression de la série sera perdue.
-            </Text>
-            <TouchableOpacity
-              style={styles.modalButton}
-              onPress={() => setModalVisible(false)}
-            >
-              <Text style={styles.modalButtonText}>Continuer la série</Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              style={[styles.modalButton, styles.modalButtonDanger]}
-              onPress={() => {
-                setModalVisible(false);
-                navigation.navigate("Home");
-              }}
-            >
-              <Text style={styles.modalButtonText}>Retourner au menu</Text>
-            </TouchableOpacity>
-          </View>
+        <Text
+          style={{ marginLeft: marginLeft, fontSize: 15, fontWeight: "bold" }}
+        >
+          Question {currentQuestionNumber}/{quizDetails.questions.length}
+        </Text>
+      </View>
+      <View style={styles.container}>
+        <View style={styles.titleContainer}>
+          <Text style={styles.titleText}>QuizTitle: {quizDetails.titre}</Text>
         </View>
-      </Modal>
-    </View>
+        <ScrollView style={styles.detailsContainer}>
+          <Text style={styles.questionText}>
+            {currentQuestionIndex + 1}. {currentQuestion.libelle}
+          </Text>
+          <View style={styles.optionsContainer}>
+            {options.map((option, index) => (
+              <Pressable
+                key={index}
+                onPress={() => handleOptionPress(option)}
+                style={[
+                  styles.optionItem,
+                  selectedOption === option ? styles.selectedOption : null,
+                ]}
+                disabled={optionsDisabled}
+              >
+                <Text
+                  style={[
+                    styles.optionText,
+                    answered &&
+                    selectedOption === option &&
+                    option === currentQuestion.correctOption
+                      ? styles.correctText
+                      : answered &&
+                        selectedOption === option &&
+                        option !== currentQuestion.correctOption
+                      ? styles.incorrectText
+                      : answered && option === currentQuestion.correctOption
+                      ? styles.correctText
+                      : null,
+                  ]}
+                >
+                  {String.fromCharCode(97 + index)}) {option}
+                </Text>
+                <View style={styles.radioButton}>
+                  <View
+                    style={[
+                      styles.radioCircle,
+                      selectedOption === option
+                        ? answered
+                          ? option === currentQuestion.correctOption
+                            ? styles.radioCorrect
+                            : styles.radioIncorrect
+                          : styles.radioSelected
+                        : null,
+                    ]}
+                  >
+                    {answered && selectedOption === option && (
+                      <Ionicons
+                        name={
+                          option === currentQuestion.correctOption
+                            ? "checkmark"
+                            : "close"
+                        }
+                        size={16}
+                        color="#fff"
+                      />
+                    )}
+                  </View>
+                </View>
+              </Pressable>
+            ))}
+          </View>
+          {errorMessage ? (
+            <Text style={styles.errorMessage}>{errorMessage}</Text>
+          ) : null}
+          <View style={styles.buttonsContainer}>
+            <Pressable
+              style={[
+                styles.button,
+                buttonText === "Valider"
+                  ? styles.validateButton
+                  : styles.continueButton,
+              ]}
+              onPress={
+                buttonText === "Valider" ? handleValidate : handleContinue
+              }
+            >
+              <Text style={styles.buttonText}>
+                {buttonText}{" "}
+                {buttonText === "Continuer" && (
+                  <Icon name="arrow-forward" size={16} color="#fff" />
+                )}
+              </Text>
+            </Pressable>
+          </View>
+          {answered && <Text style={styles.emojiText}>{emoji}</Text>}
+        </ScrollView>
+
+        <Modal
+          animationType="slide"
+          transparent={true}
+          visible={modalVisible}
+          onRequestClose={() => {
+            setModalVisible(!modalVisible);
+          }}
+        >
+          <View style={styles.modalContainer}>
+            <View style={styles.modalContent}>
+              <Icon name="arrow-back" size={30} color="#000" />
+              <Text style={styles.modalText}>Voulez-vous revenir au menu?</Text>
+              <Text style={styles.modalSubText}>
+                La progression de la série sera perdue.
+              </Text>
+              <TouchableOpacity
+                style={styles.modalButton}
+                onPress={() => setModalVisible(false)}
+              >
+                <Text style={styles.modalButtonText}>Continuer la série</Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={[styles.modalButton, styles.modalButtonDanger]}
+                onPress={() => {
+                  setModalVisible(false);
+                  navigation.navigate("Home");
+                }}
+              >
+                <Text style={styles.modalButtonText}>Retourner au menu</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+        </Modal>
+      </View>
+    </>
   );
+
+  async function createUserScoreQuiz(user: any, quiz: any, note: any) {
+    try {
+      const quizScoreApi = new ScoreUserQuizControllerApi(
+        environment,
+        environment.basePath,
+        axiosInstance
+      );
+      const response = await quizScoreApi.createUserQuiz({
+        quiz,
+        user,
+        note,
+      });
+      console.log("Score submitted successfully:", response.data);
+    } catch (error) {
+      console.error("Failed to submit score:", error);
+    }
+  }
 };
 
 export default QuizDetails;
 
 const styles = StyleSheet.create({
+  header1: {
+    marginTop: StatusBar.currentHeight,
+    flexDirection: "row",
+    alignItems: "center",
+    paddingHorizontal: 20,
+    paddingVertical: 10,
+    backgroundColor: "#fff",
+  },
   container: {
     flex: 1,
-    backgroundColor: "#f0f8ff",
-    marginTop: StatusBar.currentHeight! + 30,
+    paddingHorizontal: 20,
+    backgroundColor: "#fff",
   },
   loadingContainer: {
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
   },
-  detailsContainer: {
-    width: "90%",
-    alignSelf: "center",
-    padding: 20,
-    backgroundColor: "#fff",
-    borderRadius: 10,
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.25,
-    shadowRadius: 3.84,
-    elevation: 5,
-    marginBottom: 20,
-  },
   titleContainer: {
-    width: "90%",
-    alignSelf: "center",
-    padding: 20,
-    backgroundColor: "#fff",
-    borderRadius: 10,
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.25,
-    shadowRadius: 3.84,
-    elevation: 5,
-    marginTop: StatusBar.currentHeight + 30,
-    marginBottom: 30,
+    marginBottom: 20,
   },
   titleText: {
-    fontSize: 24,
+    fontSize: 20,
     fontWeight: "bold",
-    marginBottom: 20,
     textAlign: "center",
-    color: "#333",
   },
-  questionsContainer: {
-    marginTop: 10,
+  detailsContainer: {
+    flex: 1,
   },
   questionText: {
-    fontSize: 16,
-    color: "#333",
-    textAlign: "left",
-    marginBottom: 30,
+    fontSize: 18,
+    fontWeight: "bold",
+    marginBottom: 20,
   },
   optionsContainer: {
-    flexDirection: "row",
-    flexWrap: "wrap",
-    justifyContent: "space-between",
+    marginBottom: 20,
   },
   optionItem: {
-    width: "48%",
-    backgroundColor: "#e0e0e0",
-    borderRadius: 10,
-    padding: 10,
-    marginBottom: 20,
+    flexDirection: "row",
     alignItems: "center",
-  },
-  optionItemThree: {
-    width: "30%",
+    paddingVertical: 10,
+    paddingHorizontal: 15,
+    backgroundColor: "#f9f9f9",
+    borderWidth: 1,
+    borderColor: "#ddd",
+    borderRadius: 5,
+    marginBottom: 10,
   },
   selectedOption: {
-    borderColor: "blue",
-    borderWidth: 2,
-  },
-  correctOption: {
-    backgroundColor: "green",
-  },
-  incorrectOption: {
-    backgroundColor: "red",
+    backgroundColor: "#ddd",
   },
   optionText: {
+    flex: 1,
     fontSize: 16,
-    color: "#333",
+  },
+  radioButton: {
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  radioCircle: {
+    width: 24,
+    height: 24,
+    borderRadius: 12,
+    borderWidth: 2,
+    borderColor: "#ccc",
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  radioSelected: {
+    borderColor: "#007AFF",
+  },
+  radioCorrect: {
+    backgroundColor: "green",
+  },
+  radioIncorrect: {
+    backgroundColor: "red",
+  },
+  correctText: {
+    color: "green",
+  },
+  incorrectText: {
+    color: "red",
+  },
+  errorMessage: {
+    color: "red",
+    fontSize: 16,
+    marginBottom: 20,
+    textAlign: "center",
   },
   buttonsContainer: {
     flexDirection: "row",
     justifyContent: "center",
-    alignItems: "center",
-    marginTop: 20,
   },
   button: {
-    width: "48%",
-    padding: 15,
-    borderRadius: 20,
-    alignItems: "center",
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+    borderRadius: 5,
   },
   validateButton: {
-    backgroundColor: "blue",
+    backgroundColor: "#007AFF",
   },
   continueButton: {
-    backgroundColor: "#808080",
+    backgroundColor: "#28a745",
+    flexDirection: "row",
+    alignItems: "center",
   },
   buttonText: {
-    color: "white",
+    color: "#fff",
     fontSize: 16,
-    fontWeight: "bold",
-  },
-  errorMessage: {
-    color: "red",
-    textAlign: "center",
-    marginTop: 10,
   },
   emojiText: {
-    fontSize: 24,
+    fontSize: 30,
     textAlign: "center",
     marginTop: 20,
   },
@@ -367,13 +470,13 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
-    backgroundColor: "rgba(0, 0, 0, 0.5)",
+    backgroundColor: "rgba(0,0,0,0.5)",
   },
   modalContent: {
-    width: "80%",
-    backgroundColor: "white",
-    borderRadius: 10,
+    width: 300,
     padding: 20,
+    backgroundColor: "#fff",
+    borderRadius: 10,
     alignItems: "center",
   },
   modalText: {
@@ -382,24 +485,22 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
   modalSubText: {
-    fontSize: 14,
-    color: "red",
+    fontSize: 16,
     marginBottom: 20,
+    textAlign: "center",
   },
   modalButton: {
-    width: "100%",
-    backgroundColor: "blue",
-    padding: 15,
-    borderRadius: 10,
-    alignItems: "center",
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+    borderRadius: 5,
     marginBottom: 10,
+    backgroundColor: "#007AFF",
   },
   modalButtonDanger: {
     backgroundColor: "red",
   },
   modalButtonText: {
-    color: "white",
+    color: "#fff",
     fontSize: 16,
-    fontWeight: "bold",
   },
 });

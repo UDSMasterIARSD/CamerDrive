@@ -1,12 +1,12 @@
-import { Ionicons } from "@expo/vector-icons";
+import Header from "@/components/Header";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import { useNavigation } from "@react-navigation/native";
 import React, { useState } from "react";
 import {
+  ActivityIndicator,
   Dimensions,
   Pressable,
   ScrollView,
-  StatusBar,
   StyleSheet,
   Text,
   TextInput,
@@ -32,6 +32,7 @@ const AddUserForm = () => {
   const navigation = useNavigation();
   const [dropdownOptions, setDropdownOptions] = useState([]);
   const [showDatePicker, setShowDatePicker] = useState<boolean>(false);
+  const [loading, setLoading] = useState(false);
 
   const [dateOfBirth, setDateOfBirth] = useState<Date | null>(null);
   const [password, setPassword] = useState<string>("");
@@ -82,6 +83,7 @@ const AddUserForm = () => {
     if (hasError) return;
 
     try {
+      setLoading(true);
       const userApi = new UserControllerApi(
         environment,
         environment.basePath,
@@ -94,6 +96,7 @@ const AddUserForm = () => {
         dateNaiss: dateOfBirth,
       });
       setSuccess(true);
+      setLoading(false);
       setNameError("");
       setEmailError("");
       setPasswordError("");
@@ -101,6 +104,7 @@ const AddUserForm = () => {
       navigation.goBack();
     } catch (error) {
       console.log(error);
+      setLoading(false);
       setSuccess(false);
       setError(error.message);
     }
@@ -114,12 +118,7 @@ const AddUserForm = () => {
 
   return (
     <>
-      <View style={styles.header}>
-        <TouchableOpacity onPress={handlePress}>
-          <Ionicons name="arrow-back" size={24} color="#000000" />
-        </TouchableOpacity>
-        <Text style={styles.headerText}>Ajouter un Utilisateur</Text>
-      </View>
+      <Header titre={"Ajouter un Utilisateur"} />
       <ScrollView style={styles.scrollView}>
         <View style={styles.formContainer}>
           <View style={styles.textInputContainer}>
@@ -197,7 +196,11 @@ const AddUserForm = () => {
         <View style={styles.buttonContainer}>
           <TouchableOpacity onPress={handleSubmit}>
             <View style={styles.button}>
-              <Text style={styles.buttonText}>Ajouter</Text>
+              {loading ? (
+                <ActivityIndicator size="small" color="white" />
+              ) : (
+                <Text style={styles.buttonText}>Ajouter</Text>
+              )}
             </View>
           </TouchableOpacity>
         </View>
@@ -214,16 +217,6 @@ const AddUserForm = () => {
 };
 
 const styles = StyleSheet.create({
-  header: {
-    marginTop: StatusBar.currentHeight,
-    flexDirection: "row",
-    alignItems: "center",
-    paddingHorizontal: 20,
-    paddingVertical: 10,
-    backgroundColor: "#ffffff",
-    borderBottomWidth: 1,
-    borderBottomColor: "#dddddd",
-  },
   headerText: {
     marginLeft: "20%",
     fontSize: 15,

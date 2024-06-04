@@ -1,4 +1,5 @@
-import { AntDesign, Ionicons } from "@expo/vector-icons";
+import Header from "@/components/Header";
+import { AntDesign } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 import React, { useEffect, useState } from "react";
 import {
@@ -159,12 +160,7 @@ const EditQuizForm = ({ id }: EditQuizFormProps) => {
 
   return (
     <>
-      <View style={styles.header}>
-        <TouchableOpacity onPress={handlePress}>
-          <Ionicons name="arrow-back" size={24} color="#000000" />
-        </TouchableOpacity>
-        <Text style={styles.headerText}>Modifier Quiz</Text>
-      </View>
+      <Header titre={"Modifier un Quiz"} />
       {message && (
         <View
           style={[
@@ -226,16 +222,6 @@ const EditQuizForm = ({ id }: EditQuizFormProps) => {
 };
 
 const styles = StyleSheet.create({
-  header: {
-    marginTop: 50,
-    flexDirection: "row",
-    alignItems: "center",
-    paddingHorizontal: 20,
-    paddingVertical: 10,
-    backgroundColor: "#ffffff",
-    borderBottomWidth: 1,
-    borderBottomColor: "#dddddd",
-  },
   headerText: {
     marginLeft: "20%",
     fontSize: 15,

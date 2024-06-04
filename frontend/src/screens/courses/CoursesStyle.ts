@@ -1,6 +1,10 @@
 import { Dimensions, StatusBar, StyleSheet } from "react-native";
 
 const CoursesStyle = StyleSheet.create({
+  fstContainer:{
+    backgroundColor:"#f0f8ff",
+    height:Dimensions.get("window").height,
+  },
   container: {
     backgroundColor: "white",
     marginBottom: 15,

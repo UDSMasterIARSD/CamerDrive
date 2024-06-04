@@ -1,7 +1,9 @@
-import { AntDesign, Ionicons } from "@expo/vector-icons";
+import Header from "@/components/Header";
+import { AntDesign } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 import React, { useEffect, useState } from "react";
 import {
+  ActivityIndicator,
   Alert,
   Dimensions,
   ScrollView,
@@ -31,6 +33,7 @@ const AddQuizForm = () => {
   const [messageType, setMessageType] = useState("");
   const [titleError, setTitleError] = useState("");
   const [loading, setLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
   const [questionError, setQuestionError] = useState("");
   const [courseError, setCourseError] = useState("");
   const navigation = useNavigation();
@@ -116,6 +119,7 @@ const AddQuizForm = () => {
     if (hasError) return;
 
     try {
+      setIsLoading(true);
       const quizApi = new QuizControllerApi(
         environment,
         environment.basePath,
@@ -127,6 +131,7 @@ const AddQuizForm = () => {
         questions: selectedQuestions,
       });
       console.log("cours :", selectedCourse);
+      setIsLoading(false);
       //console.log("questions :", selectedQuestions);
       setMessage("Quiz ajouté avec succès.");
       setMessageType("success");
@@ -138,6 +143,7 @@ const AddQuizForm = () => {
       console.log(error);
       console.log("cours :", selectedCourse);
       console.log("questions :", selectedQuestions);
+      setIsLoading(false);
       setMessage("Échec de l'ajout du quiz : " + error.message);
       setMessageType("error");
       setTimeout(() => {
@@ -148,12 +154,7 @@ const AddQuizForm = () => {
 
   return (
     <>
-      <View style={styles.header}>
-        <TouchableOpacity onPress={handlePress}>
-          <Ionicons name="arrow-back" size={24} color="#000000" />
-        </TouchableOpacity>
-        <Text style={styles.headerText}>Ajouter un Quiz</Text>
-      </View>
+      <Header titre={"Ajouter un Quiz"} />
       {message && (
         <View
           style={[
@@ -246,7 +247,11 @@ const AddQuizForm = () => {
         <View style={styles.buttonContainer}>
           <TouchableOpacity onPress={handleSubmit}>
             <View style={styles.button}>
-              <Text style={styles.buttonText}>Ajouter</Text>
+              {isLoading ? (
+                <ActivityIndicator size="small" color="white" />
+              ) : (
+                <Text style={styles.buttonText}>Ajouter</Text>
+              )}
             </View>
           </TouchableOpacity>
         </View>
@@ -256,16 +261,6 @@ const AddQuizForm = () => {
 };
 
 const styles = StyleSheet.create({
-  header: {
-    marginTop: StatusBar.currentHeight,
-    flexDirection: "row",
-    alignItems: "center",
-    paddingHorizontal: 20,
-    paddingVertical: 10,
-    backgroundColor: "#ffffff",
-    borderBottomWidth: 1,
-    borderBottomColor: "#dddddd",
-  },
   headerText: {
     marginLeft: "20%",
     fontSize: 15,

@@ -1,13 +1,19 @@
 import { Ionicons } from "@expo/vector-icons";
-import { useFocusEffect, useNavigation } from "@react-navigation/native";
+import {
+  NavigationProp,
+  useFocusEffect,
+  useNavigation,
+} from "@react-navigation/native";
 import React, { useCallback } from "react";
 import {
   Alert,
   AlertOptions,
   BackHandler,
+  Dimensions,
   Pressable,
   ScrollView,
   Text,
+  TouchableOpacity,
   View,
   ViewStyle,
 } from "react-native";
@@ -20,7 +26,7 @@ declare interface CustomAlertOptions extends AlertOptions {
 }
 
 const AdminDashbord: React.FC = () => {
-  const navigation = useNavigation();
+  const navigation = useNavigation<NavigationProp<any>>();
   const { onLogout } = useAuth();
 
   useFocusEffect(
@@ -59,6 +65,9 @@ const AdminDashbord: React.FC = () => {
       } as CustomAlertOptions
     );
 
+  const windowWidth = Dimensions.get("window").width;
+  const marginLeft = windowWidth * 0.1;
+
   const handleTaskPress = (task: Task) => {
     switch (task.text) {
       case "Gestion des questions":
@@ -79,6 +88,10 @@ const AdminDashbord: React.FC = () => {
       default:
         break;
     }
+  };
+
+  const handlePress = () => {
+    navigation.goBack();
   };
 
   const createTwoButtonAlert = () =>
@@ -108,11 +121,18 @@ const AdminDashbord: React.FC = () => {
 
   return (
     <>
+      <View style={AdminDashbordStyle.header1}>
+        <TouchableOpacity onPress={handlePress}>
+          <Ionicons name="arrow-back" size={24} color="#000000" />
+        </TouchableOpacity>
+
+        <Text style={{ fontSize: 15, fontWeight: "bold" }}>Accueil</Text>
+        <Pressable onPress={createTwoButtonAlert}>
+          <Ionicons name="log-out" size={30} color="#003f5c" />
+        </Pressable>
+      </View>
       <ScrollView>
         <View style={AdminDashbordStyle.container}>
-          <Pressable style={{ marginLeft: 10 }} onPress={createTwoButtonAlert}>
-            <Ionicons name="log-out" size={30} color="#003f5c" />
-          </Pressable>
           <Text style={AdminDashbordStyle.textBelowLine}>
             Vous pouvez effectuer les tâches suivantes
           </Text>
