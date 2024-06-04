@@ -1,4 +1,4 @@
-import { Ionicons } from "@expo/vector-icons";
+import Header from "@/components/Header";
 import { useNavigation } from "@react-navigation/native";
 import React from "react";
 import {
@@ -8,7 +8,6 @@ import {
   StatusBar,
   StyleSheet,
   Text,
-  TouchableOpacity,
   View,
 } from "react-native";
 
@@ -24,17 +23,7 @@ const AboutUs = () => {
 
   return (
     <>
-      <View style={styles.header}>
-        <TouchableOpacity onPress={handlePress}>
-          <Ionicons name="arrow-back" size={24} color="#000000" />
-        </TouchableOpacity>
-
-        <Text
-          style={{ marginLeft: marginLeft, fontSize: 15, fontWeight: "bold" }}
-        >
-          A Propos de nous
-        </Text>
-      </View>
+      <Header titre={"A Propos"} />
 
       <ScrollView style={styles.container}>
         <View style={styles.header1}>

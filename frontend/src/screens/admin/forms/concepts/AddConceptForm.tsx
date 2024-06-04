@@ -1,7 +1,9 @@
-import { AntDesign, Ionicons } from "@expo/vector-icons";
+import Header from "@/components/Header";
+import { AntDesign } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 import React, { useEffect, useState } from "react";
 import {
+  ActivityIndicator,
   Alert,
   Dimensions,
   ScrollView,
@@ -30,6 +32,7 @@ const AddConceptForm = () => {
   const [titleError, setTitleError] = useState("");
   const [contentError, setContentError] = useState("");
   const [loading, setLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
   const [correctOptionError, setCorrectOptionError] = useState("");
   const navigation = useNavigation();
 
@@ -89,6 +92,7 @@ const AddConceptForm = () => {
     if (hasError) return;
 
     try {
+      setIsLoading(true);
       const conceptApi = new ConceptControllerApi(
         environment,
         environment.basePath,
@@ -99,6 +103,7 @@ const AddConceptForm = () => {
         contenu: contenu,
         cours: selectedCourse.value,
       });
+      setIsLoading(false);
       setMessage("Concept ajouté avec succès.");
       setMessageType("success");
       setTitleError("");
@@ -111,6 +116,7 @@ const AddConceptForm = () => {
       }, 2000);
     } catch (error) {
       console.log(error);
+      setIsLoading(false);
       setMessage("Échec de l'ajout du concept : " + error.message);
       setMessageType("error");
       setTimeout(() => {
@@ -121,12 +127,7 @@ const AddConceptForm = () => {
 
   return (
     <>
-      <View style={styles.header}>
-        <TouchableOpacity onPress={handlePress}>
-          <Ionicons name="arrow-back" size={24} color="#000000" />
-        </TouchableOpacity>
-        <Text style={styles.headerText}>Ajouter un Concept</Text>
-      </View>
+      <Header titre={"Ajouter un Concpet"} />
       {message && (
         <View
           style={[
@@ -200,7 +201,11 @@ const AddConceptForm = () => {
         <View style={styles.buttonContainer}>
           <TouchableOpacity onPress={handleSubmit}>
             <View style={styles.button}>
-              <Text style={styles.buttonText}>Ajouter</Text>
+              {isLoading ? (
+                <ActivityIndicator size="small" color="white" />
+              ) : (
+                <Text style={styles.buttonText}>Ajouter</Text>
+              )}
             </View>
           </TouchableOpacity>
         </View>
@@ -210,16 +215,6 @@ const AddConceptForm = () => {
 };
 
 const styles = StyleSheet.create({
-  header: {
-    marginTop: StatusBar.currentHeight,
-    flexDirection: "row",
-    alignItems: "center",
-    paddingHorizontal: 20,
-    paddingVertical: 10,
-    backgroundColor: "#ffffff",
-    borderBottomWidth: 1,
-    borderBottomColor: "#dddddd",
-  },
   headerText: {
     marginLeft: "20%",
     fontSize: 15,

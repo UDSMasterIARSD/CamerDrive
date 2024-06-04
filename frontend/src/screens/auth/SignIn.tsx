@@ -1,5 +1,5 @@
 import { Ionicons } from "@expo/vector-icons";
-import { useNavigation } from "@react-navigation/native";
+import { NavigationProp, useNavigation } from "@react-navigation/native";
 import { withExpoSnack } from "nativewind";
 import React, { useState } from "react";
 import {
@@ -16,7 +16,7 @@ import {
 import { useAuth } from "../../context/AuthContext";
 
 const SignIn = () => {
-  const navigation = useNavigation();
+  const navigation = useNavigation<NavigationProp<any>>();
 
   const [name, setName] = useState("");
   const [password, setPassword] = useState("");
@@ -50,7 +50,7 @@ const SignIn = () => {
         setLoginError(result.error);
       } else {
         setLoginError(null);
-        // Navigation vers l'écran suivant en cas de succès
+
         navigation.navigate("HomeScreen");
       }
     } finally {

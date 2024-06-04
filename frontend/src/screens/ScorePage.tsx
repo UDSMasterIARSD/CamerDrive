@@ -1,9 +1,12 @@
-import { Ionicons } from "@expo/vector-icons";
-import { useFocusEffect, useNavigation } from "@react-navigation/native";
+import Header from "@/components/Header";
+import {
+  NavigationProp,
+  useFocusEffect,
+  useNavigation,
+} from "@react-navigation/native";
 import React, { useCallback } from "react";
 import {
   BackHandler,
-  Dimensions,
   ScrollView,
   StatusBar,
   StyleSheet,
@@ -13,17 +16,20 @@ import {
 } from "react-native";
 import Svg, { Circle } from "react-native-svg";
 
-const ScorePage = ({ route }) => {
-  const { score, duration, totalQuestions } = route.params;
-
-  const percentage = (score / totalQuestions) * 100;
-  console.log(percentage);
-  const navigation = useNavigation();
-
-  const handlePress = () => {
-    navigation.navigate("Home");
+interface ScorePageProps {
+  route: {
+    params: {
+      score: number;
+      duration: string;
+      totalQuestions: number;
+    };
   };
+}
 
+const ScorePage: React.FC<ScorePageProps> = ({ route }) => {
+  const { score, duration, totalQuestions } = route.params;
+  const navigation = useNavigation<NavigationProp<any>>();
+  const percentage = (score / totalQuestions) * 100;
   const isPassed = percentage >= 50;
   const roundedPercentage = Math.floor(percentage);
 
@@ -32,9 +38,6 @@ const ScorePage = ({ route }) => {
   const circumference = 2 * Math.PI * radius;
   const strokeDashoffset =
     circumference - (circumference * roundedPercentage) / 100;
-
-  const windowWidth = Dimensions.get("window").width;
-  const marginLeft = windowWidth * 0.2;
 
   useFocusEffect(
     useCallback(() => {
@@ -48,22 +51,12 @@ const ScorePage = ({ route }) => {
       return () => {
         BackHandler.removeEventListener("hardwareBackPress", onBackPress);
       };
-    }, [])
+    }, [navigation])
   );
 
   return (
     <>
-      <View style={styles.header1}>
-        <TouchableOpacity onPress={handlePress}>
-          <Ionicons name="arrow-back" size={24} color="#000000" />
-        </TouchableOpacity>
-
-        <Text
-          style={{ marginLeft: marginLeft, fontSize: 15, fontWeight: "bold" }}
-        >
-          Resultat
-        </Text>
-      </View>
+      <Header titre="Resultat" />
       <ScrollView style={{ backgroundColor: "#f0f8ff" }}>
         <View style={styles.container}>
           <View style={styles.statusContainer}>
@@ -81,7 +74,6 @@ const ScorePage = ({ route }) => {
                   strokeWidth={strokeWidth}
                   fill="none"
                 />
-
                 <Circle
                   cx="50"
                   cy="50"
@@ -113,7 +105,10 @@ const ScorePage = ({ route }) => {
           <Text style={styles.resultText}>Temps</Text>
         </View>
         <View style={styles.container}>
-          <TouchableOpacity style={styles.button} onPress={handlePress}>
+          <TouchableOpacity
+            style={styles.button}
+            onPress={() => navigation.navigate("Home")}
+          >
             <Text style={styles.buttonText}>Retour à l'accueil</Text>
           </TouchableOpacity>
         </View>
@@ -140,7 +135,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     backgroundColor: "#f0f8ff",
-    marginTop: StatusBar.currentHeight + 30,
+    marginTop: StatusBar.currentHeight! + 30,
   },
   title: {
     fontSize: 24,

@@ -1,4 +1,3 @@
-import { Ionicons } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 import React, { useEffect, useState } from "react";
 import {
@@ -12,6 +11,7 @@ import {
   View,
 } from "react-native";
 
+import Header from "@/components/Header";
 import { CoursControllerApi } from "../../../../../generated/index";
 import axiosInstance from "../../../../environments/axiosInstance";
 import environment from "../../../../environments/environment";
@@ -27,6 +27,7 @@ const EditCourseForm = ({ id }: EditCourseFormProps) => {
   const [messageType, setMessageType] = useState("");
   const navigation = useNavigation();
   const [loading, setLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
   const [titleError, setTitleError] = useState("");
   const [descriptionError, setDescriptionError] = useState("");
 
@@ -87,6 +88,7 @@ const EditCourseForm = ({ id }: EditCourseFormProps) => {
 
     if (hasError) return;
     try {
+      setIsLoading(true);
       const courseApi = new CoursControllerApi(
         environment,
         environment.basePath,
@@ -99,6 +101,7 @@ const EditCourseForm = ({ id }: EditCourseFormProps) => {
         },
         id
       );
+      setIsLoading(false);
       setMessage("cours modifie avec success.");
       setMessageType("success");
       setTimeout(() => {
@@ -106,23 +109,15 @@ const EditCourseForm = ({ id }: EditCourseFormProps) => {
       }, 2000);
     } catch (error) {
       console.log(error);
+      setIsLoading(false);
       setMessage("Erreure de Modification: " + error.message);
       setMessageType("error");
     }
   };
 
-  const handlePress = () => {
-    navigation.goBack();
-  };
-
   return (
     <>
-      <View style={styles.header}>
-        <TouchableOpacity onPress={handlePress}>
-          <Ionicons name="arrow-back" size={24} color="#000000" />
-        </TouchableOpacity>
-        <Text style={styles.headerText}>Modifier un Cours</Text>
-      </View>
+      <Header titre={"Modifier un Cours"} />
       {message && (
         <View
           style={[
@@ -161,7 +156,11 @@ const EditCourseForm = ({ id }: EditCourseFormProps) => {
         <View style={styles.buttonContainer}>
           <TouchableOpacity onPress={handleSubmit}>
             <View style={styles.button}>
-              <Text style={styles.buttonText}>Modifier</Text>
+              {isLoading ? (
+                <ActivityIndicator size="small" color="white" />
+              ) : (
+                <Text style={styles.buttonText}>Modifier</Text>
+              )}
             </View>
           </TouchableOpacity>
         </View>
@@ -171,16 +170,6 @@ const EditCourseForm = ({ id }: EditCourseFormProps) => {
 };
 
 const styles = StyleSheet.create({
-  header: {
-    marginTop: 50,
-    flexDirection: "row",
-    alignItems: "center",
-    paddingHorizontal: 20,
-    paddingVertical: 10,
-    backgroundColor: "#ffffff",
-    borderBottomWidth: 1,
-    borderBottomColor: "#dddddd",
-  },
   headerText: {
     marginLeft: "20%",
     fontSize: 15,

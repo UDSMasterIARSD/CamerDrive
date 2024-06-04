@@ -1,5 +1,10 @@
-import { AntDesign, Ionicons } from "@expo/vector-icons";
-import { useNavigation, useRoute } from "@react-navigation/native";
+import Header from "@/components/Header";
+import { AntDesign } from "@expo/vector-icons";
+import {
+  NavigationProp,
+  useNavigation,
+  useRoute,
+} from "@react-navigation/native";
 import React, { useEffect, useState } from "react";
 import {
   ActivityIndicator,
@@ -14,30 +19,34 @@ import axiosInstance from "../../environments/axiosInstance";
 import environment from "../../environments/environment";
 import CourseDetailsStyle from "./CoursesDetailsStyles";
 
+import { CoursResponse } from "../../../generated/index";
+
+interface Concept {
+  id: number;
+  titre: string;
+}
+
 const CourseConcepts: React.FC = () => {
+  const navigation = useNavigation<NavigationProp<any>>();
   const route = useRoute();
   const { id } = route.params as { id: number };
-  const navigation = useNavigation();
   const [courseDetails, setCourseDetails] = useState<CoursResponse | null>(
     null
   );
-  const [loading, setLoading] = useState(true);
-
-  const windowWidth = Dimensions.get("window").width;
-  const marginLeft = windowWidth * 0.2;
+  const [loading, setLoading] = useState<boolean>(true);
 
   useEffect(() => {
     const fetchCourseDetails = async () => {
+      const courseApi = new CoursControllerApi(
+        environment,
+        environment.basePath,
+        axiosInstance
+      );
       try {
-        const courseApi = new CoursControllerApi(
-          environment,
-          environment.basePath,
-          axiosInstance
-        );
         const response = await courseApi.showCours(id);
         setCourseDetails(response.data);
       } catch (error) {
-        console.log(error);
+        console.error("Failed to fetch course details:", error);
       } finally {
         setLoading(false);
       }
@@ -51,7 +60,7 @@ const CourseConcepts: React.FC = () => {
   };
 
   const handlePress = () => {
-    navigation.goBack(); // Revenir à la page précédente
+    navigation.goBack();
   };
 
   if (loading) {
@@ -69,18 +78,7 @@ const CourseConcepts: React.FC = () => {
         height: Dimensions.get("window").height,
       }}
     >
-      <View style={CourseDetailsStyle.header}>
-        <TouchableOpacity onPress={handlePress}>
-          <Ionicons name="arrow-back" size={24} color="#000000" />
-        </TouchableOpacity>
-
-        <Text
-          style={{ marginLeft: marginLeft, fontSize: 15, fontWeight: "bold" }}
-        >
-          Liste des Concepts
-        </Text>
-      </View>
-
+      <Header titre={"Liste des Concepts"} />
       <View
         style={{
           backgroundColor: "#f0f8ff",
@@ -89,15 +87,13 @@ const CourseConcepts: React.FC = () => {
         }}
       >
         <Text style={CourseDetailsStyle.titleText}>{courseDetails?.titre}</Text>
-
         <FlatList
           data={courseDetails?.concepts}
-          keyExtractor={(item, index) => index.toString()}
+          keyExtractor={(item) => item.id!.toString()}
           renderItem={({ item }) => (
-            <TouchableOpacity onPress={() => handleConceptPress(item.id)}>
+            <TouchableOpacity onPress={() => handleConceptPress(item.id!)}>
               <View style={CourseDetailsStyle.conceptContainer}>
                 <Text style={CourseDetailsStyle.conceptText}>{item.titre}</Text>
-
                 <AntDesign name="rightcircleo" size={24} color="black" />
               </View>
             </TouchableOpacity>

@@ -1,15 +1,19 @@
 import { Entypo } from "@expo/vector-icons";
 import React, { useEffect, useRef, useState } from "react";
-import { Dimensions, Image, StyleSheet, Text, View } from "react-native";
+import { Dimensions, Image, StyleSheet, View } from "react-native";
 import SideSwipe from "react-native-sideswipe";
 
-const Carousel = () => {
-  const [activeIndex, setActiveIndex] = useState(0);
-  const carouselRef = useRef(null);
+interface CarouselItem {
+  imageUrl: ReturnType<typeof require>;
+}
+
+const Carousel: React.FC = () => {
+  const [activeIndex, setActiveIndex] = useState<number>(0);
+  const carouselRef = useRef<SideSwipe>(null);
   const { width: viewportWidth } = Dimensions.get("window");
 
   // Carousel items
-  const carouselItems = [
+  const carouselItems: CarouselItem[] = [
     {
       imageUrl: require("../../assets/dashbordImages/image2.jpg"),
     },
@@ -50,7 +54,6 @@ const Carousel = () => {
         renderItem={({ itemIndex, currentIndex, item, animatedValue }) => (
           <View style={styles.imageContainer}>
             <Image source={item.imageUrl} style={styles.image} />
-            {/* {item.title && <Text style={styles.title}>{item.title}</Text>} */}
           </View>
         )}
       />
@@ -75,11 +78,6 @@ const styles = StyleSheet.create({
     alignItems: "center",
     padding: 10,
   },
-  title: {
-    marginTop: 10,
-    fontSize: 16,
-    fontWeight: "bold",
-  },
   image: {
     height: 220,
     width: "100%",
@@ -89,7 +87,6 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "center",
     alignItems: "center",
-    //marginTop: 5,
   },
 });
 

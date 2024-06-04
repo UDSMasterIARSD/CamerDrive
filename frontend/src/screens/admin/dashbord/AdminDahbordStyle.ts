@@ -2,12 +2,23 @@ import { Dimensions, StatusBar, StyleSheet } from "react-native";
 const { width, height } = Dimensions.get("window");
 
 const AdminDashbordStyle = StyleSheet.create({
+  header1: {
+    marginTop: StatusBar.currentHeight,
+    flexDirection: "row",
+    alignItems: "center",
+    paddingHorizontal: 20,
+    paddingVertical: 10,
+    backgroundColor: "#ffffff",
+    borderBottomWidth: 1,
+    borderBottomColor: "#dddddd",
+    justifyContent:"space-between"
+  },
   container: {
     flex: 1,
     //justifyContent: "center",
     //alignItems: "center",
     backgroundColor: "#f5f5f5",
-    marginTop: StatusBar.currentHeight! + 20,
+    //marginTop: StatusBar.currentHeight! + 20,
   },
   textBelowLine: {
     fontSize: 24,

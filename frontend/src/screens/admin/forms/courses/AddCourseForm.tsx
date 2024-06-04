@@ -1,7 +1,11 @@
-import { Ionicons } from "@expo/vector-icons";
+import Header from "@/components/Header";
+import SelectImage from "@/components/SelectImage";
+import { useAuth } from "@/context/AuthContext";
 import { useNavigation } from "@react-navigation/native";
+import axios from "axios";
 import React, { useState } from "react";
 import {
+  ActivityIndicator,
   Dimensions,
   ScrollView,
   StatusBar,
@@ -11,8 +15,6 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-import { CoursControllerApi } from "../../../../../generated/index";
-import axiosInstance from "../../../../environments/axiosInstance";
 import environment from "../../../../environments/environment";
 
 const AddCourseForm = () => {
@@ -22,12 +24,11 @@ const AddCourseForm = () => {
   const [messageType, setMessageType] = useState(""); // 'success' or 'error'
   const [titleError, setTitleError] = useState("");
   const [descriptionError, setDescriptionError] = useState("");
+  const [imageUri, setImageUri] = useState<string | null>(null);
+  const [loading, setLoading] = useState(false);
 
   const navigation = useNavigation();
-
-  const handlePress = () => {
-    navigation.goBack(); // Revenir à la page précédente
-  };
+  const { authState } = useAuth();
 
   const handleSubmit = async () => {
     let hasError = false;
@@ -49,15 +50,50 @@ const AddCourseForm = () => {
     if (hasError) return;
 
     try {
-      const courseApi = new CoursControllerApi(
-        environment,
-        environment.basePath,
-        axiosInstance
-      );
-      await courseApi.createCours({
-        titre: titre,
-        description: description,
-      });
+      setLoading(true);
+
+      if (imageUri) {
+        const formData = new FormData();
+
+        formData.append("file", {
+          uri: imageUri,
+          type: "image/jpeg",
+          name: "upload.jpg",
+        });
+        console.log("FormData", formData);
+        const response = await axios.post(
+          `${environment.basePath}/files/`,
+          formData,
+          {
+            headers: {
+              "Content-Type": "multipart/form-data",
+              Authorization: `Bearer ${authState?.token}`,
+            },
+          }
+        );
+        const result = response.data;
+
+        const formDataf = new FormData();
+        formDataf.append("titre", titre);
+        formDataf.append("description", description);
+        formDataf.append("fichier", {
+          uri: imageUri,
+          type: "image/jpeg",
+          name: "upload.jpg",
+        });
+
+        const responsef = await axios.post(
+          `${environment.basePath}/cours/`,
+          formDataf,
+          {
+            headers: {
+              "Content-Type": "multipart/form-data",
+              Authorization: `Bearer ${authState?.token}`,
+            },
+          }
+        );
+        console.log(responsef.data);
+      }
       setMessage("Cours Ajoute avec success");
       setMessageType("success");
       setTitleError("");
@@ -79,12 +115,7 @@ const AddCourseForm = () => {
 
   return (
     <>
-      <View style={styles.header}>
-        <TouchableOpacity onPress={handlePress}>
-          <Ionicons name="arrow-back" size={24} color="#000000" />
-        </TouchableOpacity>
-        <Text style={styles.headerText}>Ajouter un Cours</Text>
-      </View>
+      <Header titre={"Ajouter un Cours"} />
       {message && (
         <View
           style={[
@@ -97,6 +128,7 @@ const AddCourseForm = () => {
       )}
       <ScrollView style={styles.scrollView}>
         <View style={styles.formContainer}>
+          <SelectImage onImagePicked={setImageUri} />
           <View style={styles.textInputContainer}>
             <TextInput
               placeholder="Entrer le titre du cours"
@@ -123,7 +155,11 @@ const AddCourseForm = () => {
         <View style={styles.buttonContainer}>
           <TouchableOpacity onPress={handleSubmit}>
             <View style={styles.button}>
-              <Text style={styles.buttonText}>Ajouter</Text>
+              {loading ? (
+                <ActivityIndicator size="small" color="white" />
+              ) : (
+                <Text style={styles.buttonText}>Ajouter</Text>
+              )}
             </View>
           </TouchableOpacity>
         </View>
@@ -133,16 +169,6 @@ const AddCourseForm = () => {
 };
 
 const styles = StyleSheet.create({
-  header: {
-    marginTop: StatusBar.currentHeight,
-    flexDirection: "row",
-    alignItems: "center",
-    paddingHorizontal: 20,
-    paddingVertical: 10,
-    backgroundColor: "#ffffff",
-    borderBottomWidth: 1,
-    borderBottomColor: "#dddddd",
-  },
   headerText: {
     marginLeft: "20%",
     fontSize: 15,

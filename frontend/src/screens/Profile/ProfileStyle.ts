@@ -1,16 +1,7 @@
 import { Dimensions, StatusBar, StyleSheet } from "react-native";
 
 const styles = StyleSheet.create({
-  header1: {
-    marginTop: StatusBar.currentHeight,
-    flexDirection: "row",
-    alignItems: "center",
-    paddingHorizontal: 20,
-    paddingVertical: 10,
-    backgroundColor: "#ffffff",
-    borderBottomWidth: 1,
-    borderBottomColor: "#dddddd",
-  },
+  
   container: {
     flex: 1,
     padding: 40,

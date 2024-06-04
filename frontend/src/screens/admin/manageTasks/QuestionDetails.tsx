@@ -1,5 +1,6 @@
 import { Ionicons } from "@expo/vector-icons";
 import {
+  NavigationProp,
   RouteProp,
   useFocusEffect,
   useNavigation,
@@ -15,6 +16,8 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
+
+import Header from "@/components/Header";
 
 import { Row, Table } from "react-native-table-component";
 import {
@@ -47,7 +50,7 @@ type DataItem = {
 const QuestionDetails = () => {
   const route = useRoute<RouteProp<QuestionDetailsRouteParams, "params">>();
   const { type } = route.params;
-  const navigation = useNavigation();
+  const navigation = useNavigation<NavigationProp<any>>();
   const [tableHead, setTableHead] = useState(["", "", ""]);
   const [dataList, setDataList] = useState<DataItem[]>([]);
   const [loading, setLoading] = useState(true);
@@ -276,50 +279,55 @@ const QuestionDetails = () => {
   };
 
   return (
-    <View style={QuestionDetailsStyle.container}>
-      <View style={QuestionDetailsStyle.titleHeader}>
-        <Text style={QuestionDetailsStyle.titleText}>
-          {type === "users"
-            ? "Utilisateurs"
-            : type === "courses"
-            ? "Cours"
-            : type === "concepts"
-            ? "Concepts"
-            : type === "quizzes"
-            ? "Quizzes"
-            : "Questions"}
-        </Text>
+    <>
+      {type === "users" ? (
+        <Header titre={"Liste des Utilisateurs"} />
+      ) : type === "courses" ? (
+        <Header titre={"Liste des Cours"} />
+      ) : type === "concepts" ? (
+        <Header titre={"Liste des Concepts"} />
+      ) : type === "quizzes" ? (
+        <Header titre={"Liste des Quiz"} />
+      ) : (
+        <Header titre={"Liste des Questions"} />
+      )}
 
-        <TouchableOpacity onPress={() => handleAdd()}>
-          <Ionicons name="add-circle-outline" size={34} color="green" />
-        </TouchableOpacity>
-      </View>
-      <ScrollView horizontal={true}>
-        <View>
-          <Table borderStyle={{ borderWidth: 2, borderColor: "#000" }}>
-            <Row
-              data={tableHead}
-              widthArr={widthArr}
-              style={QuestionDetailsStyle.header}
-              textStyle={{ ...QuestionDetailsStyle.text, textAlign: "center" }}
-            />
-          </Table>
-          <ScrollView style={QuestionDetailsStyle.dataWrapper}>
-            <Table borderStyle={{ borderWidth: 2, borderColor: "#000" }}>
-              {loading ? (
-                <ActivityIndicator
-                  size="large"
-                  color="#0000ff"
-                  style={{ marginTop: 20 }}
-                />
-              ) : (
-                renderRows()
-              )}
-            </Table>
-          </ScrollView>
+      <View style={QuestionDetailsStyle.container}>
+        <View style={QuestionDetailsStyle.titleHeader}>
+          <TouchableOpacity onPress={() => handleAdd()}>
+            <Ionicons name="add-circle-outline" size={34} color="green" />
+          </TouchableOpacity>
         </View>
-      </ScrollView>
-    </View>
+        <ScrollView horizontal={true}>
+          <View>
+            <Table borderStyle={{ borderWidth: 2, borderColor: "#000" }}>
+              <Row
+                data={tableHead}
+                widthArr={widthArr}
+                style={QuestionDetailsStyle.header}
+                textStyle={{
+                  ...QuestionDetailsStyle.text,
+                  textAlign: "center",
+                }}
+              />
+            </Table>
+            <ScrollView style={QuestionDetailsStyle.dataWrapper}>
+              <Table borderStyle={{ borderWidth: 2, borderColor: "#000" }}>
+                {loading ? (
+                  <ActivityIndicator
+                    size="large"
+                    color="#0000ff"
+                    style={{ marginTop: 20 }}
+                  />
+                ) : (
+                  renderRows()
+                )}
+              </Table>
+            </ScrollView>
+          </View>
+        </ScrollView>
+      </View>
+    </>
   );
 };
 

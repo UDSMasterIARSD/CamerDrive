@@ -1,6 +1,14 @@
 import { NavigationProp, useNavigation } from "@react-navigation/native";
+import axios from "axios";
 import React, { useEffect, useState } from "react";
-import { Alert, FlatList, Text, TouchableOpacity, View } from "react-native";
+import {
+  Alert,
+  FlatList,
+  Image,
+  Text,
+  TouchableOpacity,
+  View,
+} from "react-native";
 import { CoursControllerApi } from "../../../generated/index";
 import { useAuth } from "../../context/AuthContext";
 import axiosInstance from "../../environments/axiosInstance";
@@ -10,7 +18,8 @@ import CoursesStyle from "./CoursesStyle";
 interface Course {
   id: number;
   courseName: string;
-  // image: string;
+  imageId: number;
+  imageUrl?: string;
 }
 
 const Courses: React.FC = () => {
@@ -31,9 +40,29 @@ const Courses: React.FC = () => {
       const courses = response.data.map((course: any) => ({
         id: course.id,
         courseName: course.titre,
-        // image: course.image,
+        imageId: course.image.id,
       }));
-      setCourses(courses);
+
+      console.log(courses);
+
+      const imageRequests = courses.map((course) => {
+        return axios.get(`${environment.basePath}/files/${course.imageId}`, {
+          headers: {
+            Authorization: `Bearer ${authState?.token}`,
+          },
+          // responseType: Blob,
+        });
+      });
+
+      const imageResponses = await Promise.all(imageRequests);
+
+      const coursesWithImages = courses.map((course, index) => ({
+        ...course,
+        imageUrl: imageResponses[index].data,
+      }));
+
+      console.log("Cours avec images:", coursesWithImages);
+      setCourses(coursesWithImages);
     } catch (error: any) {
       console.log(error);
       Alert.alert("Error", error.message);
@@ -43,7 +72,12 @@ const Courses: React.FC = () => {
   };
 
   useEffect(() => {
-    AllCourses();
+    const fetchData = async () => {
+      await AllCourses();
+
+      setLoading(false);
+    };
+    fetchData();
   }, []);
 
   const handleCoursePress = (id: number) => {
@@ -63,7 +97,10 @@ const Courses: React.FC = () => {
         <View style={CoursesStyle.container}>
           <TouchableOpacity onPress={() => handleCoursePress(item.id)}>
             <View style={CoursesStyle.itemContainer}>
-              {/* <Image source={{ uri: item.image }} style={CoursesStyle.courseImage} /> */}
+              <Image
+                source={{ uri: item.imageUrl }}
+                style={CoursesStyle.courseImage}
+              />
               <View>
                 <Text style={CoursesStyle.title}>{item.courseName}</Text>
                 <Text>Driving Lesson - #{item.id}</Text>

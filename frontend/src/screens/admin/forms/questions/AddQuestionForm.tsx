@@ -1,5 +1,6 @@
+import Header from "@/components/Header";
 import { useAuth } from "@/context/AuthContext";
-import { AntDesign, Ionicons } from "@expo/vector-icons";
+import { AntDesign } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
@@ -198,12 +199,7 @@ const AddQuestionForm = () => {
 
   return (
     <>
-      <View style={styles.header}>
-        <TouchableOpacity onPress={handlePress}>
-          <Ionicons name="arrow-back" size={24} color="#000000" />
-        </TouchableOpacity>
-        <Text style={styles.headerText}>Ajouter une question</Text>
-      </View>
+      <Header titre={"Ajouter une Question"} />
       {message && (
         <View
           style={[
