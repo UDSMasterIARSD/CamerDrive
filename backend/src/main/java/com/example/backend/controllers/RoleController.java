@@ -4,6 +4,9 @@ import com.example.backend.configs.AppConstants;
 import com.example.backend.dto.RoleRequest;
 import com.example.backend.dto.RoleResponse;
 import com.example.backend.services.RoleService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -50,6 +53,17 @@ public class RoleController {
 
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
+    @Operation(
+            responses = {
+                    @ApiResponse(
+                            description = "Success",
+                            responseCode = "204"
+                    ),
+                    @ApiResponse(description = "Bad Exception", responseCode = "400", content = @Content),
+                    @ApiResponse(description = "Not found", responseCode = "404", content = @Content),
+                    @ApiResponse(description = "Internal error", responseCode = "500", content = @Content)
+            }
+    )
     public void delete(@PathVariable Long id) {
         roleService.delete(id);
     }

@@ -5,6 +5,7 @@ import com.example.backend.dto.ConceptResponse;
 import com.example.backend.dto.CoursRequest;
 import com.example.backend.dto.CoursResponse;
 import com.example.backend.dto.FichierResponse;
+import com.example.backend.exceptions.BADException;
 import com.example.backend.exceptions.NotFoundException;
 import com.example.backend.models.Cours;
 import com.example.backend.models.Fichier;
@@ -14,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.io.IOException;
 import java.util.List;
 
 @Service
@@ -60,6 +62,7 @@ public class CoursServiceImpl implements CoursService {
                 new NotFoundException("Le cours que vous voulez modifier ", "d'id", id));
         Cours newCours = mapper.map(cours, Cours.class);
         newCours.setId(id);
+        newCours.setImage(req.getImage());
         return mapper.map(coursRepo.save(newCours), CoursResponse.class);
     }
 
@@ -67,7 +70,14 @@ public class CoursServiceImpl implements CoursService {
     public void delete(Long id) {
         Cours cours = coursRepo.findById(id).orElseThrow(() ->
                 new NotFoundException("Le cours que vous voulez supprimer ", "d'id", id));
-        coursRepo.delete(cours);
+        try {
+            if (cours.getImage() != null) {
+                fichierService.delete(cours.getImage().getId());
+            }
+            coursRepo.delete(cours);
+        } catch (IOException e) {
+            throw new BADException("Erreur lors de la suppression de l'image");
+        }
     }
 
     public CoursResponse toDto(Cours cours) {

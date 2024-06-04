@@ -4,6 +4,7 @@ import com.example.backend.configs.AppConstants;
 import com.example.backend.dto.FichierResponse;
 import com.example.backend.dto.QuestionRequest;
 import com.example.backend.dto.QuestionResponse;
+import com.example.backend.exceptions.BADException;
 import com.example.backend.exceptions.NotFoundException;
 import com.example.backend.models.Fichier;
 import com.example.backend.models.Question;
@@ -13,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.io.IOException;
 import java.util.List;
 
 @Service
@@ -59,6 +61,7 @@ public class QuestionServiceImpl implements QuestionService{
                 new NotFoundException("La question que vous voulez modifier ", "d'id", id));
         Question newQuestion = mapper.map(updated, Question.class);
         newQuestion.setId(id);
+        newQuestion.setImage(old.getImage());
         return mapper.map(questionRepo.save(newQuestion), QuestionResponse.class);
     }
 
@@ -66,6 +69,13 @@ public class QuestionServiceImpl implements QuestionService{
     public void delete(Long id){
         Question question = questionRepo.findById(id).orElseThrow(() ->
                 new NotFoundException("La Question que vous voulez supprimer ", "d'id", id));
-        questionRepo.delete(question);
+        try{
+            if (question.getImage() != null) {
+                fichierService.delete(question.getImage().getId());
+            }
+            questionRepo.delete(question);
+        } catch (IOException e) {
+            throw new BADException("Erreur lors de la suppression de l'image");
+        }
     }
 }
