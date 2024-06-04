@@ -2,6 +2,7 @@ import { NavigationProp, useNavigation } from "@react-navigation/native";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import {
+  ActivityIndicator,
   Alert,
   FlatList,
   Image,
@@ -84,6 +85,14 @@ const Courses: React.FC = () => {
     navigation.navigate("CourseConcepts", { id });
   };
 
+  if (loading) {
+    return (
+      <View style={CoursesStyle.loadingContainer}>
+        <ActivityIndicator size="large" color="#0000ff" />
+      </View>
+    );
+  }
+
   return (
     <FlatList
       data={courses}
@@ -109,7 +118,6 @@ const Courses: React.FC = () => {
           </TouchableOpacity>
         </View>
       )}
-      ListFooterComponent={loading ? <Text>Loading...</Text> : null}
     />
   );
 };

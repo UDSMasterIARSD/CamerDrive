@@ -39,5 +39,11 @@ const CoursesStyle = StyleSheet.create({
     width: Dimensions.get("window").width * 0.5,
     fontWeight: "bold",
   },
+  loadingContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    marginTop:Dimensions.get("window").height*0.4
+  },
 });
 export default CoursesStyle;

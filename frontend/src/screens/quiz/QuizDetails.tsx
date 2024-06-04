@@ -176,7 +176,8 @@ const QuizDetails = ({ route }) => {
   }
 
   const handlePress = () => {
-    navigation.goBack();
+    setModalVisible(true);
+    return true;
   };
 
   const currentQuestion = quizDetails.questions[currentQuestionIndex];

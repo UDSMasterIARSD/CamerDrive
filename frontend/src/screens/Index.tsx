@@ -16,6 +16,10 @@ import Courses from "./courses/Courses";
 import ConceptDetails from "./coursesDetails/ConceptDetails";
 import CourseConcepts from "./coursesDetails/CourseConcepts";
 import Dashbord from "./dashbord/Dashbord";
+import ExamDashbord from "./examen/ExamDashbord";
+import ExamenDetails from "./examen/ExamenDetails";
+import ExamenScore from "./examen/ExamenScore";
+import LoadingScreen from "./examen/LoadingScreem";
 import LastExam from "./lastExam/LastExam";
 import Quiz from "./quiz/Quiz";
 import QuizDetails from "./quiz/QuizDetails";
@@ -104,6 +108,26 @@ const Index = () => {
             <Stack.Screen
               name="Statistiques"
               component={Statistiques}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="ExamenBlanc"
+              component={ExamDashbord}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="ExamenDetails"
+              component={ExamenDetails}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="LoadingScreen"
+              component={LoadingScreen}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="ExamenScore"
+              component={ExamenScore}
               options={{ headerShown: false }}
             />
           </>

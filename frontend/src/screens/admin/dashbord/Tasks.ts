@@ -11,7 +11,7 @@ const tasks: Task[] = [
   { icon: "archive-outline", text: "Gestion des anciens sujets" },
   { icon: "people-outline", text: "Gestion des utilisateurs" },
   { icon: "school-outline", text: "Gestion des cours" },
-  { icon: "checkmark-circle-outline", text: "Gestion des tests" },
+  /*{ icon: "checkmark-circle-outline", text: "Gestion des tests" },*/
   { icon: "book-outline", text: "Gestion des concepts" },
 ];
 
