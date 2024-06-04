@@ -15,102 +15,112 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
+import { CoursRequest } from "../../../../../generated/index";
 import environment from "../../../../environments/environment";
+import Uploadimage from "@/components/UploadImage";
+import * as ImagePicker from "expo-image-picker";
 
 const AddCourseForm = () => {
-  const [titre, setTitre] = useState("");
-  const [description, setDescription] = useState("");
+  const authState = useAuth();
+  const [formData, setFormData] = useState<CoursRequest>({})
   const [message, setMessage] = useState("");
   const [messageType, setMessageType] = useState(""); // 'success' or 'error'
   const [titleError, setTitleError] = useState("");
   const [descriptionError, setDescriptionError] = useState("");
-  const [imageUri, setImageUri] = useState<string | null>(null);
-  const [loading, setLoading] = useState(false);
+  const [imageError, setImageError] = useState("");
+  const [fileUri, setFileUri] = useState<string>();
+  const [loading, setLoading] = useState<boolean>();
+  // const [file, setFile] = useState<Blob>();
 
   const navigation = useNavigation();
-  const { authState } = useAuth();
+
+  const handlePress = () => {
+    navigation.goBack(); // Revenir à la page précédente
+  };
+
+  const handlePick = async (image: ImagePicker.ImagePickerResult) => {
+    setImageError("")
+    // console.log("Uploaded Image: ", image);
+    const fileUri = image.assets![0].uri;
+    handleInputChange("fichier", image.assets![0].uri);
+
+    setFileUri(fileUri);
+  }
+
+  const handleInputChange = (name: keyof CoursRequest, text: string) => {
+    setFormData((prevState) => ({ ...prevState, [name]: text }));
+    // console.log("FormData: ", formData);
+  };
 
   const handleSubmit = async () => {
+    // console.log(formData);
+    // return;
     let hasError = false;
 
-    if (!titre) {
+    if (!formData.titre) {
       setTitleError("Le champ 'titre' est obligatoire.");
       hasError = true;
     } else {
       setTitleError("");
     }
 
-    if (!description) {
-      setDescriptionError("entrer une description");
+    if (!formData.description) {
+      setDescriptionError("Entrer une description");
       hasError = true;
     } else {
       setDescriptionError("");
     }
 
-    if (hasError) return;
-
-    try {
-      setLoading(true);
-
-      if (imageUri) {
-        const formData = new FormData();
-
-        formData.append("file", {
-          uri: imageUri,
-          type: "image/jpeg",
-          name: "upload.jpg",
-        });
-        console.log("FormData", formData);
-        const response = await axios.post(
-          `${environment.basePath}/files/`,
-          formData,
-          {
-            headers: {
-              "Content-Type": "multipart/form-data",
-              Authorization: `Bearer ${authState?.token}`,
-            },
-          }
-        );
-        const result = response.data;
-
-        const formDataf = new FormData();
-        formDataf.append("titre", titre);
-        formDataf.append("description", description);
-        formDataf.append("fichier", {
-          uri: imageUri,
-          type: "image/jpeg",
-          name: "upload.jpg",
-        });
-
-        const responsef = await axios.post(
-          `${environment.basePath}/cours/`,
-          formDataf,
-          {
-            headers: {
-              "Content-Type": "multipart/form-data",
-              Authorization: `Bearer ${authState?.token}`,
-            },
-          }
-        );
-        console.log(responsef.data);
-      }
-      setMessage("Cours Ajoute avec success");
-      setMessageType("success");
-      setTitleError("");
-      setDescriptionError("");
-      setTitre("");
-      setDescription("");
-      setTimeout(() => {
-        navigation.goBack();
-      }, 2000);
-    } catch (error) {
-      console.log(error);
-      setMessage("Erreur d'ajout: " + error.message);
-      setMessageType("error");
-      setTimeout(() => {
-        navigation.goBack();
-      }, 2000);
+    if (!formData.fichier) {
+      setImageError("Veilez selectionner une image");
+      hasError = true;
+    } else {
+      setImageError("");
     }
+
+    if (hasError) return;
+    setLoading(true);
+    const formValues = new FormData();
+    formValues.append("titre", formData.titre!);
+    formValues.append("description", formData.description!);
+
+    formValues.append('fichier', {
+      uri: formData.fichier,
+      type: "image/jpeg",
+      name: "image.jpg",
+    });
+
+    await axios.post(
+      `${environment.basePath}/cours/`,
+      formValues,
+      {
+        headers: {
+          "Content-Type": "multipart/form-data",
+          Authorization: `Bearer ${authState.authState?.token}`,
+        },
+      }
+    ).then((response) => {
+      if (response.status === 201) {
+        setMessage("Cours ajoute avec succes !!!");
+        setMessageType("success");
+        setTitleError("");
+        setDescriptionError("");
+        setFormData({});
+        setTimeout(() => {
+          navigation.goBack();
+        }, 1000);
+      }
+    }).catch((err) => {
+      console.log(err);
+      setMessage("Erreur d'ajout: " + err.message);
+      setMessageType("error");
+    }).finally(() => {
+      setTimeout(() => {
+        setMessage("");
+        setMessageType("");
+        setLoading(false);
+      }, 5000)
+    });
   };
 
   return (
@@ -128,12 +138,17 @@ const AddCourseForm = () => {
       )}
       <ScrollView style={styles.scrollView}>
         <View style={styles.formContainer}>
-          <SelectImage onImagePicked={setImageUri} />
+          <View style={styles.textInputContainer} className="mt-5" >
+            <Uploadimage onImagePicked={handlePick} />
+            {imageError ? (
+              <Text style={styles.errorText}>{imageError}</Text>
+            ) : null}
+          </View>
           <View style={styles.textInputContainer}>
             <TextInput
-              placeholder="Entrer le titre du cours"
-              value={titre}
-              onChangeText={setTitre}
+              placeholder="Enter course title"
+              value={formData.titre}
+              onChangeText={(text) => handleInputChange("titre", text)}
               style={styles.textInput}
             />
             {titleError ? (
@@ -142,9 +157,9 @@ const AddCourseForm = () => {
           </View>
           <View style={styles.textInputContainer}>
             <TextInput
-              placeholder="Entrer la description"
-              value={description}
-              onChangeText={setDescription}
+              placeholder="Enter a description"
+              value={formData.description}
+              onChangeText={(text) => handleInputChange("description", text)}
               style={styles.textInput}
             />
             {descriptionError ? (
@@ -158,7 +173,7 @@ const AddCourseForm = () => {
               {loading ? (
                 <ActivityIndicator size="small" color="white" />
               ) : (
-                <Text style={styles.buttonText}>Ajouter</Text>
+                <Text style={styles.buttonText}>Add</Text>
               )}
             </View>
           </TouchableOpacity>

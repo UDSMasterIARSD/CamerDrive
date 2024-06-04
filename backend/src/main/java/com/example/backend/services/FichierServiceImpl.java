@@ -82,6 +82,19 @@ public class FichierServiceImpl implements FichierService {
         return mapper.map(fichierRepo.save(fichier), FichierResponse.class);
     }
 
+    @Override
+    public void delete(Long id) {
+        Fichier fichier = show(id);
+        Path toDelete = Paths.get(fichier.getUrl());
+        try{
+            if (Files.exists(toDelete))
+                Files.delete(toDelete);
+            fichierRepo.delete(fichier);
+        } catch (IOException e) {
+            throw new BADException("Impossible de supprimer le fichier");
+        }
+    }
+
     private String getExtension(String filename) {
         return filename.substring(filename.lastIndexOf(".") + 1);
     }
@@ -149,4 +162,6 @@ public class FichierServiceImpl implements FichierService {
             throw new BADException("Echec. Veillez reessayer");
         }
     }
+
+
 }

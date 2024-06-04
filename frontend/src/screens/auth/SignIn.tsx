@@ -50,8 +50,8 @@ const SignIn = () => {
         setLoginError(result.error);
       } else {
         setLoginError(null);
-
-        navigation.navigate("HomeScreen");
+        // Navigation vers l'écran suivant en cas de succès
+        navigation.navigate("HomeScreen" as never);
       }
     } finally {
       setIsLoading(false);
@@ -171,19 +171,19 @@ const SignIn = () => {
         </View>
 
         <View style={styles.imageContainer}>
-          <TouchableOpacity onPress={() => {}}>
+          <TouchableOpacity onPress={() => { }}>
             <Image
               source={require("./../../../assets/auth/icons8-google-logo-96.png")}
               style={styles.image}
             />
           </TouchableOpacity>
-          <TouchableOpacity onPress={() => {}}>
+          <TouchableOpacity onPress={() => { }}>
             <Image
               source={require("./../../../assets/auth/icons8-facebook-logo-96.png")}
               style={styles.image}
             />
           </TouchableOpacity>
-          <TouchableOpacity onPress={() => {}}>
+          <TouchableOpacity onPress={() => { }}>
             <Image
               source={require("./../../../assets/auth/icons8-linkedin-logo-96.png")}
               style={styles.image}

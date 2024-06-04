@@ -6,6 +6,7 @@ import com.example.backend.services.QuestionService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -57,6 +58,17 @@ public class QuestionController {
 
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
+    @Operation(
+            responses = {
+                    @ApiResponse(
+                            description = "Success",
+                            responseCode = "204"
+                    ),
+                    @ApiResponse(description = "Bad Exception", responseCode = "400", content = @Content),
+                    @ApiResponse(description = "Not found", responseCode = "404", content = @Content),
+                    @ApiResponse(description = "Internal error", responseCode = "500", content = @Content)
+            }
+    )
     public void deleteQuestion(@PathVariable Long id){
         questionService.delete(id);
     }

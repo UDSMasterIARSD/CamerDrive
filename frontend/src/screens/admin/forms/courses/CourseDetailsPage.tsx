@@ -1,40 +1,53 @@
 import React, { useEffect, useState } from "react";
 import {
   ActivityIndicator,
+  Image,
   ScrollView,
   StyleSheet,
   Text,
   View,
 } from "react-native";
-import { CoursControllerApi } from "../../../../../generated/index";
+import { CoursControllerApi, CoursResponse, FichierControllerApi } from "../../../../../generated/index";
 import axiosInstance from "../../../../environments/axiosInstance";
 import environment from "../../../../environments/environment";
 
-const CourseDetailsPage = ({ id }) => {
-  const [courseDetails, setCourseDetails] = useState(null);
-  const [course, setCourse] = useState(null);
+interface CourseDetailsProps {
+  id: number;
+}
+
+const CourseDetailsPage: React.FC<CourseDetailsProps> = (props) => {
+  const [courseDetails, setCourseDetails] = useState<CoursResponse>({});
+  // const [course, setCourse] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [imageUri, setImageUri] = useState<string>("");
 
   useEffect(() => {
     const fetchCourseDetails = async () => {
-      console.log(id);
-      try {
-        const courseApi = new CoursControllerApi(
-          environment,
-          environment.basePath,
-          axiosInstance
-        );
-        const response = await courseApi.showCours(id);
-        setCourseDetails(response.data);
-      } catch (error) {
-        console.log(error);
-      } finally {
-        setLoading(false);
-      }
+
+      const courseApi = new CoursControllerApi(
+        environment,
+        environment.basePath,
+        axiosInstance
+      );
+      courseApi.showCours(props.id)
+        .then((response) => {
+          // console.log("Course Response: ", response.data);
+          if (response.data) {
+            setCourseDetails(response.data);
+            if (response.data.image) {
+              // console.log("Course Image: ", response.data.image);
+              setImageUri("/files/" + response.data.image.id)
+            }
+          }
+        }).catch((err) => {
+          console.log("Error while fetching course details: ", err);
+        }).finally(() => {
+          setLoading(false);
+        });
     };
 
     fetchCourseDetails();
-  }, [id]);
+  }, [props.id, imageUri]);
 
   if (loading) {
     return (
@@ -50,6 +63,9 @@ const CourseDetailsPage = ({ id }) => {
         <Text style={styles.titleText}>
           Titre du Cours: {courseDetails.titre}
         </Text>
+        {imageUri && <View className="w-full items-center">
+          <Image src={environment.basePath + imageUri} className="h-80 w-80 my-5 content-center bg-cover" />
+        </View>}
         <Text style={styles.contentText}>
           Description: {courseDetails.description}
         </Text>

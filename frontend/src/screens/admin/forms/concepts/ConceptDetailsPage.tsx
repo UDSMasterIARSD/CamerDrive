@@ -6,28 +6,35 @@ import {
   Text,
   View,
 } from "react-native";
-import { ConceptControllerApi } from "../../../../../generated/index";
+import { ConceptControllerApi, ConceptResponse, CoursResponse } from "../../../../../generated/index";
 import axiosInstance from "../../../../environments/axiosInstance";
 import environment from "../../../../environments/environment";
 
-const ConceptDetailsPage = ({ id }) => {
-  const [conceptDetails, setConceptDetails] = useState(null);
-  const [course, setCourse] = useState(null);
+interface ConceptDetailsProps {
+  id: number;
+}
+const ConceptDetailsPage: React.FC<ConceptDetailsProps> = (props) => {
+  const [conceptDetails, setConceptDetails] = useState<ConceptResponse>({});
+  const [course, setCourse] = useState<CoursResponse>({});
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchConceptDetails = async () => {
-      console.log(id);
+      console.log(props.id);
       try {
         const conceptApi = new ConceptControllerApi(
           environment,
           environment.basePath,
           axiosInstance
         );
-        const response = await conceptApi.showConcept(id);
+        const response = await conceptApi.showConcept(props.id);
         setConceptDetails(response.data);
-        const courseResponse = await conceptApi.getCours(id);
-        setCourse(courseResponse.data);
+        conceptApi.getCours(props.id)
+          .then((response) => {
+            if (response.data) {
+              setCourse(response.data);
+            }
+          });
       } catch (error) {
         console.log(error);
       } finally {
@@ -36,7 +43,7 @@ const ConceptDetailsPage = ({ id }) => {
     };
 
     fetchConceptDetails();
-  }, [id]);
+  }, [props.id]);
 
   if (loading) {
     return (
@@ -50,7 +57,7 @@ const ConceptDetailsPage = ({ id }) => {
     <ScrollView style={styles.container}>
       <View style={styles.detailsContainer}>
         <Text style={styles.titleText}>
-          Titre du Concept: {conceptDetails.titre}
+          Concept Title: {conceptDetails!.titre}
         </Text>
         <Text style={styles.contentText}>
           Contenu: {conceptDetails.contenu}
