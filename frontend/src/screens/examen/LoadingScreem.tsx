@@ -1,7 +1,6 @@
 import axiosInstance from "@/environments/axiosInstance";
 import environment from "@/environments/environment";
 import { NavigationProp, useNavigation } from "@react-navigation/native";
-import { QuestionControllerApi, QuestionResponse } from "generated/index";
 import React, { useEffect, useState } from "react";
 import {
   Alert,
@@ -11,6 +10,10 @@ import {
   Text,
   View,
 } from "react-native";
+import {
+  QuestionControllerApi,
+  QuestionResponse,
+} from "../../../generated/index";
 
 interface Question {
   id: number;
@@ -49,6 +52,7 @@ const LoadingScreen: React.FC = () => {
             option3: question.option3,
             option4: question.option4,
             correctOption: question.correctOption,
+            image: question.image,
           })
         );
 

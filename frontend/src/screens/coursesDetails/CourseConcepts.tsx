@@ -14,12 +14,11 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-import { CoursControllerApi } from "../../../generated/index";
+
+import { CoursControllerApi, CoursResponse } from "../../../generated/index";
 import axiosInstance from "../../environments/axiosInstance";
 import environment from "../../environments/environment";
 import CourseDetailsStyle from "./CoursesDetailsStyles";
-
-import { CoursResponse } from "../../../generated/index";
 
 interface Concept {
   id: number;
@@ -72,35 +71,41 @@ const CourseConcepts: React.FC = () => {
   }
 
   return (
-    <View
-      style={{
-        backgroundColor: "#f0f8ff",
-        height: Dimensions.get("window").height,
-      }}
-    >
+    <>
       <Header titre={"Liste des Concepts"} />
       <View
         style={{
           backgroundColor: "#f0f8ff",
-          justifyContent: "center",
-          alignItems: "center",
+          height: Dimensions.get("window").height + 50,
         }}
       >
-        <Text style={CourseDetailsStyle.titleText}>{courseDetails?.titre}</Text>
-        <FlatList
-          data={courseDetails?.concepts}
-          keyExtractor={(item) => item.id!.toString()}
-          renderItem={({ item }) => (
-            <TouchableOpacity onPress={() => handleConceptPress(item.id!)}>
-              <View style={CourseDetailsStyle.conceptContainer}>
-                <Text style={CourseDetailsStyle.conceptText}>{item.titre}</Text>
-                <AntDesign name="rightcircleo" size={24} color="black" />
-              </View>
-            </TouchableOpacity>
-          )}
-        />
+        <View
+          style={{
+            backgroundColor: "#f0f8ff",
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+        >
+          <Text style={CourseDetailsStyle.titleText}>
+            {courseDetails?.titre}
+          </Text>
+          <FlatList
+            data={courseDetails?.concepts}
+            keyExtractor={(item) => item.id!.toString()}
+            renderItem={({ item }) => (
+              <TouchableOpacity onPress={() => handleConceptPress(item.id!)}>
+                <View style={CourseDetailsStyle.conceptContainer}>
+                  <Text style={CourseDetailsStyle.conceptText}>
+                    {item.titre}
+                  </Text>
+                  <AntDesign name="rightcircleo" size={24} color="black" />
+                </View>
+              </TouchableOpacity>
+            )}
+          />
+        </View>
       </View>
-    </View>
+    </>
   );
 };
 

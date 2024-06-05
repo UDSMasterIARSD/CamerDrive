@@ -16,6 +16,7 @@ interface AuthProps {
       dateNaiss: Date | null;
       password: string | null;
       role: string | null;
+      profile: string | null;
     } | null;
   };
   onRegister?: (
@@ -50,6 +51,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
       dateNaiss: Date | null;
       password: string | null;
       role: string | null;
+      profile: string | null;
     } | null;
   }>({
     token: null,
@@ -108,6 +110,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
           dateNaiss: user?.dateNaiss!,
           password: user?.password!,
           role: user?.role?.nom!,
+          profile: user?.profile!,
         },
       });
 

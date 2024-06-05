@@ -13,7 +13,6 @@ import {
   Pressable,
   ScrollView,
   Text,
-  TouchableOpacity,
   View,
   ViewStyle,
 } from "react-native";
@@ -90,10 +89,6 @@ const AdminDashbord: React.FC = () => {
     }
   };
 
-  const handlePress = () => {
-    navigation.goBack();
-  };
-
   const createTwoButtonAlert = () =>
     Alert.alert(
       "Confirmer la déconnexion",
@@ -122,10 +117,6 @@ const AdminDashbord: React.FC = () => {
   return (
     <>
       <View style={AdminDashbordStyle.header1}>
-        <TouchableOpacity onPress={handlePress}>
-          <Ionicons name="arrow-back" size={24} color="#000000" />
-        </TouchableOpacity>
-
         <Text style={{ fontSize: 15, fontWeight: "bold" }}>Accueil</Text>
         <Pressable onPress={createTwoButtonAlert}>
           <Ionicons name="log-out" size={30} color="#003f5c" />

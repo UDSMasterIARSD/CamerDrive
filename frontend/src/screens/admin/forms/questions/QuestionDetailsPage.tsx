@@ -1,5 +1,12 @@
 import React, { useEffect, useState } from "react";
-import { ActivityIndicator, StyleSheet, Text, View } from "react-native";
+import {
+  ActivityIndicator,
+  Image,
+  ScrollView,
+  StyleSheet,
+  Text,
+  View,
+} from "react-native";
 import { QuestionControllerApi } from "../../../../../generated/index";
 import axiosInstance from "../../../../environments/axiosInstance";
 import environment from "../../../../environments/environment";
@@ -7,6 +14,7 @@ import environment from "../../../../environments/environment";
 const QuestionDetailsPage = ({ id }) => {
   const [questionDetails, setQuestionDetails] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [imageUri, setImageUri] = useState("");
 
   useEffect(() => {
     const fetchQuestionDetails = async () => {
@@ -18,6 +26,9 @@ const QuestionDetailsPage = ({ id }) => {
         );
         const response = await questionApi.showQuestion(id);
         setQuestionDetails(response.data);
+        if (response.data.image) {
+          setImageUri("/files/" + response.data.image.id);
+        }
       } catch (error) {
         console.log(error);
       } finally {
@@ -37,9 +48,14 @@ const QuestionDetailsPage = ({ id }) => {
   }
 
   return (
-    <View style={QuestionDetailsStyle.container}>
+    <ScrollView style={QuestionDetailsStyle.container}>
       <View style={QuestionDetailsStyle.detailsContainer}>
-        <Text style={QuestionDetailsStyle.titleText}>Details Question</Text>
+        {imageUri && (
+          <Image
+            source={{ uri: environment.basePath + imageUri }}
+            style={QuestionDetailsStyle.image}
+          />
+        )}
         <View style={QuestionDetailsStyle.sectionContainer}>
           <Text style={QuestionDetailsStyle.labelText}>ID:</Text>
           <Text style={QuestionDetailsStyle.detailText}>
@@ -82,7 +98,7 @@ const QuestionDetailsPage = ({ id }) => {
           )}
         </View>
       </View>
-    </View>
+    </ScrollView>
   );
 };
 
@@ -91,10 +107,8 @@ export default QuestionDetailsPage;
 const QuestionDetailsStyle = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
     backgroundColor: "#f5f5f5",
-    padding: 16,
+    //justifyContent: "center",
   },
   loadingContainer: {
     flex: 1,
@@ -102,8 +116,10 @@ const QuestionDetailsStyle = StyleSheet.create({
     alignItems: "center",
   },
   detailsContainer: {
-    width: "100%",
-    padding: 20,
+    width: "90%",
+    alignSelf: "center",
+    justifyContent: "center",
+    //padding: 20,
     backgroundColor: "#fff",
     borderRadius: 10,
     shadowColor: "#000",
@@ -111,6 +127,7 @@ const QuestionDetailsStyle = StyleSheet.create({
     shadowOpacity: 0.25,
     shadowRadius: 3.84,
     elevation: 5,
+    marginTop: 20,
     marginBottom: 20,
   },
   titleText: {
@@ -123,6 +140,9 @@ const QuestionDetailsStyle = StyleSheet.create({
   sectionContainer: {
     marginBottom: 15,
     alignItems: "center",
+    flexDirection: "row",
+    justifyContent: "space-evenly",
+    paddingHorizontal: 10,
   },
   labelText: {
     fontSize: 16,
@@ -150,5 +170,14 @@ const QuestionDetailsStyle = StyleSheet.create({
     fontSize: 16,
     paddingVertical: 5,
     color: "#333",
+  },
+
+  image: {
+    width: "100%",
+    height: 200,
+    resizeMode: "cover",
+    borderTopLeftRadius: 15,
+    borderTopRightRadius: 15,
+    marginBottom: 20,
   },
 });

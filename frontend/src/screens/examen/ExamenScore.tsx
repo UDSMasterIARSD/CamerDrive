@@ -1,11 +1,14 @@
 import { Ionicons } from "@expo/vector-icons";
 import {
   NavigationProp,
+  RouteProp,
+  useFocusEffect,
   useNavigation,
   useRoute,
 } from "@react-navigation/native";
-import React from "react";
+import React, { useCallback } from "react";
 import {
+  BackHandler,
   Dimensions,
   ScrollView,
   StatusBar,
@@ -15,15 +18,55 @@ import {
   View,
 } from "react-native";
 
+type QuizRouteParams = {
+  id: number;
+  questions: {
+    correct: boolean;
+    questionText: string;
+  }[];
+  score: number;
+  totalTime: number;
+};
+
+type ExamenScoreScreenRouteProp = RouteProp<
+  { params: QuizRouteParams },
+  "params"
+>;
+
 const ExamenScore = () => {
-  const route = useRoute();
+  const route = useRoute<ExamenScoreScreenRouteProp>();
   const { questions, score, totalTime } = route.params;
   const navigation = useNavigation<NavigationProp<any>>();
   const windowWidth = Dimensions.get("window").width;
   const marginLeft = windowWidth * 0.2;
 
+  useFocusEffect(
+    useCallback(() => {
+      const onBackPress = () => {
+        navigation.navigate("ExamenBlanc");
+        return true;
+      };
+
+      BackHandler.addEventListener("hardwareBackPress", onBackPress);
+
+      return () => {
+        BackHandler.removeEventListener("hardwareBackPress", onBackPress);
+      };
+    }, [navigation])
+  );
+
   const handlePress = () => {
     navigation.navigate("Home");
+  };
+
+  const formatTime = (seconds: number) => {
+    if (seconds >= 3600) {
+      return `${Math.floor(seconds / 3600)} heures`;
+    } else if (seconds >= 60) {
+      return `${Math.floor(seconds / 60)} minutes`;
+    } else {
+      return `${seconds} secondes`;
+    }
   };
 
   return (
@@ -33,9 +76,7 @@ const ExamenScore = () => {
           <Ionicons name="arrow-back" size={24} color="#000000" />
         </TouchableOpacity>
 
-        <Text
-          style={{ marginLeft: marginLeft, fontSize: 15, fontWeight: "bold" }}
-        >
+        <Text style={{ marginLeft, fontSize: 15, fontWeight: "bold" }}>
           Résultat
         </Text>
       </View>
@@ -46,40 +87,35 @@ const ExamenScore = () => {
         }}
       >
         <View style={styles.container}>
-          {questions.map((question, index) => {
-            if (index % 2 === 0) {
-              return (
+          {questions.map(
+            (question, index) =>
+              index % 4 === 0 && (
                 <View key={index} style={styles.row}>
-                  <View
-                    style={[
-                      styles.questionContainer,
-                      !question.correct && styles.incorrectQuestion,
-                    ]}
-                  >
-                    <Text style={styles.questionText}>
-                      Question {index + 1}
-                    </Text>
-                  </View>
-                  {questions[index + 1] && (
-                    <View
-                      style={[
-                        styles.questionContainer,
-                        !questions[index + 1].correct &&
-                          styles.incorrectQuestion,
-                      ]}
-                    >
-                      <Text style={styles.questionText}>
-                        Question {index + 2}
-                      </Text>
-                    </View>
-                  )}
+                  {Array.from({ length: 4 }).map((_, i) => {
+                    const currentQuestion = questions[index + i];
+                    if (currentQuestion) {
+                      return (
+                        <View
+                          key={i}
+                          style={[
+                            styles.questionContainer,
+                            !currentQuestion.correct &&
+                              styles.incorrectQuestion,
+                          ]}
+                        >
+                          <Text style={styles.questionText}>
+                            {index + i + 1}
+                          </Text>
+                        </View>
+                      );
+                    }
+                    return null;
+                  })}
                 </View>
-              );
-            }
-            return null;
-          })}
+              )
+          )}
           <Text style={styles.summaryText}>
-            Durée totale: {totalTime} secondes
+            Durée totale: {formatTime(totalTime)}
           </Text>
           <Text style={styles.summaryText}>
             Questions réussies: {score}/{questions.length}
@@ -104,7 +140,8 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 20,
-    //backgroundColor: "#fff",
+    alignItems: "center",
+    justifyContent: "center",
   },
   row: {
     flexDirection: "row",
@@ -115,11 +152,12 @@ const styles = StyleSheet.create({
     flex: 1,
     padding: 15,
     borderRadius: 5,
-    backgroundColor: "#d4edda",
+    backgroundColor: "#fff",
     marginHorizontal: 5,
+    alignItems: "center",
   },
   incorrectQuestion: {
-    backgroundColor: "#f8d7da",
+    backgroundColor: "red",
   },
   questionText: {
     fontSize: 16,

@@ -16,10 +16,7 @@ import {
   View,
 } from "react-native";
 import { Dropdown } from "react-native-element-dropdown";
-import {
-  FichierControllerApi,
-  QuestionControllerApi,
-} from "../../../../../generated/index";
+import { QuestionControllerApi } from "../../../../../generated/index";
 import SelectImage from "../../../../components/SelectImage"; // Adjust the path as necessary
 import axiosInstance from "../../../../environments/axiosInstance";
 import environment from "../../../../environments/environment";
@@ -94,42 +91,6 @@ const AddQuestionForm = () => {
       let uploadedImageUrl = "";
 
       if (imageUri) {
-        //const result = await fetch(imageUri);
-        //console.log(result);
-        //const blod = await result.blob();
-        const formData = new FormData();
-
-        formData.append("file", {
-          uri: imageUri,
-          type: "image/jpeg",
-          name: "upload.jpg",
-        });
-        //console.log("blod", formData);
-        const fileApi = new FichierControllerApi(
-          environment,
-          environment.basePath,
-          axiosInstance
-        );
-        console.log("FormData", formData);
-        //const fichier = fileApi.uploadForm(formData);
-        const response = await axios.post(
-          `${environment.basePath}/files/`,
-          formData,
-          {
-            headers: {
-              "Content-Type": "multipart/form-data",
-              Authorization: `Bearer ${authState?.token}`,
-            },
-          }
-        );
-        const result = response.data;
-        //console.log("image", imageUri);
-        //const response = await fichierApi.uploadForm(formData);
-        //console.log(response.data);
-        //console.log(response.status);
-
-        // uploadedImageUrl! = response!.data!.url!;
-        //console.log(uploadedImageUrl);
         const formDataf = new FormData();
         formDataf.append("libelle", libelle);
         formDataf.append("option1", option1);
@@ -159,24 +120,7 @@ const AddQuestionForm = () => {
           environment.basePath,
           axiosInstance
         );
-        /*console.log({
-          libelle: libelle,
-          option1: option1,
-          option2: option2,
-          option3: option3,
-          option4: option4,
-          correctOption: correctOption,
-          fichier: uploadedIm*/
 
-        /*await questionApi.createQuestionForm(
-          libelle,
-          option1,
-          option2,
-          option3,
-          option4,
-          correctOption,
-          fichier
-        );*/
         setLoading(false);
         setMessage("Question ajoute avec success");
         setMessageType("success");
@@ -212,7 +156,9 @@ const AddQuestionForm = () => {
       )}
       <ScrollView style={styles.scrollView}>
         <View style={styles.formContainer}>
-          <SelectImage onImagePicked={setImageUri} />
+          <TouchableOpacity>
+            <SelectImage onImagePicked={setImageUri} />
+          </TouchableOpacity>
           {/* Add SelectImage component */}
           <View style={styles.textInputContainer}>
             <TextInput
@@ -328,7 +274,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#ffffff",
   },
   formContainer: {
-    marginTop: 50,
+    //marginTop: 50,
     alignItems: "center",
     justifyContent: "center",
   },
