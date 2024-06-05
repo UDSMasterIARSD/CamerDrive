@@ -1,4 +1,4 @@
-import { useNavigation } from "@react-navigation/native";
+import { NavigationProp, useNavigation } from "@react-navigation/native";
 import * as SecureStore from "expo-secure-store";
 import React, { createContext, useContext, useState } from "react";
 import { AuthControllerApi } from "../../generated/index";
@@ -16,6 +16,7 @@ interface AuthProps {
       dateNaiss: Date | null;
       password: string | null;
       role: string | null;
+      profile: string | null;
     } | null;
   };
   onRegister?: (
@@ -39,7 +40,7 @@ export const useAuth = () => {
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
   children,
 }) => {
-  const navigation = useNavigation();
+  const navigation = useNavigation<NavigationProp<any>>();
   const [authState, setAuthState] = useState<{
     token: string | null;
     authenticated: boolean | null;
@@ -50,6 +51,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
       dateNaiss: Date | null;
       password: string | null;
       role: string | null;
+      profile: string | null;
     } | null;
   }>({
     token: null,
@@ -108,6 +110,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
           dateNaiss: user?.dateNaiss!,
           password: user?.password!,
           role: user?.role?.nom!,
+          profile: user?.profile!,
         },
       });
 

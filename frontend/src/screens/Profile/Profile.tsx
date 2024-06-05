@@ -4,7 +4,6 @@ import DateTimePicker from "@react-native-community/datetimepicker";
 import { useNavigation } from "@react-navigation/native";
 import axios from "axios";
 import * as ImagePicker from "expo-image-picker";
-import { FichierControllerApi, UserControllerApi } from "generated/index";
 import React, { useState } from "react";
 import {
   Button,
@@ -17,6 +16,10 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
+import {
+  FichierControllerApi,
+  UserControllerApi,
+} from "../../../generated/index";
 import axiosInstance from "../../environments/axiosInstance";
 import environment from "../../environments/environment";
 
@@ -244,7 +247,8 @@ const ProfilePage = () => {
           environment.basePath,
           axiosInstance
         );
-        console.log("FormData", formData);
+        //console.log("FormData", formData);
+
         //const fichier = fileApi.uploadForm(formData);
         const response = await axios.post(
           `${environment.basePath}/files/`,
@@ -258,6 +262,25 @@ const ProfilePage = () => {
         );
 
         console.log(response.data);
+
+        const formDataf = new FormData();
+
+        formDataf.append("profile", response.data);
+        const userId = authState?.user?.id;
+
+        console.log(userId);
+
+        const responsef = await axios.put(
+          `${environment.basePath}/users/profile/${userId}`,
+          formDataf,
+          {
+            headers: {
+              "Content-Type": "multipart/form-data",
+              Authorization: `Bearer ${authState?.token}`,
+            },
+          }
+        );
+        console.log(responsef.data);
 
         setMessage("Image charge avec success.");
         setMessageType("success");
@@ -277,7 +300,7 @@ const ProfilePage = () => {
           setMessage("");
         }, 2000);
       }
-      setImage(result.assets[0].uri);
+      //setImage(result.assets[0].uri);
     }
   };
 

@@ -1,6 +1,16 @@
-import { useNavigation } from "@react-navigation/native";
+import { NavigationProp, useNavigation } from "@react-navigation/native";
 import React, { useEffect, useState } from "react";
-import { Alert, FlatList, Text, TouchableOpacity, View } from "react-native";
+import {
+  ActivityIndicator,
+  Alert,
+  Dimensions,
+  FlatList,
+  StatusBar,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from "react-native";
 import { QuizControllerApi } from "../../../generated/index";
 import axiosInstance from "../../environments/axiosInstance";
 import environment from "../../environments/environment";
@@ -12,7 +22,7 @@ interface Quiz {
 }
 
 const Quizzes = () => {
-  const navigation = useNavigation();
+  const navigation = useNavigation<NavigationProp<any>>();
 
   const [quizzes, setQuizzes] = useState<Quiz[]>([]);
   const [loading, setLoading] = useState(true);
@@ -47,6 +57,14 @@ const Quizzes = () => {
     navigation.navigate("QuizDetails", { id });
   };
 
+  if (loading) {
+    return (
+      <View style={QuizStyle.loadingContainer}>
+        <ActivityIndicator size="large" color="#0000ff" />
+      </View>
+    );
+  }
+
   return (
     <View
       style={{
@@ -74,7 +92,6 @@ const Quizzes = () => {
             </TouchableOpacity>
           </View>
         )}
-        ListFooterComponent={loading ? <Text>Loading...</Text> : null}
       />
     </View>
   );
@@ -82,16 +99,20 @@ const Quizzes = () => {
 
 export default Quizzes;
 
-import { Dimensions, StatusBar, StyleSheet } from "react-native";
-
 const QuizStyle = StyleSheet.create({
   container: {
     backgroundColor: "white",
     marginBottom: 15,
     marginLeft: 20,
     marginRight: 20,
-    marginTop: StatusBar.currentHeight - 10,
+    marginTop: StatusBar.currentHeight! - 10,
     borderRadius: 20,
+  },
+  loadingContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    marginTop: Dimensions.get("window").height * 0.4,
   },
 
   itemContainer: {

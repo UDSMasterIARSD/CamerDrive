@@ -28,6 +28,7 @@ const AdminDashbordStyle = StyleSheet.create({
     textAlign: "center",
     alignSelf: "center",
     marginTop: 20,
+    padding:10
   },
   tasksContainer: {
     marginTop: 16,

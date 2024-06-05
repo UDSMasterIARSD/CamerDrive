@@ -2,9 +2,12 @@ import Header from "@/components/Header";
 import axiosInstance from "@/environments/axiosInstance";
 import environment from "@/environments/environment";
 import { NavigationProp, useNavigation } from "@react-navigation/native";
-import { QuizControllerApi, ScoreUserQuizControllerApi } from "generated/index";
 import React, { useEffect, useState } from "react";
 import { ActivityIndicator, ScrollView, Text, View } from "react-native";
+import {
+  QuizControllerApi,
+  ScoreUserQuizControllerApi,
+} from "../../../generated/index";
 import StatistiqueStyle from "./StatistiqueStyle";
 
 interface ScoreDetail {

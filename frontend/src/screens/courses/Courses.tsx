@@ -1,8 +1,9 @@
 import { NavigationProp, useNavigation } from "@react-navigation/native";
-import axios from "axios";
 import React, { useEffect, useState } from "react";
 import {
+  ActivityIndicator,
   Alert,
+  Dimensions,
   FlatList,
   Image,
   Text,
@@ -45,20 +46,9 @@ const Courses: React.FC = () => {
 
       console.log(courses);
 
-      const imageRequests = courses.map((course) => {
-        return axios.get(`${environment.basePath}/files/${course.imageId}`, {
-          headers: {
-            Authorization: `Bearer ${authState?.token}`,
-          },
-          // responseType: Blob,
-        });
-      });
-
-      const imageResponses = await Promise.all(imageRequests);
-
-      const coursesWithImages = courses.map((course, index) => ({
+      const coursesWithImages = courses.map((course) => ({
         ...course,
-        imageUrl: imageResponses[index].data,
+        imageUrl: `${environment.basePath}/files/${course.imageId}`,
       }));
 
       console.log("Cours avec images:", coursesWithImages);
@@ -74,8 +64,6 @@ const Courses: React.FC = () => {
   useEffect(() => {
     const fetchData = async () => {
       await AllCourses();
-
-      setLoading(false);
     };
     fetchData();
   }, []);
@@ -84,33 +72,46 @@ const Courses: React.FC = () => {
     navigation.navigate("CourseConcepts", { id });
   };
 
+  if (loading) {
+    return (
+      <View style={CoursesStyle.loadingContainer}>
+        <ActivityIndicator size="large" color="#0000ff" />
+      </View>
+    );
+  }
+
   return (
-    <FlatList
-      data={courses}
-      keyExtractor={(item) => item.id.toString()}
+    <View
       style={{
         backgroundColor: "#f0f8ff",
-        borderTopRightRadius: 10,
-        marginBottom: 40,
+        height: Dimensions.get("window").height,
       }}
-      renderItem={({ item }) => (
-        <View style={CoursesStyle.container}>
-          <TouchableOpacity onPress={() => handleCoursePress(item.id)}>
-            <View style={CoursesStyle.itemContainer}>
-              <Image
-                source={{ uri: item.imageUrl }}
-                style={CoursesStyle.courseImage}
-              />
-              <View>
-                <Text style={CoursesStyle.title}>{item.courseName}</Text>
-                <Text>Driving Lesson - #{item.id}</Text>
+    >
+      <FlatList
+        data={courses}
+        keyExtractor={(item) => item.id.toString()}
+        style={{
+          borderTopRightRadius: 10,
+          marginBottom: 40,
+        }}
+        renderItem={({ item }) => (
+          <View style={CoursesStyle.container}>
+            <TouchableOpacity onPress={() => handleCoursePress(item.id)}>
+              <View style={CoursesStyle.itemContainer}>
+                <Image
+                  source={{ uri: item.imageUrl }}
+                  style={CoursesStyle.courseImage}
+                />
+                <View>
+                  <Text style={CoursesStyle.title}>{item.courseName}</Text>
+                  <Text>Driving Lesson - #{item.id}</Text>
+                </View>
               </View>
-            </View>
-          </TouchableOpacity>
-        </View>
-      )}
-      ListFooterComponent={loading ? <Text>Loading...</Text> : null}
-    />
+            </TouchableOpacity>
+          </View>
+        )}
+      />
+    </View>
   );
 };
 

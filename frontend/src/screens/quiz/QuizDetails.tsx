@@ -6,6 +6,7 @@ import {
   ActivityIndicator,
   BackHandler,
   Dimensions,
+  Image,
   Modal,
   Pressable,
   ScrollView,
@@ -16,11 +17,12 @@ import {
   View,
 } from "react-native";
 import Icon from "react-native-vector-icons/Ionicons"; // Assurez-vous d'avoir installé react-native-vector-icons
+
 import {
   QuizControllerApi,
   ScoreUserQuizControllerApi,
   UserControllerApi,
-} from "../../../generated/index";
+} from "generated/index";
 import axiosInstance from "../../environments/axiosInstance";
 import environment from "../../environments/environment";
 
@@ -176,7 +178,8 @@ const QuizDetails = ({ route }) => {
   }
 
   const handlePress = () => {
-    navigation.goBack();
+    setModalVisible(true);
+    return true;
   };
 
   const currentQuestion = quizDetails.questions[currentQuestionIndex];
@@ -186,6 +189,8 @@ const QuizDetails = ({ route }) => {
     currentQuestion.option3,
     currentQuestion.option4,
   ].filter((option) => option);
+
+  console.log(currentQuestion);
 
   return (
     <>
@@ -200,71 +205,81 @@ const QuizDetails = ({ route }) => {
           Question {currentQuestionNumber}/{quizDetails.questions.length}
         </Text>
       </View>
-      <View style={styles.container}>
-        <View style={styles.titleContainer}>
-          <Text style={styles.titleText}>QuizTitle: {quizDetails.titre}</Text>
-        </View>
-        <ScrollView style={styles.detailsContainer}>
-          <Text style={styles.questionText}>
-            {currentQuestionIndex + 1}. {currentQuestion.libelle}
-          </Text>
-          <View style={styles.optionsContainer}>
-            {options.map((option, index) => (
-              <Pressable
-                key={index}
-                onPress={() => handleOptionPress(option)}
-                style={[
-                  styles.optionItem,
-                  selectedOption === option ? styles.selectedOption : null,
-                ]}
-                disabled={optionsDisabled}
-              >
-                <Text
-                  style={[
-                    styles.optionText,
-                    answered &&
-                    selectedOption === option &&
-                    option === currentQuestion.correctOption
-                      ? styles.correctText
-                      : answered &&
-                        selectedOption === option &&
-                        option !== currentQuestion.correctOption
-                      ? styles.incorrectText
-                      : answered && option === currentQuestion.correctOption
-                      ? styles.correctText
-                      : null,
-                  ]}
-                >
-                  {String.fromCharCode(97 + index)}) {option}
-                </Text>
-                <View style={styles.radioButton}>
-                  <View
+
+      <ScrollView>
+        <View style={styles.container}>
+          <View style={styles.questionContainer}>
+            {currentQuestion.image && (
+              <Image
+                source={{
+                  uri: `${environment.basePath}/files/${currentQuestion.image.id}`,
+                }}
+                style={styles.questionImage}
+              />
+            )}
+            <View style={styles.detailsContainer}>
+              <Text style={styles.questionText}>
+                {currentQuestionIndex + 1}. {currentQuestion.libelle}
+              </Text>
+              <View style={styles.optionsContainer}>
+                {options.map((option, index) => (
+                  <Pressable
+                    key={index}
+                    onPress={() => handleOptionPress(option)}
                     style={[
-                      styles.radioCircle,
-                      selectedOption === option
-                        ? answered
-                          ? option === currentQuestion.correctOption
-                            ? styles.radioCorrect
-                            : styles.radioIncorrect
-                          : styles.radioSelected
-                        : null,
+                      styles.optionItem,
+                      selectedOption === option ? styles.selectedOption : null,
                     ]}
+                    disabled={optionsDisabled}
                   >
-                    {answered && selectedOption === option && (
-                      <Ionicons
-                        name={
-                          option === currentQuestion.correctOption
-                            ? "checkmark"
-                            : "close"
-                        }
-                        size={16}
-                        color="#fff"
-                      />
-                    )}
-                  </View>
-                </View>
-              </Pressable>
-            ))}
+                    <Text
+                      style={[
+                        styles.optionText,
+                        answered &&
+                        selectedOption === option &&
+                        option === currentQuestion.correctOption
+                          ? styles.correctText
+                          : answered &&
+                            selectedOption === option &&
+                            option !== currentQuestion.correctOption
+                          ? styles.incorrectText
+                          : answered && option === currentQuestion.correctOption
+                          ? styles.correctText
+                          : null,
+                      ]}
+                    >
+                      {String.fromCharCode(97 + index)}) {option}
+                    </Text>
+                    <View style={styles.radioButton}>
+                      <View
+                        style={[
+                          styles.radioCircle,
+                          selectedOption === option
+                            ? answered
+                              ? option === currentQuestion.correctOption
+                                ? styles.radioCorrect
+                                : styles.radioIncorrect
+                              : styles.radioSelected
+                            : null,
+                        ]}
+                      >
+                        {answered && selectedOption === option && (
+                          <Ionicons
+                            name={
+                              option === currentQuestion.correctOption
+                                ? "checkmark"
+                                : "close"
+                            }
+                            size={16}
+                            color="#fff"
+                          />
+                        )}
+                      </View>
+                    </View>
+                  </Pressable>
+                ))}
+              </View>
+            </View>
           </View>
           {errorMessage ? (
             <Text style={styles.errorMessage}>{errorMessage}</Text>
@@ -290,42 +305,44 @@ const QuizDetails = ({ route }) => {
             </Pressable>
           </View>
           {answered && <Text style={styles.emojiText}>{emoji}</Text>}
-        </ScrollView>
 
-        <Modal
-          animationType="slide"
-          transparent={true}
-          visible={modalVisible}
-          onRequestClose={() => {
-            setModalVisible(!modalVisible);
-          }}
-        >
-          <View style={styles.modalContainer}>
-            <View style={styles.modalContent}>
-              <Icon name="arrow-back" size={30} color="#000" />
-              <Text style={styles.modalText}>Voulez-vous revenir au menu?</Text>
-              <Text style={styles.modalSubText}>
-                La progression de la série sera perdue.
-              </Text>
-              <TouchableOpacity
-                style={styles.modalButton}
-                onPress={() => setModalVisible(false)}
-              >
-                <Text style={styles.modalButtonText}>Continuer la série</Text>
-              </TouchableOpacity>
-              <TouchableOpacity
-                style={[styles.modalButton, styles.modalButtonDanger]}
-                onPress={() => {
-                  setModalVisible(false);
-                  navigation.navigate("Home");
-                }}
-              >
-                <Text style={styles.modalButtonText}>Retourner au menu</Text>
-              </TouchableOpacity>
+          <Modal
+            animationType="slide"
+            transparent={true}
+            visible={modalVisible}
+            onRequestClose={() => {
+              setModalVisible(!modalVisible);
+            }}
+          >
+            <View style={styles.modalContainer}>
+              <View style={styles.modalContent}>
+                <Icon name="arrow-back" size={30} color="#000" />
+                <Text style={styles.modalText}>
+                  Voulez-vous revenir au menu?
+                </Text>
+                <Text style={styles.modalSubText}>
+                  La progression de la série sera perdue.
+                </Text>
+                <TouchableOpacity
+                  style={styles.modalButton}
+                  onPress={() => setModalVisible(false)}
+                >
+                  <Text style={styles.modalButtonText}>Continuer la série</Text>
+                </TouchableOpacity>
+                <TouchableOpacity
+                  style={[styles.modalButton, styles.modalButtonDanger]}
+                  onPress={() => {
+                    setModalVisible(false);
+                    navigation.navigate("Home");
+                  }}
+                >
+                  <Text style={styles.modalButtonText}>Retourner au menu</Text>
+                </TouchableOpacity>
+              </View>
             </View>
-          </View>
-        </Modal>
-      </View>
+          </Modal>
+        </View>
+      </ScrollView>
     </>
   );
 
@@ -357,76 +374,72 @@ const styles = StyleSheet.create({
     alignItems: "center",
     paddingHorizontal: 20,
     paddingVertical: 10,
-    backgroundColor: "#fff",
+    //backgroundColor: "#f0f8ff",
   },
   container: {
     flex: 1,
     paddingHorizontal: 20,
-    backgroundColor: "#fff",
+    backgroundColor: "#f0f8ff",
+    justifyContent: "center",
   },
   loadingContainer: {
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
   },
-  titleContainer: {
+  questionContainer: {
+    backgroundColor: "#ffffff",
+    borderRadius: 15,
+
     marginBottom: 20,
-  },
-  titleText: {
-    fontSize: 20,
-    fontWeight: "bold",
-    textAlign: "center",
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 5,
+    marginTop: Dimensions.get("window").height * 0.1,
   },
   detailsContainer: {
-    flex: 1,
+    padding: 20,
   },
   questionText: {
-    fontSize: 18,
+    fontSize: 20,
     fontWeight: "bold",
+    color: "#000",
+    marginBottom: 20,
+    textAlign: "center",
+  },
+  questionImage: {
+    width: "100%",
+    height: 200,
+    resizeMode: "cover",
+    borderTopLeftRadius: 15,
+    borderTopRightRadius: 15,
+    //borderRadius: 10,
     marginBottom: 20,
   },
   optionsContainer: {
-    marginBottom: 20,
+    marginTop: 20,
   },
   optionItem: {
     flexDirection: "row",
     alignItems: "center",
-    paddingVertical: 10,
-    paddingHorizontal: 15,
-    backgroundColor: "#f9f9f9",
+    padding: 10,
+    marginBottom: 10,
+    backgroundColor: "#f8f8ff",
+    borderRadius: 10,
     borderWidth: 1,
     borderColor: "#ddd",
-    borderRadius: 5,
-    marginBottom: 10,
   },
   selectedOption: {
-    backgroundColor: "#ddd",
+    backgroundColor: "#d3d3d3",
   },
   optionText: {
     flex: 1,
     fontSize: 16,
-  },
-  radioButton: {
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  radioCircle: {
-    width: 24,
-    height: 24,
-    borderRadius: 12,
-    borderWidth: 2,
-    borderColor: "#ccc",
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  radioSelected: {
-    borderColor: "#007AFF",
-  },
-  radioCorrect: {
-    backgroundColor: "green",
-  },
-  radioIncorrect: {
-    backgroundColor: "red",
   },
   correctText: {
     color: "green",
@@ -434,35 +447,56 @@ const styles = StyleSheet.create({
   incorrectText: {
     color: "red",
   },
-  errorMessage: {
-    color: "red",
-    fontSize: 16,
-    marginBottom: 20,
-    textAlign: "center",
+  radioButton: {
+    marginLeft: 10,
   },
-  buttonsContainer: {
-    flexDirection: "row",
+  radioCircle: {
+    width: 20,
+    height: 20,
+    borderRadius: 10,
+    borderWidth: 2,
+    borderColor: "#000",
+    alignItems: "center",
     justifyContent: "center",
   },
+  radioSelected: {
+    backgroundColor: "#000",
+  },
+  radioCorrect: {
+    backgroundColor: "green",
+  },
+  radioIncorrect: {
+    backgroundColor: "red",
+  },
+  errorMessage: {
+    color: "red",
+    textAlign: "center",
+    marginTop: 10,
+  },
+  buttonsContainer: {
+    marginTop: 20,
+    alignItems: "center",
+  },
   button: {
-    paddingVertical: 10,
-    paddingHorizontal: 20,
-    borderRadius: 5,
+    padding: 10,
+    borderRadius: 10,
+    alignItems: "center",
+    justifyContent: "center",
+    width: "80%",
   },
   validateButton: {
-    backgroundColor: "#007AFF",
+    backgroundColor: "#007bff",
+    marginBottom: 50,
   },
   continueButton: {
     backgroundColor: "#28a745",
-    flexDirection: "row",
-    alignItems: "center",
   },
   buttonText: {
     color: "#fff",
     fontSize: 16,
   },
   emojiText: {
-    fontSize: 30,
+    fontSize: 50,
     textAlign: "center",
     marginTop: 20,
   },
@@ -473,9 +507,8 @@ const styles = StyleSheet.create({
     backgroundColor: "rgba(0,0,0,0.5)",
   },
   modalContent: {
-    width: 300,
-    padding: 20,
     backgroundColor: "#fff",
+    padding: 20,
     borderRadius: 10,
     alignItems: "center",
   },
@@ -485,19 +518,21 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
   modalSubText: {
-    fontSize: 16,
+    fontSize: 14,
+    color: "#666",
     marginBottom: 20,
-    textAlign: "center",
   },
   modalButton: {
-    paddingVertical: 10,
-    paddingHorizontal: 20,
-    borderRadius: 5,
+    padding: 10,
+    borderRadius: 10,
+    alignItems: "center",
+    justifyContent: "center",
+    width: "80%",
     marginBottom: 10,
-    backgroundColor: "#007AFF",
+    backgroundColor: "#007bff",
   },
   modalButtonDanger: {
-    backgroundColor: "red",
+    backgroundColor: "#dc3545",
   },
   modalButtonText: {
     color: "#fff",

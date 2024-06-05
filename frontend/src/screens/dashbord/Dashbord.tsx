@@ -1,5 +1,6 @@
 import { Ionicons } from "@expo/vector-icons";
 import {
+  NavigationProp,
   useFocusEffect,
   useNavigation,
   useNavigationState,
@@ -44,7 +45,7 @@ interface MenuItem {
 
 const Dashbord = () => {
   const { colorScheme, toggleColorScheme } = useColorScheme();
-  const navigation = useNavigation();
+  const navigation = useNavigation<NavigationProp<any>>();
   const { authState } = useAuth();
   console.log("userName", authState?.user?.username);
   console.log("initialLetter", authState!.user!.username!.charAt(0));
@@ -158,6 +159,7 @@ const Dashbord = () => {
 
   const menuItems: MenuItem[] = [
     { title: "Profil", iconName: "person" },
+    { title: "Examen Blanc", iconName: "document-text" },
     { title: "Statistiques", iconName: "stats-chart" },
     { title: "A Propos", iconName: "information-circle" },
     { title: "Deconnexion", iconName: "log-out" },
@@ -180,13 +182,16 @@ const Dashbord = () => {
         createTwoButtonAlert();
         break;
       case "Profil":
-        navigation.navigate("Profile" as never);
+        navigation.navigate("Profile");
         break;
       case "Statistiques":
-        navigation.navigate("Statistiques" as never);
+        navigation.navigate("Statistiques");
+        break;
+      case "Examen Blanc":
+        navigation.navigate("ExamenBlanc");
         break;
       case "A Propos":
-        navigation.navigate("AboutUs" as never);
+        navigation.navigate("AboutUs");
         break;
       case "Theme":
         toggleColorScheme();
@@ -196,7 +201,7 @@ const Dashbord = () => {
   };
 
   const goToProfilePage = () => {
-    navigation.navigate("Profile" as never);
+    navigation.navigate("Profile");
   };
 
   const navigationView = () => (

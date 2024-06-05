@@ -29,7 +29,15 @@ const SelectImage: React.FC<{ onImagePicked: (uri: string) => void }> = ({
   return (
     <View style={styles.container}>
       {imageUri ? (
-        <Image source={{ uri: imageUri }} style={styles.image} />
+        <>
+          <Image source={{ uri: imageUri }} style={styles.image} />
+          <TouchableOpacity
+            style={styles.changeButton}
+            onPress={handleSelectImage}
+          >
+            <Text style={styles.buttonText}>Changer l'image</Text>
+          </TouchableOpacity>
+        </>
       ) : (
         <TouchableOpacity style={styles.button} onPress={handleSelectImage}>
           <Text style={styles.buttonText}>Select Image</Text>
@@ -41,8 +49,8 @@ const SelectImage: React.FC<{ onImagePicked: (uri: string) => void }> = ({
 
 const styles = StyleSheet.create({
   container: {
-    //alignItems: "center",
-    //justifyContent: "center",
+    alignItems: "center",
+    justifyContent: "center",
     //marginVertical: 20,
   },
   button: {
@@ -50,13 +58,20 @@ const styles = StyleSheet.create({
     backgroundColor: "#007bff",
     borderRadius: 5,
   },
+  changeButton: {
+    marginTop: 10,
+    padding: 10,
+    backgroundColor: "#ff6347",
+    borderRadius: 5,
+    marginBottom: 15,
+  },
   buttonText: {
     color: "#fff",
     fontSize: 16,
   },
   image: {
-    width: 200,
-    height: 200,
+    width: 250,
+    height: 250,
     borderRadius: 10,
   },
 });

@@ -1,12 +1,14 @@
-import Header from "@/components/Header";
+import { Ionicons } from "@expo/vector-icons";
 import {
   NavigationProp,
   useFocusEffect,
   useNavigation,
 } from "@react-navigation/native";
+
 import React, { useCallback } from "react";
 import {
   BackHandler,
+  Dimensions,
   ScrollView,
   StatusBar,
   StyleSheet,
@@ -54,9 +56,26 @@ const ScorePage: React.FC<ScorePageProps> = ({ route }) => {
     }, [navigation])
   );
 
+  const handlePress = () => {
+    navigation.navigate("Home");
+  };
+
+  const windowWidth = Dimensions.get("window").width;
+  const marginLeft = windowWidth * 0.2;
+
   return (
     <>
-      <Header titre="Resultat" />
+      <View style={styles.header1}>
+        <TouchableOpacity onPress={handlePress}>
+          <Ionicons name="arrow-back" size={24} color="#000000" />
+        </TouchableOpacity>
+
+        <Text
+          style={{ marginLeft: marginLeft, fontSize: 15, fontWeight: "bold" }}
+        >
+          Resultat
+        </Text>
+      </View>
       <ScrollView style={{ backgroundColor: "#f0f8ff" }}>
         <View style={styles.container}>
           <View style={styles.statusContainer}>

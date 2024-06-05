@@ -7,7 +7,10 @@ import {
   Text,
   View,
 } from "react-native";
-import { CoursControllerApi, CoursResponse, FichierControllerApi } from "../../../../../generated/index";
+import {
+  CoursControllerApi,
+  CoursResponse,
+} from "../../../../../generated/index";
 import axiosInstance from "../../../../environments/axiosInstance";
 import environment from "../../../../environments/environment";
 
@@ -23,25 +26,27 @@ const CourseDetailsPage: React.FC<CourseDetailsProps> = (props) => {
 
   useEffect(() => {
     const fetchCourseDetails = async () => {
-
       const courseApi = new CoursControllerApi(
         environment,
         environment.basePath,
         axiosInstance
       );
-      courseApi.showCours(props.id)
+      courseApi
+        .showCours(props.id)
         .then((response) => {
           // console.log("Course Response: ", response.data);
           if (response.data) {
             setCourseDetails(response.data);
             if (response.data.image) {
               // console.log("Course Image: ", response.data.image);
-              setImageUri("/files/" + response.data.image.id)
+              setImageUri("/files/" + response.data.image.id);
             }
           }
-        }).catch((err) => {
+        })
+        .catch((err) => {
           console.log("Error while fetching course details: ", err);
-        }).finally(() => {
+        })
+        .finally(() => {
           setLoading(false);
         });
     };
@@ -63,9 +68,14 @@ const CourseDetailsPage: React.FC<CourseDetailsProps> = (props) => {
         <Text style={styles.titleText}>
           Titre du Cours: {courseDetails.titre}
         </Text>
-        {imageUri && <View className="w-full items-center">
-          <Image src={environment.basePath + imageUri} className="h-80 w-80 my-5 content-center bg-cover" />
-        </View>}
+        {imageUri && (
+          <View className="w-full items-center">
+            <Image
+              src={environment.basePath + imageUri}
+              className="h-80 w-80 my-5 content-center bg-cover"
+            />
+          </View>
+        )}
         <Text style={styles.contentText}>
           Description: {courseDetails.description}
         </Text>
