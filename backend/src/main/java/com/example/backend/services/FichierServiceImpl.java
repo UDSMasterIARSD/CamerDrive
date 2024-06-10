@@ -62,7 +62,7 @@ public class FichierServiceImpl implements FichierService {
             if (Files.exists(toDelete))
                 Files.delete(toDelete);
             String nouvNom = copyImgToPath(image, AppConstants.PROFILE_PATH);
-            profile.setUrl(nouvNom);
+            profile.setUrl(AppConstants.PROFILE_PATH + nouvNom);
             return mapper.map(fichierRepo.save(profile), FichierResponse.class);
         } catch (IOException e){
             throw new BADException("Echec de la modification de l'image");

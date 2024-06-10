@@ -25,6 +25,7 @@ import environment from "../../environments/environment";
 
 import Header from "@/components/Header";
 import styles from "./ProfileStyle";
+import ImageModal from "@/components/ImageModal";
 
 const ProfilePage = () => {
   const navigation = useNavigation();
@@ -36,14 +37,13 @@ const ProfilePage = () => {
     return date.toISOString().split("T")[0];
   };
 
-  const [profileImage, setProfileImage] = useState("../../../assets/V2.jpg");
   const [modalVisible, setModalVisible] = useState(false);
   const [passwordModalVisible, setPasswordModalVisible] = useState(false);
   const [imageModalVisible, setImageModalVisible] = useState(false);
   const [username, setUsername] = useState(authState?.user?.username || "");
   const [email, setEmail] = useState(authState?.user?.email || "");
-  const [dob, setDob] = useState(
-    new Date(authState?.user?.dateNaiss) || new Date()
+  const [dob, setDob] = useState<Date>(
+    new Date(authState?.user?.dateNaiss!) || new Date()
   );
   const [showDatePicker, setShowDatePicker] = useState(false);
   const [status, setStatus] = useState(authState?.user?.role || "");
@@ -53,8 +53,9 @@ const ProfilePage = () => {
   const [messageType, setMessageType] = useState("");
   const [cameraModalVisible, setCameraModalVisible] = useState(false);
   const [selectedImage, setSelectedImage] = useState(null);
-  const [image, setImage] = useState(null);
+  const [image, setImage] = useState<string>("");
   const [downloadedImage, setDownloadedImage] = useState(null);
+  const [isImageCharged, setIsImageCharged] = useState<boolean>(false);
 
   const [errorMessage, setErrorMessage] = useState<{
     username: string | null;
@@ -70,7 +71,7 @@ const ProfilePage = () => {
 
   const resetProfileModal = () => {
     setEmail(authState?.user?.email || "");
-    setDob(new Date(authState?.user?.dateNaiss) || new Date());
+    setDob(new Date(authState?.user?.dateNaiss!) || new Date());
     setErrorMessage({
       username: null,
       email: null,
@@ -126,7 +127,7 @@ const ProfilePage = () => {
           username,
           email,
           dateNaiss: dob.toISOString(),
-          password: authState?.user?.password,
+          password: authState?.user?.password!,
         },
         authState?.user?.id
       );
@@ -191,7 +192,7 @@ const ProfilePage = () => {
       );
       await userApi.modifyPassword(
         { oldPassword, newPassword },
-        authState?.user?.id
+        authState?.user?.id!
       );
       setMessage("Mot de passe modifie avec success.");
       setMessageType("success");
@@ -216,7 +217,16 @@ const ProfilePage = () => {
     setImageModalVisible(true);
   };
 
-  const handleDateChange = (event, selectedDate) => {
+  const handleCloseModal = () => {
+    console.log("Close Modal")
+    setImageModalVisible(false);
+  };
+
+  let imageUri = null
+  if (authState?.user?.profile)
+    imageUri = isImageCharged ? image : `${environment.basePath}/files/${authState?.user?.profile!.id}`;
+
+  const handleDateChange = (event: { type: string; }, selectedDate: Date) => {
     setShowDatePicker(false);
     if (event.type === "set") {
       const currentDate = selectedDate || dob;
@@ -224,107 +234,53 @@ const ProfilePage = () => {
     }
   };
 
-  const pickImage = async () => {
-    let result = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ImagePicker.MediaTypeOptions.All,
-      allowsEditing: true,
-      aspect: [4, 3],
-      quality: 1,
-    });
+  // const pickImage = async () => {
+  //   let result = await ImagePicker.launchImageLibraryAsync({
+  //     mediaTypes: ImagePicker.MediaTypeOptions.All,
+  //     allowsEditing: true,
+  //     aspect: [4, 3],
+  //     quality: 1,
+  //   });
 
-    if (!result.canceled) {
-      try {
-        const uri = result.assets[0].uri;
-        const formData = new FormData();
+  //   if (!result.canceled) {
+  //     const uri = result.assets[0].uri;
+  //     setImage(uri);
+  //     setIsImageCharged(true)
+  //     console.log("image charged");
 
-        formData.append("file", {
-          uri: uri,
-          type: "image/jpeg",
-          name: "upload.jpg",
-        });
-        const fileApi = new FichierControllerApi(
-          environment,
-          environment.basePath,
-          axiosInstance
-        );
-        //console.log("FormData", formData);
-
-        //const fichier = fileApi.uploadForm(formData);
-        const response = await axios.post(
-          `${environment.basePath}/files/`,
-          formData,
-          {
-            headers: {
-              "Content-Type": "multipart/form-data",
-              Authorization: `Bearer ${authState?.token}`,
-            },
-          }
-        );
-
-        console.log(response.data);
-
-        const formDataf = new FormData();
-
-        formDataf.append("profile", response.data);
-        const userId = authState?.user?.id;
-
-        console.log(userId);
-
-        const responsef = await axios.put(
-          `${environment.basePath}/users/profile/${userId}`,
-          formDataf,
-          {
-            headers: {
-              "Content-Type": "multipart/form-data",
-              Authorization: `Bearer ${authState?.token}`,
-            },
-          }
-        );
-        console.log(responsef.data);
-
-        setMessage("Image charge avec success.");
-        setMessageType("success");
-        setModalVisible(false);
-        setTimeout(() => {
-          setMessage("");
-        }, 2000);
-      } catch (error) {
-        console.log(error);
-        setMessage(
-          "erreure lors du chargement de l'image: " +
-            (error.response?.message || error.message)
-        );
-        setMessageType("error");
-        setModalVisible(false);
-        setTimeout(() => {
-          setMessage("");
-        }, 2000);
-      }
-      //setImage(result.assets[0].uri);
-    }
-  };
+  //     //setImage(result.assets[0].uri);
+  //   }
+  // };
 
   return (
     <>
       <Header titre={"Profil"} />
+      <ImageModal
+        modalVisible={imageModalVisible}
+        handleCloseModal={handleCloseModal}
+        imageUri={imageUri}
+      />
       <ScrollView>
         <View style={styles.container}>
           <View style={styles.header}>
-            {downloadedImage ? (
+            {authState?.user?.profile ? (
               <Pressable onPress={handleImagePress}>
-                <Image source={{ uri: downloadedImage }} style={styles.image} />
+                {isImageCharged ?
+                  <Image source={{ uri: image }} style={styles.image} /> :
+                  <Image source={{ uri: environment.basePath + "/files/" + authState.user.profile.id }} style={styles.image} />}
               </Pressable>
             ) : (
-              <View style={styles.initialLetterContainer}>
+              <Pressable style={styles.initialLetterContainer} onPress={handleImagePress}>
                 <Text style={styles.initialLetter}>
-                  {authState?.user?.username.charAt(0)}
+                  {authState?.user?.username!.charAt(0).toUpperCase()}
                 </Text>
-              </View>
+              </Pressable>
             )}
 
-            <TouchableOpacity style={styles.cameraIcon} onPress={pickImage}>
-              <Feather name="camera" size={24} color="white" />
-            </TouchableOpacity>
+            {/* <TouchableOpacity style={styles.cameraIcon} onPress={pickImage}>
+              {isImageCharged ? <Feather name="save" size={24} color="white" />
+                : <Feather name="camera" size={24} color="white" />}
+            </TouchableOpacity> */}
           </View>
           {message && (
             <View
@@ -348,7 +304,7 @@ const ProfilePage = () => {
             <View style={styles.infoRow}>
               <Text style={styles.label}>Date de naissance:</Text>
               <Text style={styles.value}>
-                {formatDate(new Date(authState?.user?.dateNaiss))}
+                {formatDate(new Date(authState?.user?.dateNaiss!))}
               </Text>
             </View>
             <View style={styles.infoRow}>

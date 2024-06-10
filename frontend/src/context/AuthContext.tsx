@@ -2,7 +2,7 @@ import { NavigationProp, useNavigation } from "@react-navigation/native";
 import * as SecureStore from "expo-secure-store";
 import React, { createContext, useContext, useState } from "react";
 import { AuthControllerApi } from "../../generated/index";
-import { SignInRequest, UserRequest } from "../../generated/models";
+import { FichierResponse, SignInRequest, UserRequest } from "../../generated/models";
 import environment from "../environments/environment";
 
 interface AuthProps {
@@ -16,7 +16,7 @@ interface AuthProps {
       dateNaiss: Date | null;
       password: string | null;
       role: string | null;
-      profile: string | null;
+      profile: FichierResponse | null;
     } | null;
   };
   onRegister?: (
