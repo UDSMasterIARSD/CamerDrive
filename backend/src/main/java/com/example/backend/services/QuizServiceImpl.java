@@ -36,9 +36,9 @@ public class QuizServiceImpl implements QuizService {
 
     @Override
     public List<QuizResponse> index() {
-        Pageable pageable = PageRequest.of(0, 15);
-        Page<Quiz> quizPage = quizRepo.findAll(pageable);
-        return quizPage.stream()
+//        Pageable pageable = PageRequest.of(0, 15);
+//        Page<Quiz> quizPage = quizRepo.findAll(pageable);
+        return quizRepo.findAll().stream()
                 .map(this::toDto)
                 .collect(Collectors.toList());
     }

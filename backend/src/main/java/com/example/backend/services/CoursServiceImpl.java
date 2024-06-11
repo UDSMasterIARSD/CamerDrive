@@ -33,8 +33,8 @@ public class CoursServiceImpl implements CoursService {
 
     @Override
     public List<CoursResponse> index() {
-        Pageable pageable = Pageable.ofSize(15);
-        return coursRepo.findAll(pageable).stream().map(this::toDto).toList();
+//        Pageable pageable = Pageable.ofSize(15);
+        return coursRepo.findAll().stream().map(this::toDto).toList();
     }
 
     @Override

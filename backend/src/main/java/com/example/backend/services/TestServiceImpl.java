@@ -30,8 +30,8 @@ public class TestServiceImpl implements TestService {
 
     @Override
     public List<TestResponse> index() {
-        Pageable pageable = Pageable.ofSize(15);
-        return testRepo.findAll(pageable).stream().map(this::toDto).toList();
+//        Pageable pageable = Pageable.ofSize(15);
+        return testRepo.findAll().stream().map(this::toDto).toList();
     }
 
     @Override

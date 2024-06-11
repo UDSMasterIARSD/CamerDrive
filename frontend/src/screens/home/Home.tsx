@@ -4,6 +4,7 @@ import Carousel from "../../components/Carousel";
 import HorizontalView from "../../components/HorizontalView";
 import { useAuth } from "../../context/AuthContext";
 import Homestyles from "./HomeStyle";
+import environment from "@/environments/environment";
 
 const Home = () => {
   const { authState } = useAuth();
@@ -18,10 +19,15 @@ const Home = () => {
           className="bg-white dark:bg-slate-700"
           style={Homestyles.textContainer}
         >
-          <Image
-            source={require("../../../assets/V2.jpg")}
-            style={Homestyles.logo}
-          />
+          {authState?.user?.profile ?
+            <Image
+              source={{ uri: `${environment.basePath}/files/${authState.user.profile.id}` }}
+              style={Homestyles.logo}
+            />
+            : <Image
+              source={require("../../../assets/V2.jpg")}
+              style={Homestyles.logo}
+            />}
           <View style={{ flex: 1 }}>
             <Text
               className="text-gray-700 dark:text-gray-50"

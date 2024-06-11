@@ -65,6 +65,7 @@ const ImageModal: React.FC<ImageModalProps> = (props) => {
             const newUser: UserResponse = response.data;
             authState!.user!.profile = newUser.profile!;
             console.log(response.data);
+            props.handleCloseModal();
         }).catch((err) => {
             console.log(err)
         })

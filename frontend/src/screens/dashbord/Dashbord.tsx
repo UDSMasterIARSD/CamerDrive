@@ -19,6 +19,7 @@ import {
   BackHandler,
   Dimensions,
   DrawerLayoutAndroid,
+  Image,
   Pressable,
   ScrollView,
   Text,
@@ -33,6 +34,8 @@ import Home from "../home/Home";
 import LastExam from "../lastExam/LastExam";
 import Quiz from "../quiz/Quiz";
 import DashbordStyle from "./DashbordStyle";
+import environment from "@/environments/environment";
+import { ImageBackground } from "react-native";
 
 declare interface CustomAlertOptions extends AlertOptions {
   alertContainerStyle?: ViewStyle;
@@ -210,9 +213,15 @@ const Dashbord = () => {
         <View style={DashbordStyle.userInfoContainer}>
           <View style={DashbordStyle.initialLetterContainer}>
             <Pressable onPress={goToProfilePage}>
-              <Text style={DashbordStyle.initialLetter}>
-                {authState!.user!.username!.charAt(0)}
-              </Text>
+              {authState?.user?.profile ?
+                <ImageBackground
+                  source={{ uri: `${environment.basePath}/files/${authState.user.profile.id}` }}
+                // className="z-50 bg-cover"
+                // style={DashbordStyle.initialLetter}
+                />
+                : <Text style={DashbordStyle.initialLetter}>
+                  {authState!.user!.username!.charAt(0)}
+                </Text>}
             </Pressable>
           </View>
           <View>
@@ -234,7 +243,7 @@ const Dashbord = () => {
               DashbordStyle.menuItem,
               DashbordStyle.menuItemContainer,
               selectedMenuItem.title === menuItem.title &&
-                DashbordStyle.selectedMenuItem,
+              DashbordStyle.selectedMenuItem,
             ]}
             onPress={() => handleMenuItemClick(menuItem)}
           >
