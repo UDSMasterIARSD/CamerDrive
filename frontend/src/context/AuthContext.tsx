@@ -1,8 +1,11 @@
 import { NavigationProp, useNavigation } from "@react-navigation/native";
 import * as SecureStore from "expo-secure-store";
 import React, { createContext, useContext, useState } from "react";
-import { AuthControllerApi } from "../../generated/index";
-import { SignInRequest, UserRequest } from "../../generated/models";
+import {
+  AuthControllerApi,
+  SignInRequest,
+  UserRequest,
+} from "../../generated/index";
 import environment from "../environments/environment";
 
 interface AuthProps {
@@ -16,7 +19,7 @@ interface AuthProps {
       dateNaiss: Date | null;
       password: string | null;
       role: string | null;
-      profile: string | null;
+      //profile: string | null;
     } | null;
   };
   onRegister?: (
@@ -51,7 +54,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
       dateNaiss: Date | null;
       password: string | null;
       role: string | null;
-      profile: string | null;
+      //profile: string | null;
     } | null;
   }>({
     token: null,
@@ -81,7 +84,10 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
     } catch (error) {
       console.log(error);
       if (error.response?.status === 400) {
-        return { success: false, error: "Nom d'utilisateur existant." };
+        return {
+          success: false,
+          error: "Nom d'utilisateur ou email existant.",
+        };
       }
       return { success: false, error: error.message };
     }
@@ -110,7 +116,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
           dateNaiss: user?.dateNaiss!,
           password: user?.password!,
           role: user?.role?.nom!,
-          profile: user?.profile!,
+          //profile: user?.profile!,
         },
       });
 
