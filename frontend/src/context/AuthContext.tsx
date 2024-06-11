@@ -1,11 +1,8 @@
 import { NavigationProp, useNavigation } from "@react-navigation/native";
 import * as SecureStore from "expo-secure-store";
 import React, { createContext, useContext, useState } from "react";
-import {
-  AuthControllerApi,
-  SignInRequest,
-  UserRequest,
-} from "../../generated/index";
+import { AuthControllerApi } from "../../generated/index";
+import { FichierResponse, SignInRequest, UserRequest } from "../../generated/models";
 import environment from "../environments/environment";
 
 interface AuthProps {

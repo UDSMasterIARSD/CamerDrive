@@ -3,19 +3,21 @@ const OnboardingConfig = {
     onboardingScreens: [
       {
         icon: require("../../../../assets/onboading/image9.jpg"),
-        title: "React Native Walkthrough",
-        description: "Welcome your users with a beautiful app walkthrough.",
+        title: "Bienvenue sur CamerDrive",
+        description:
+          "Accueillez vos utilisateurs avec une belle présentation de l'application.",
       },
       {
         icon: require("../../../../assets/onboading/image15.jpg"),
-        title: "Educate",
+        title: "Éduquer",
         description:
-          "Showcase features to new users so that they get to love your app.",
+          "Présentez les fonctionnalités aux nouveaux utilisateurs pour qu'ils apprécient votre application.",
       },
       {
         icon: require("../../../../assets/onboading/image10.jpg"),
-        title: "Get Notified",
-        description: "Describe the value proposition of each core feature.",
+        title: "Recevez des notifications",
+        description:
+          "Décrivez la proposition de valeur de chaque fonctionnalité principale.",
       },
     ],
   },

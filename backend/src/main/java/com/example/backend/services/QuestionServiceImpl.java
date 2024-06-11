@@ -31,8 +31,8 @@ public class QuestionServiceImpl implements QuestionService{
 
     @Override
     public List<QuestionResponse> index(){
-        Pageable pageable = Pageable.ofSize(15);
-        return questionRepo.findAll(pageable).stream().map(el ->
+//        Pageable pageable = Pageable.ofSize(15);
+        return questionRepo.findAll().stream().map(el ->
                 mapper.map(el, QuestionResponse.class)).toList();
     }
 
