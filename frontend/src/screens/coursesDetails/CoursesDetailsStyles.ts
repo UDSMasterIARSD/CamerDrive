@@ -28,7 +28,7 @@ const CourseDetailsStyle = StyleSheet.create({
   conceptContainer: {
     flexDirection:"row",
     justifyContent:"space-between",
-    //padding: 15,
+    padding: 15,
     backgroundColor: '#fff',
     borderRadius: 30,
     borderColor: '#ddd',
