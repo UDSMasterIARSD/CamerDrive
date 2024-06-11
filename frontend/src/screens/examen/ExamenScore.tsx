@@ -121,6 +121,44 @@ const ExamenScore = () => {
             Questions réussies: {score}/{questions.length}
           </Text>
         </View>
+        <View
+          style={{
+            flexDirection: "row",
+            alignItems: "center",
+            justifyContent: "space-evenly",
+            padding: 20,
+          }}
+        >
+          <Text style={styles.summaryText}>Mauvaises Reponses:</Text>
+          <View
+            style={{
+              backgroundColor: "red",
+              width: 35,
+              height: 35,
+              borderRadius: 8,
+              marginTop: 15,
+            }}
+          ></View>
+        </View>
+        <View
+          style={{
+            flexDirection: "row",
+            alignItems: "center",
+            justifyContent: "space-evenly",
+            padding: 20,
+          }}
+        >
+          <Text style={styles.summaryText}>Bonnes Reponses:</Text>
+          <View
+            style={{
+              backgroundColor: "#fff",
+              width: 35,
+              height: 35,
+              borderRadius: 8,
+              marginTop: 15,
+            }}
+          ></View>
+        </View>
       </ScrollView>
     </>
   );

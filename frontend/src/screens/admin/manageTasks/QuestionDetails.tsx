@@ -126,6 +126,7 @@ const QuestionDetails = () => {
           id: question.id,
           questionText: question.libelle,
         }));
+        console.log(questions);
         setDataList(questions);
       }
     } catch (error) {

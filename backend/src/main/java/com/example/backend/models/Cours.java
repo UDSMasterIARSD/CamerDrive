@@ -13,6 +13,8 @@ import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
+
+
 @Data
 @Entity
 @Table(name = "cours")
@@ -27,6 +29,7 @@ public class Cours implements Serializable {
     @NotBlank(message = "titre : Ce champ ne doit pas etre vide")
     private String titre;
 
+    @Lob
     @NotNull(message = "description : Ce champ est obligatoire")
     @NotBlank(message = "description : Ce champ ne doit pas etre vide")
     private String description;

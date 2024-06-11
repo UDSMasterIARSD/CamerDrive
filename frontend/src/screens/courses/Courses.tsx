@@ -93,7 +93,7 @@ const Courses: React.FC = () => {
         keyExtractor={(item) => item.id.toString()}
         style={{
           borderTopRightRadius: 10,
-          marginBottom: 40,
+          marginBottom: 110,
         }}
         renderItem={({ item }) => (
           <View style={CoursesStyle.container}>

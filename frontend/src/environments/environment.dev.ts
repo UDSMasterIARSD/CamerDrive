@@ -7,7 +7,7 @@ const devConfig: ConfigurationParameters = {
     username: '',
     password: '',
     accessToken: '',
-    basePath: Platform.OS === "android" ? 'https://bd35-129-0-80-181.ngrok-free.app' : 'http://localhost:8080/api'
+    basePath: Platform.OS === "android" ? 'https://766e-129-0-103-10.ngrok-free.app' : 'http://localhost:8080/api'
 };
 
 export default devConfig;

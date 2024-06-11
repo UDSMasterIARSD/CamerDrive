@@ -109,7 +109,7 @@ const ExamenDetails = () => {
     }
   };
 
-  const handleOptionSelect = (option) => {
+  const handleOptionSelect = (option: any) => {
     if (answered) return;
 
     setSelectedOption(option);
