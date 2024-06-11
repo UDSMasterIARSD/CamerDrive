@@ -85,6 +85,7 @@ const Courses: React.FC = () => {
       style={{
         backgroundColor: "#f0f8ff",
         height: Dimensions.get("window").height,
+        paddingBottom: 50,
       }}
     >
       <FlatList

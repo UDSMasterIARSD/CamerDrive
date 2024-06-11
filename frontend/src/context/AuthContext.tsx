@@ -19,7 +19,7 @@ interface AuthProps {
       dateNaiss: Date | null;
       password: string | null;
       role: string | null;
-      //profile: string | null;
+      profile: FichierResponse | null;
     } | null;
   };
   onRegister?: (

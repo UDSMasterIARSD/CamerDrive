@@ -61,7 +61,7 @@ const SignIn = () => {
   return (
     <View style={styles.container}>
       <ScrollView>
-        <View style={{ justifyContent: "center", alignItems: "center" }}>
+        <View style={{ justifyContent: "center", alignItems: "center", marginTop: 50 }}>
           <Image
             source={require("./../../../assets/auth/loginImg.png")}
             style={{ width: 300, height: 200 }}
@@ -142,7 +142,7 @@ const SignIn = () => {
 
           <View
             style={{
-              height: 20,
+              height: 40,
               justifyContent: "center",
               alignItems: "center",
               marginBottom: 10,
@@ -170,7 +170,7 @@ const SignIn = () => {
           </Text>
         </View>
 
-        <View style={styles.imageContainer}>
+        <View style={styles.imageContainer} className="mt-16">
           <TouchableOpacity onPress={() => { }}>
             <Image
               source={require("./../../../assets/auth/icons8-google-logo-96.png")}
@@ -211,7 +211,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-around",
     alignContent: "center",
-    height: 80,
+    height: 150,
     width: "auto",
     marginHorizontal: 25,
     paddingTop: 40,
@@ -263,8 +263,7 @@ const styles = StyleSheet.create({
   errorText: {
     color: "red",
     textAlign: "center",
-    marginTop: 10,
-    marginBottom: 5,
+    marginVertical: 5,
     fontSize: 14,
   },
   passwordContainer: {
