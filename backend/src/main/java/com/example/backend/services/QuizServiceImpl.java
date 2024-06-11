@@ -97,8 +97,13 @@ public class QuizServiceImpl implements QuizService {
 //    }`
     public QuizResponse toDto(Quiz quiz) {
         QuizResponse resp = new QuizResponse();
-        resp = mapper.map(quiz, QuizResponse.class);
-        resp.setCours(mapper.map(quiz.getCours(), CoursResponse.class));
+        resp.setId(quiz.getId());
+        resp.setTitre(quiz.getTitre());
+        resp.setQuestions(quiz.getQuestions().stream().map(el -> mapper.map(el, QuestionResponse.class)).toList());
+        resp.setCreatedAt(quiz.getCreatedAt());
+        resp.setUpdatedat(quiz.getUpdatedAt());
+//        resp = mapper.map(quiz, QuizResponse.class);
+//        resp.setCours(mapper.map(quiz.getCours(), CoursResponse.class));
         resp.setQuestions(quiz.getQuestions().stream().map(el ->
                 mapper.map(el, QuestionResponse.class)).toList());
         return resp;
